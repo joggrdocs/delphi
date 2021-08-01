@@ -16,7 +16,9 @@
     "test": "jest --passWithNoTests"
   },
   "dependencies": {
-    "@actions/core": "^1.2.6"
+    "@actions/core": "^1.2.6",
+    "axios": "^0.21.1",
+    "lodash": "^4.17.21"
   },
   "devDependencies": {
     "@jest/types": "^26.6.2",

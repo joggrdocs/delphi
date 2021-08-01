@@ -12,7 +12,8 @@ module.exports = {
   ],
   ignorePatterns: [
     'src/**/testUtils/',
-    'src/**/__tests__/'
+    'src/**/__tests__/',
+    'examples/**/*'
   ],
   rules: {
     '@typescript-eslint/no-unused-vars': 0,
