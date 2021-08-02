@@ -67,7 +67,8 @@ class Docker {
         this.assertSetup();
         await exec.getExecOutput('docker', [
             'build',
-            `-t ${this.getTag()}`,
+            '--tag',
+            this.getTag(),
             '.'
         ]);
         await exec.getExecOutput('docker', [
