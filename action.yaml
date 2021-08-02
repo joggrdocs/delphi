@@ -1,7 +1,16 @@
-name: blueprint-action-typescript
-description: Template repository for TypeScript Github Actions.
+name: LaunchPad
+description: Github Action used to deploy to the BlueNova cloud environment.
 author: "@bluenovaio"
-inputs: {}
+inputs:
+  name:
+    description: "The name of the service (must be unique) to be deployed."
+    required: true
+  api_key:
+    description: "The API Key provided by BlueNova, used to associate all requests."
+    required: true
+  service_account_key:
+    description: "The Service Account JSON Key used to push images to the BlueNova Container Registry."
+    required: true
 outputs: {}
 runs:
   using: node12
