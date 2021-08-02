@@ -13,26 +13,19 @@ const MARK_BN_BOTTOM_END = '[//]: # (bn-bottom-end)';
 // -----
 
 async function updatePullRequest (updater: { (currentDescription: string | null): string }) {
-  const branch = getBranch();
-
-  const source = github.context.ref.replace(/^refs\/heads\//, '');
-
-  core.info(`FOOO ${core.getInput('github_token')}`);
+  const prNumber = getPullRequestNumber();
 
   const octokit = github.getOctokit(core.getInput('github_token'));
 
-  const { data: pulls } = await octokit.rest.pulls.list({
+  const { data: pullRequest } = await octokit.rest.pulls.get({
     owner: github.context.repo.owner,
     repo: github.context.repo.repo,
-    base: branch,
-    head: `${github.context.repo.owner}:${source}`
+    pull_number: prNumber
   });
 
-  if (pulls.length === 0) {
-    throw new Error(`No such pull request for branch: ${branch}`);
+  if (!pullRequest) {
+    throw new Error(`No such pull request for PR: ${prNumber}`);
   }
-
-  const pullRequest = pulls[0];
 
   await octokit.rest.pulls.update({
     owner: github.context.repo.owner,
@@ -78,6 +71,11 @@ export function isPullRequest (): boolean {
   return true;
 }
 
-export function getBranch (): string {
-  return _.replace(github.context.ref, 'refs/heads/', '');
+export function getPullRequestNumber (): number {
+  return Number(
+    _.replace(
+      _.replace(github.context.ref, 'refs/pull/', ''),
+      '/merge'
+    )
+  );
 }
