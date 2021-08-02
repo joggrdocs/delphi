@@ -157,6 +157,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.getBranch = exports.isPullRequest = exports.resetPullDescription = exports.prependToPullDescription = exports.appendToPullDescription = void 0;
 const github = __importStar(__nccwpck_require__(5438));
+const core = __importStar(__nccwpck_require__(2186));
 const _ = __importStar(__nccwpck_require__(250));
 // eslint-disable-next-line no-unused-vars
 const MARK_BN_TOP_START = '[//]: # (bn-top-start)';
@@ -169,7 +170,8 @@ const MARK_BN_BOTTOM_END = '[//]: # (bn-bottom-end)';
 async function updatePullRequest(updater) {
     const branch = getBranch();
     const source = github.context.ref.replace(/^refs\/heads\//, '');
-    const octokit = github.getOctokit(process.env.GITHUB_TOKEN);
+    core.info(`FOOO ${core.getInput('github_token')}`);
+    const octokit = github.getOctokit(core.getInput('github_token'));
     const { data: pulls } = await octokit.rest.pulls.list({
         owner: github.context.repo.owner,
         repo: github.context.repo.repo,
@@ -367,7 +369,7 @@ async function run() {
         }
     }
     catch (error) {
-        await github.resetPullDescription();
+        // await github.resetPullDescription();
         core.setFailed(error.message);
     }
 }

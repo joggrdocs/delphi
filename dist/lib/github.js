@@ -21,6 +21,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getBranch = exports.isPullRequest = exports.resetPullDescription = exports.prependToPullDescription = exports.appendToPullDescription = void 0;
 const github = __importStar(require("@actions/github"));
+const core = __importStar(require("@actions/core"));
 const _ = __importStar(require("lodash"));
 // eslint-disable-next-line no-unused-vars
 const MARK_BN_TOP_START = '[//]: # (bn-top-start)';
@@ -33,7 +34,8 @@ const MARK_BN_BOTTOM_END = '[//]: # (bn-bottom-end)';
 async function updatePullRequest(updater) {
     const branch = getBranch();
     const source = github.context.ref.replace(/^refs\/heads\//, '');
-    const octokit = github.getOctokit(process.env.GITHUB_TOKEN);
+    core.info(`FOOO ${core.getInput('github_token')}`);
+    const octokit = github.getOctokit(core.getInput('github_token'));
     const { data: pulls } = await octokit.rest.pulls.list({
         owner: github.context.repo.owner,
         repo: github.context.repo.repo,

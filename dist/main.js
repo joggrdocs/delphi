@@ -59,7 +59,7 @@ async function run() {
         }
     }
     catch (error) {
-        await github.resetPullDescription();
+        // await github.resetPullDescription();
         core.setFailed(error.message);
     }
 }
