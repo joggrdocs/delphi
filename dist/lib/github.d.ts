@@ -3,3 +3,4 @@ export declare function prependToPullDescription(description: string): Promise<v
 export declare function resetPullDescription(): Promise<void>;
 export declare function isPullRequest(): boolean;
 export declare function getPullRequestNumber(): number;
+export declare function getBranch(): string;

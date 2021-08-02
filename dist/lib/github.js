@@ -19,7 +19,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getPullRequestNumber = exports.isPullRequest = exports.resetPullDescription = exports.prependToPullDescription = exports.appendToPullDescription = void 0;
+exports.getBranch = exports.getPullRequestNumber = exports.isPullRequest = exports.resetPullDescription = exports.prependToPullDescription = exports.appendToPullDescription = void 0;
 const github = __importStar(require("@actions/github"));
 const core = __importStar(require("@actions/core"));
 const _ = __importStar(require("lodash"));
@@ -87,4 +87,8 @@ function getPullRequestNumber() {
     return Number(_.replace(_.replace(github.context.ref, 'refs/pull/', ''), '/merge'));
 }
 exports.getPullRequestNumber = getPullRequestNumber;
+function getBranch() {
+    return _.replace(github.context.ref, 'refs/heads/', '');
+}
+exports.getBranch = getBranch;
 //# sourceMappingURL=github.js.map
