@@ -16,7 +16,7 @@
       "dom"
     ],
     "declaration": true,
-    "outDir": "./build"
+    "outDir": "./dist"
   },
   "typeRoots": [
     "node_modules/@types"
