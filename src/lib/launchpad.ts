@@ -3,7 +3,7 @@ import axios from 'axios';
 
 import { getBranch } from './github';
 
-const API_URL = 'alpha-launchpad.bluenova-app.com';
+const API_URL = 'https://alpha-launchpad.bluenova-app.com';
 
 // Types
 // -----
