@@ -68,7 +68,8 @@ export default class Docker {
 
     await exec.getExecOutput('docker', [
       'build',
-      `-t ${this.getTag()}`,
+      '--tag',
+      this.getTag(),
       '.'
     ]);
 
