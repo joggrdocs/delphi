@@ -19,7 +19,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getBranch = exports.isPullRequest = exports.resetPullDescription = exports.prependToPullDescription = exports.appendToPullDescription = void 0;
+exports.getPullRequestNumber = exports.isPullRequest = exports.resetPullDescription = exports.prependToPullDescription = exports.appendToPullDescription = void 0;
 const github = __importStar(require("@actions/github"));
 const core = __importStar(require("@actions/core"));
 const _ = __importStar(require("lodash"));
@@ -32,20 +32,16 @@ const MARK_BN_BOTTOM_END = '[//]: # (bn-bottom-end)';
 // Utils
 // -----
 async function updatePullRequest(updater) {
-    const branch = getBranch();
-    const source = github.context.ref.replace(/^refs\/heads\//, '');
-    core.info(`FOOO ${core.getInput('github_token')}`);
+    const prNumber = getPullRequestNumber();
     const octokit = github.getOctokit(core.getInput('github_token'));
-    const { data: pulls } = await octokit.rest.pulls.list({
+    const { data: pullRequest } = await octokit.rest.pulls.get({
         owner: github.context.repo.owner,
         repo: github.context.repo.repo,
-        base: branch,
-        head: `${github.context.repo.owner}:${source}`
+        pull_number: prNumber
     });
-    if (pulls.length === 0) {
-        throw new Error(`No such pull request for branch: ${branch}`);
+    if (!pullRequest) {
+        throw new Error(`No such pull request for PR: ${prNumber}`);
     }
-    const pullRequest = pulls[0];
     await octokit.rest.pulls.update({
         owner: github.context.repo.owner,
         repo: github.context.repo.repo,
@@ -87,8 +83,8 @@ function isPullRequest() {
     return true;
 }
 exports.isPullRequest = isPullRequest;
-function getBranch() {
-    return _.replace(github.context.ref, 'refs/heads/', '');
+function getPullRequestNumber() {
+    return Number(_.replace(_.replace(github.context.ref, 'refs/pull/', ''), '/merge'));
 }
-exports.getBranch = getBranch;
+exports.getPullRequestNumber = getPullRequestNumber;
 //# sourceMappingURL=github.js.map

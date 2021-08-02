@@ -2,4 +2,4 @@ export declare function appendToPullDescription(description: string): Promise<vo
 export declare function prependToPullDescription(description: string): Promise<void>;
 export declare function resetPullDescription(): Promise<void>;
 export declare function isPullRequest(): boolean;
-export declare function getBranch(): string;
+export declare function getPullRequestNumber(): number;

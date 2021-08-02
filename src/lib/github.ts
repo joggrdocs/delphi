@@ -79,3 +79,7 @@ export function getPullRequestNumber (): number {
     )
   );
 }
+
+export function getBranch (): string {
+  return _.replace(github.context.ref, 'refs/heads/', '');
+}
