@@ -11,6 +11,9 @@ inputs:
   service_account_key:
     description: "The Service Account JSON Key used to push images to the BlueNova Container Registry."
     required: true
+  github_token:
+    description: "Github Token, pass in the `${{ secrets.GITHUB_TOKEN }}`."
+    required: true
 outputs: {}
 runs:
   using: node12

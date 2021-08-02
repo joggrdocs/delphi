@@ -1,4 +1,5 @@
 import * as github from '@actions/github';
+import * as core from '@actions/core';
 import * as _ from 'lodash';
 
 // eslint-disable-next-line no-unused-vars
@@ -16,7 +17,7 @@ async function updatePullRequest (updater: { (currentDescription: string | null)
 
   const source = github.context.ref.replace(/^refs\/heads\//, '');
 
-  const octokit = github.getOctokit(process.env.GITHUB_TOKEN as string);
+  const octokit = github.getOctokit(core.getInput('github_token') as string);
 
   const { data: pulls } = await octokit.rest.pulls.list({
     owner: github.context.repo.owner,
