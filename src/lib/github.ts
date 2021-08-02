@@ -17,7 +17,9 @@ async function updatePullRequest (updater: { (currentDescription: string | null)
 
   const source = github.context.ref.replace(/^refs\/heads\//, '');
 
-  const octokit = github.getOctokit(core.getInput('github_token') as string);
+  core.info(`FOOO ${core.getInput('github_token')}`);
+
+  const octokit = github.getOctokit(core.getInput('github_token'));
 
   const { data: pulls } = await octokit.rest.pulls.list({
     owner: github.context.repo.owner,
