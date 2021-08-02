@@ -53,8 +53,6 @@ export default class Docker {
   }
 
   public async login (): Promise<void> {
-    this.assertSetup();
-
     await exec.getExecOutput('docker', [
       'login',
       '-u _json_key',
