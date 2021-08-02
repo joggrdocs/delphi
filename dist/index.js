@@ -49,6 +49,7 @@ class Docker {
         this.isSetup = false;
         this.serviceAccountKey = props.serviceAccountKey;
         this.projectId = props.projectId;
+        this.directory = props.directory || '.';
         this.slug = props.slug;
         this.name = props.name;
     }
@@ -77,7 +78,7 @@ class Docker {
             'build',
             '--tag',
             this.getTag(),
-            '.'
+            this.directory
         ]);
         await exec.getExecOutput('docker', [
             'push',
@@ -309,6 +310,7 @@ const docker_1 = __importDefault(__nccwpck_require__(7458));
 async function run() {
     try {
         const serviceAccountKey = core.getInput('service_account_key');
+        const directory = core.getInput('directory');
         const apiKey = core.getInput('api_key');
         const name = core.getInput('name');
         // // Update description that a deploy is in flight
@@ -326,6 +328,7 @@ async function run() {
         const docker = new docker_1.default({
             serviceAccountKey,
             name,
+            directory,
             projectId: launchpad.projectId,
             slug: launchpad.slugId,
             apiKey: apiKey

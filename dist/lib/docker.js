@@ -41,6 +41,7 @@ class Docker {
         this.isSetup = false;
         this.serviceAccountKey = props.serviceAccountKey;
         this.projectId = props.projectId;
+        this.directory = props.directory || '.';
         this.slug = props.slug;
         this.name = props.name;
     }
@@ -69,7 +70,7 @@ class Docker {
             'build',
             '--tag',
             this.getTag(),
-            '.'
+            this.directory
         ]);
         await exec.getExecOutput('docker', [
             'push',

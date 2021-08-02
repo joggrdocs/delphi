@@ -14,6 +14,10 @@ inputs:
   github_token:
     description: "Github Token, pass in the secrets.GITHUB_TOKEN."
     required: true
+  directory:
+    description: "Directory where the DockerFile is located."
+    required: false
+    default: "."
 outputs: {}
 runs:
   using: node12

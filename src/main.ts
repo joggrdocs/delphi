@@ -8,6 +8,7 @@ import Docker from './lib/docker';
 async function run (): Promise<void> {
   try {
     const serviceAccountKey = core.getInput('service_account_key');
+    const directory = core.getInput('directory');
     const apiKey = core.getInput('api_key');
     const name = core.getInput('name');
 
@@ -28,6 +29,7 @@ async function run (): Promise<void> {
     const docker = new Docker({
       serviceAccountKey,
       name,
+      directory,
       projectId: launchpad.projectId as string,
       slug: launchpad.slugId as string,
       apiKey: apiKey

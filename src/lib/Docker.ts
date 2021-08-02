@@ -27,18 +27,21 @@ interface DockerProps {
   slug: string;
   apiKey: string;
   serviceAccountKey: string;
+  directory?: string;
 }
 
 export default class Docker {
   private isSetup = false;
   private readonly serviceAccountKey: string;
   private readonly projectId: string;
+  private readonly directory: string;
   private readonly name: string;
   private readonly slug: string;
 
   constructor (props: DockerProps) {
     this.serviceAccountKey = props.serviceAccountKey;
     this.projectId = props.projectId;
+    this.directory = props.directory || '.';
     this.slug = props.slug;
     this.name = props.name;
   }
@@ -70,7 +73,7 @@ export default class Docker {
       'build',
       '--tag',
       this.getTag(),
-      '.'
+      this.directory
     ]);
 
     await exec.getExecOutput('docker', [

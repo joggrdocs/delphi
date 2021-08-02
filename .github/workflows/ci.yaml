@@ -16,6 +16,7 @@ jobs:
         name: Run Action Code
         uses: ./
         with:
+          directory: ./examples/nodejs-example
           service_account_key: ${{ secrets.GCP_SA_KEY }}
           name: action-launchpad-example
           api_key: ${{ secrets.BLUENOVA_API_KEY }}

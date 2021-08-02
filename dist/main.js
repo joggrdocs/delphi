@@ -28,6 +28,7 @@ const docker_1 = __importDefault(require("./lib/docker"));
 async function run() {
     try {
         const serviceAccountKey = core.getInput('service_account_key');
+        const directory = core.getInput('directory');
         const apiKey = core.getInput('api_key');
         const name = core.getInput('name');
         // // Update description that a deploy is in flight
@@ -45,6 +46,7 @@ async function run() {
         const docker = new docker_1.default({
             serviceAccountKey,
             name,
+            directory,
             projectId: launchpad.projectId,
             slug: launchpad.slugId,
             apiKey: apiKey
