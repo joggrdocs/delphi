@@ -11,12 +11,12 @@ async function run (): Promise<void> {
     const apiKey = core.getInput('api_key');
     const name = core.getInput('name');
 
-    // Update description that a deploy is in flight
-    if (github.isPullRequest()) {
-      await github.prependToPullDescription(
-        content.getRunningDescription()
-      );
-    }
+    // // Update description that a deploy is in flight
+    // if (github.isPullRequest()) {
+    //   await github.prependToPullDescription(
+    //     content.getRunningDescription()
+    //   );
+    // }
 
     const launchpad = new LaunchPad({
       name,
@@ -38,12 +38,12 @@ async function run (): Promise<void> {
     // Deploy built image to LaunchPad Cloud
     const result = await launchpad.createDeployment();
 
-    // Add Preview URL to PR
-    if (github.isPullRequest()) {
-      await github.appendToPullDescription(
-        content.getFinishedDescription(result.url)
-      );
-    }
+    // // Add Preview URL to PR
+    // if (github.isPullRequest()) {
+    //   await github.appendToPullDescription(
+    //     content.getFinishedDescription(result.url)
+    //   );
+    // }
   } catch (error) {
     // await github.resetPullDescription();
     core.setFailed(error.message);
