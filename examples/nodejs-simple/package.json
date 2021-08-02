@@ -1,0 +1,10 @@
+{
+  "name": "nodejs-simple",
+  "version": "1.0.0",
+  "description": "Simple node server example for LaunchPad.",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
