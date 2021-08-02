@@ -23,6 +23,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const github = __importStar(require("@actions/github"));
+const core = __importStar(require("@actions/core"));
 const axios_1 = __importDefault(require("axios"));
 const github_1 = require("./github");
 const API_URL = 'https://alpha-launchpad.bluenova-app.com';
@@ -43,6 +44,7 @@ class LaunchPad {
     }
     async createDeployment() {
         this.assertSetup();
+        core.info(`POST ${API_URL}/deployments`);
         const result = await axios_1.default.post(`${API_URL}/deployments`, {
             apiKey: this.apiKey,
             name: this.name,
@@ -53,6 +55,7 @@ class LaunchPad {
         return result.data;
     }
     async readOrganization() {
+        core.info(`GET ${API_URL}/organizations/${this.apiKey}`);
         const result = await axios_1.default.get(`${API_URL}/organizations/${this.apiKey}`);
         return result.data;
     }
