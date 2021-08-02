@@ -53,10 +53,12 @@ export default class Docker {
   }
 
   public async login (): Promise<void> {
-    await exec.getExecOutput('docker', [
+    await exec.getExecOutput('echo', [
+      `"${this.serviceAccountKey}"`,
+      '|',
+      'docker',
       'login',
       '-u _json_key',
-      `-p "${this.serviceAccountKey}"`,
       'https://gcr.io'
     ]);
   }
