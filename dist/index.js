@@ -62,7 +62,6 @@ class Docker {
         }
     }
     async login() {
-        this.assertSetup();
         await exec.getExecOutput('docker', [
             'login',
             '-u _json_key',
