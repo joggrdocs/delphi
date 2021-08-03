@@ -75,7 +75,8 @@ export function getPullRequestNumber (): number {
   return Number(
     _.replace(
       _.replace(github.context.ref, 'refs/pull/', ''),
-      '/merge'
+      '/merge',
+      ''
     )
   );
 }

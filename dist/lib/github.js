@@ -85,7 +85,7 @@ function isPullRequest() {
 }
 exports.isPullRequest = isPullRequest;
 function getPullRequestNumber() {
-    return Number(_.replace(_.replace(github.context.ref, 'refs/pull/', ''), '/merge'));
+    return Number(_.replace(_.replace(github.context.ref, 'refs/pull/', ''), '/merge', ''));
 }
 exports.getPullRequestNumber = getPullRequestNumber;
 function getBranch() {
