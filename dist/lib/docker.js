@@ -55,15 +55,14 @@ class Docker {
         }
     }
     async login() {
-        await exec.getExecOutput('echo', [
-            `"${this.serviceAccountKey}"`,
-            '|',
-            'docker',
+        await exec.getExecOutput('docker', [
             'login',
             '-u _json_key',
             'https://gcr.io',
             '--password-stdin'
-        ]);
+        ], {
+            input: Buffer.from(this.serviceAccountKey)
+        });
     }
     async buildAndPush() {
         this.assertSetup();
