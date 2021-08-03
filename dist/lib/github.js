@@ -39,6 +39,7 @@ function getRunningDescription() {
 BlueNova deploying a Preview of this change, please wait until completed before pushing a new commit.
 
 ---
+
 [//]: # (bn-top-end)
 `.trim();
 }
@@ -50,6 +51,7 @@ function getFinishedDescription(url) {
 🚀 **BlueNova Deployment**
 
 **Preview Url:** [${url}](${url})
+
 [//]: # (bn-bottom-end)
   `.trim();
 }

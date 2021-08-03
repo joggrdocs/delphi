@@ -20,6 +20,7 @@ export function getRunningDescription (): string {
 BlueNova deploying a Preview of this change, please wait until completed before pushing a new commit.
 
 ---
+
 [//]: # (bn-top-end)
 `.trim();
 }
@@ -31,6 +32,7 @@ export function getFinishedDescription (url: string): string {
 🚀 **BlueNova Deployment**
 
 **Preview Url:** [${url}](${url})
+
 [//]: # (bn-bottom-end)
   `.trim();
 }
