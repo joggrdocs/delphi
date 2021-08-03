@@ -48,8 +48,8 @@ function cleanDescription (description: string) {
 export async function appendToPullDescription (description: string): Promise<void> {
   await updatePullRequest((currentDescription) => {
     return `
-${description}
 ${cleanDescription(currentDescription || '')}    
+${description}
 `;
   });
 }
@@ -57,8 +57,8 @@ ${cleanDescription(currentDescription || '')}
 export async function prependToPullDescription (description: string): Promise<void> {
   await updatePullRequest((currentDescription) => {
     return `
-${cleanDescription(currentDescription || '')}    
 ${description}
+${cleanDescription(currentDescription || '')}    
 `;
   });
 }

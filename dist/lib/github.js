@@ -61,8 +61,8 @@ function cleanDescription(description) {
 async function appendToPullDescription(description) {
     await updatePullRequest((currentDescription) => {
         return `
-${description}
 ${cleanDescription(currentDescription || '')}    
+${description}
 `;
     });
 }
@@ -70,8 +70,8 @@ exports.appendToPullDescription = appendToPullDescription;
 async function prependToPullDescription(description) {
     await updatePullRequest((currentDescription) => {
         return `
-${cleanDescription(currentDescription || '')}    
 ${description}
+${cleanDescription(currentDescription || '')}    
 `;
     });
 }
