@@ -1,6 +1,5 @@
 import * as core from '@actions/core';
 
-import * as content from './lib/content';
 import LaunchPad from './lib/launchpad';
 import * as github from './lib/github';
 import Docker from './lib/docker';
@@ -14,9 +13,7 @@ async function run (): Promise<void> {
 
     // Update description that a deploy is in flight
     if (github.isPullRequest()) {
-      await github.prependToPullDescription(
-        content.getRunningDescription()
-      );
+      await github.prependToPullDescription();
     }
 
     const launchpad = new LaunchPad({
@@ -40,12 +37,10 @@ async function run (): Promise<void> {
     // Deploy built image to LaunchPad Cloud
     const result = await launchpad.createDeployment();
 
-    // // Add Preview URL to PR
-    // if (github.isPullRequest()) {
-    //   await github.appendToPullDescription(
-    //     content.getFinishedDescription(result.url)
-    //   );
-    // }
+    // Add Preview URL to PR
+    if (github.isPullRequest()) {
+      await github.appendToPullDescription(result.url);
+    }
   } catch (error) {
     // await github.resetPullDescription();
     core.setFailed(error.message);

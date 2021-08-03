@@ -19,7 +19,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getBranch = exports.getPullRequestNumber = exports.isPullRequest = exports.resetPullDescription = exports.prependToPullDescription = exports.appendToPullDescription = void 0;
+exports.getBranch = exports.getPullRequestNumber = exports.isPullRequest = exports.resetPullDescription = exports.prependToPullDescription = exports.appendToPullDescription = exports.getFinishedDescription = exports.getRunningDescription = void 0;
 const github = __importStar(require("@actions/github"));
 const core = __importStar(require("@actions/core"));
 const _ = __importStar(require("lodash"));
@@ -31,6 +31,29 @@ const MARK_BN_BOTTOM_START = '[//]: # (bn-bottom-start)';
 const MARK_BN_BOTTOM_END = '[//]: # (bn-bottom-end)';
 // Utils
 // -----
+function getRunningDescription() {
+    return `
+[//]: # (bn-top-start)
+⚠️  **BlueNova deployment in progress** ⚠️ 
+
+BlueNova deploying a Preview of this change, please wait until completed before pushing a new commit.
+
+---
+[//]: # (bn-top-end)
+`.trim();
+}
+exports.getRunningDescription = getRunningDescription;
+function getFinishedDescription(url) {
+    return `
+[//]: # (bn-bottom-start)
+---
+🚀 **BlueNova Deployment**
+
+**Preview Url:** [${url}](${url})
+[//]: # (bn-bottom-end)
+  `.trim();
+}
+exports.getFinishedDescription = getFinishedDescription;
 async function updatePullRequest(updater) {
     const prNumber = getPullRequestNumber();
     core.info(`PR NUMBER: ${getPullRequestNumber()}`);
@@ -58,19 +81,19 @@ function cleanDescription(description) {
 }
 // Public Methods
 // -----
-async function appendToPullDescription(description) {
+async function appendToPullDescription(url) {
     await updatePullRequest((currentDescription) => {
         return `
 ${cleanDescription(currentDescription || '')}    
-${description}
+${getFinishedDescription(url)}
 `;
     });
 }
 exports.appendToPullDescription = appendToPullDescription;
-async function prependToPullDescription(description) {
+async function prependToPullDescription() {
     await updatePullRequest((currentDescription) => {
         return `
-${description}
+${getRunningDescription()}
 ${cleanDescription(currentDescription || '')}    
 `;
     });

@@ -12,6 +12,29 @@ const MARK_BN_BOTTOM_END = '[//]: # (bn-bottom-end)';
 // Utils
 // -----
 
+export function getRunningDescription (): string {
+  return `
+[//]: # (bn-top-start)
+⚠️  **BlueNova deployment in progress** ⚠️ 
+
+BlueNova deploying a Preview of this change, please wait until completed before pushing a new commit.
+
+---
+[//]: # (bn-top-end)
+`.trim();
+}
+
+export function getFinishedDescription (url: string): string {
+  return `
+[//]: # (bn-bottom-start)
+---
+🚀 **BlueNova Deployment**
+
+**Preview Url:** [${url}](${url})
+[//]: # (bn-bottom-end)
+  `.trim();
+}
+
 async function updatePullRequest (updater: { (currentDescription: string | null): string }) {
   const prNumber = getPullRequestNumber();
   core.info(`PR NUMBER: ${getPullRequestNumber()}`);
@@ -45,19 +68,19 @@ function cleanDescription (description: string) {
 // Public Methods
 // -----
 
-export async function appendToPullDescription (description: string): Promise<void> {
+export async function appendToPullDescription (url: string): Promise<void> {
   await updatePullRequest((currentDescription) => {
     return `
 ${cleanDescription(currentDescription || '')}    
-${description}
+${getFinishedDescription(url)}
 `;
   });
 }
 
-export async function prependToPullDescription (description: string): Promise<void> {
+export async function prependToPullDescription (): Promise<void> {
   await updatePullRequest((currentDescription) => {
     return `
-${description}
+${getRunningDescription()}
 ${cleanDescription(currentDescription || '')}    
 `;
   });

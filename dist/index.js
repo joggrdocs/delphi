@@ -2,40 +2,6 @@ require('./sourcemap-register.js');module.exports =
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 7622:
-/***/ ((__unused_webpack_module, exports) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.getFinishedDescription = exports.getRunningDescription = void 0;
-function getRunningDescription() {
-    return `
-[//]: # (bn-start)
-⚠️  **BlueNova deployment in progress** ⚠️ 
-
-BlueNova deploying a Preview of this change, please wait until completed before pushing a new commit.
-
----
-[//]: # (bn-end)
-`.trim();
-}
-exports.getRunningDescription = getRunningDescription;
-function getFinishedDescription(url) {
-    return `
-[//]: # (bn-start)
----
-🚀 **BlueNova Deployment**
-
-**Preview Url:** [${url}](${url})
-[//]: # (bn-end)
-  `.trim();
-}
-exports.getFinishedDescription = getFinishedDescription;
-//# sourceMappingURL=content.js.map
-
-/***/ }),
-
 /***/ 7458:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
@@ -158,7 +124,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.getBranch = exports.getPullRequestNumber = exports.isPullRequest = exports.resetPullDescription = exports.prependToPullDescription = exports.appendToPullDescription = void 0;
+exports.getBranch = exports.getPullRequestNumber = exports.isPullRequest = exports.resetPullDescription = exports.prependToPullDescription = exports.appendToPullDescription = exports.getFinishedDescription = exports.getRunningDescription = void 0;
 const github = __importStar(__nccwpck_require__(5438));
 const core = __importStar(__nccwpck_require__(2186));
 const _ = __importStar(__nccwpck_require__(250));
@@ -170,6 +136,29 @@ const MARK_BN_BOTTOM_START = '[//]: # (bn-bottom-start)';
 const MARK_BN_BOTTOM_END = '[//]: # (bn-bottom-end)';
 // Utils
 // -----
+function getRunningDescription() {
+    return `
+[//]: # (bn-top-start)
+⚠️  **BlueNova deployment in progress** ⚠️ 
+
+BlueNova deploying a Preview of this change, please wait until completed before pushing a new commit.
+
+---
+[//]: # (bn-top-end)
+`.trim();
+}
+exports.getRunningDescription = getRunningDescription;
+function getFinishedDescription(url) {
+    return `
+[//]: # (bn-bottom-start)
+---
+🚀 **BlueNova Deployment**
+
+**Preview Url:** [${url}](${url})
+[//]: # (bn-bottom-end)
+  `.trim();
+}
+exports.getFinishedDescription = getFinishedDescription;
 async function updatePullRequest(updater) {
     const prNumber = getPullRequestNumber();
     core.info(`PR NUMBER: ${getPullRequestNumber()}`);
@@ -197,19 +186,19 @@ function cleanDescription(description) {
 }
 // Public Methods
 // -----
-async function appendToPullDescription(description) {
+async function appendToPullDescription(url) {
     await updatePullRequest((currentDescription) => {
         return `
 ${cleanDescription(currentDescription || '')}    
-${description}
+${getFinishedDescription(url)}
 `;
     });
 }
 exports.appendToPullDescription = appendToPullDescription;
-async function prependToPullDescription(description) {
+async function prependToPullDescription() {
     await updatePullRequest((currentDescription) => {
         return `
-${description}
+${getRunningDescription()}
 ${cleanDescription(currentDescription || '')}    
 `;
     });
@@ -340,7 +329,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(2186));
-const content = __importStar(__nccwpck_require__(7622));
 const launchpad_1 = __importDefault(__nccwpck_require__(6624));
 const github = __importStar(__nccwpck_require__(2979));
 const docker_1 = __importDefault(__nccwpck_require__(7458));
@@ -352,7 +340,7 @@ async function run() {
         const name = core.getInput('name');
         // Update description that a deploy is in flight
         if (github.isPullRequest()) {
-            await github.prependToPullDescription(content.getRunningDescription());
+            await github.prependToPullDescription();
         }
         const launchpad = new launchpad_1.default({
             name,
@@ -372,12 +360,10 @@ async function run() {
         await docker.buildAndPush();
         // Deploy built image to LaunchPad Cloud
         const result = await launchpad.createDeployment();
-        // // Add Preview URL to PR
-        // if (github.isPullRequest()) {
-        //   await github.appendToPullDescription(
-        //     content.getFinishedDescription(result.url)
-        //   );
-        // }
+        // Add Preview URL to PR
+        if (github.isPullRequest()) {
+            await github.appendToPullDescription(result.url);
+        }
     }
     catch (error) {
         // await github.resetPullDescription();
