@@ -34,7 +34,7 @@ async function run() {
         const name = core.getInput('name');
         // Update description that a deploy is in flight
         if (github.isPullRequest()) {
-            await github.prependToPullDescription();
+            await github.prependToPullDescription(github.getRunningDescription());
         }
         const launchpad = new launchpad_1.default({
             name,
@@ -56,7 +56,7 @@ async function run() {
         const result = await launchpad.createDeployment();
         // Add Preview URL to PR
         if (github.isPullRequest()) {
-            await github.appendToPullDescription(result.url);
+            await github.appendToPullDescription(github.getFinishedDescription(result.url));
         }
     }
     catch (error) {

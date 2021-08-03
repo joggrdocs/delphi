@@ -151,15 +151,13 @@ BlueNova deploying a Preview of this change, please wait until completed before 
 exports.getRunningDescription = getRunningDescription;
 function getFinishedDescription(url) {
     return `
-[//]: # (bn-bottom-start)
+[//]: # (bn-top-start)
+
+🚀 **BlueNova Deployment** | **Preview Url:** [${url}](${url})
 
 ---
 
-🚀 **BlueNova Deployment**
-
-**Preview Url:** [${url}](${url})
-
-[//]: # (bn-bottom-end)
+[//]: # (bn-top-end)
   `.trim();
 }
 exports.getFinishedDescription = getFinishedDescription;
@@ -189,19 +187,19 @@ function cleanDescription(description) {
 exports.cleanDescription = cleanDescription;
 // Public Methods
 // -----
-async function appendToPullDescription(url) {
+async function appendToPullDescription(description) {
     await updatePullRequest((currentDescription) => {
         return `
 ${cleanDescription(currentDescription || '')}    
-${getFinishedDescription(url)}
+${description}
 `;
     });
 }
 exports.appendToPullDescription = appendToPullDescription;
-async function prependToPullDescription() {
+async function prependToPullDescription(description) {
     await updatePullRequest((currentDescription) => {
         return `
-${getRunningDescription()}
+${description}
 ${cleanDescription(currentDescription || '')}    
 `;
     });
@@ -340,7 +338,7 @@ async function run() {
         const name = core.getInput('name');
         // Update description that a deploy is in flight
         if (github.isPullRequest()) {
-            await github.prependToPullDescription();
+            await github.prependToPullDescription(github.getRunningDescription());
         }
         const launchpad = new launchpad_1.default({
             name,
@@ -362,7 +360,7 @@ async function run() {
         const result = await launchpad.createDeployment();
         // Add Preview URL to PR
         if (github.isPullRequest()) {
-            await github.appendToPullDescription(result.url);
+            await github.appendToPullDescription(github.getFinishedDescription(result.url));
         }
     }
     catch (error) {

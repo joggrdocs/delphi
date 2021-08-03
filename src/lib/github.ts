@@ -27,15 +27,13 @@ BlueNova deploying a Preview of this change, please wait until completed before 
 
 export function getFinishedDescription (url: string): string {
   return `
-[//]: # (bn-bottom-start)
+[//]: # (bn-top-start)
+
+🚀 **BlueNova Deployment** | **Preview Url:** [${url}](${url})
 
 ---
 
-🚀 **BlueNova Deployment**
-
-**Preview Url:** [${url}](${url})
-
-[//]: # (bn-bottom-end)
+[//]: # (bn-top-end)
   `.trim();
 }
 
@@ -70,19 +68,19 @@ export function cleanDescription (description: string): string {
 // Public Methods
 // -----
 
-export async function appendToPullDescription (url: string): Promise<void> {
+export async function appendToPullDescription (description: string): Promise<void> {
   await updatePullRequest((currentDescription) => {
     return `
 ${cleanDescription(currentDescription || '')}    
-${getFinishedDescription(url)}
+${description}
 `;
   });
 }
 
-export async function prependToPullDescription (): Promise<void> {
+export async function prependToPullDescription (description: string): Promise<void> {
   await updatePullRequest((currentDescription) => {
     return `
-${getRunningDescription()}
+${description}
 ${cleanDescription(currentDescription || '')}    
 `;
   });

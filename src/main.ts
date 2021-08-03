@@ -13,7 +13,9 @@ async function run (): Promise<void> {
 
     // Update description that a deploy is in flight
     if (github.isPullRequest()) {
-      await github.prependToPullDescription();
+      await github.prependToPullDescription(
+        github.getRunningDescription()
+      );
     }
 
     const launchpad = new LaunchPad({
@@ -39,7 +41,9 @@ async function run (): Promise<void> {
 
     // Add Preview URL to PR
     if (github.isPullRequest()) {
-      await github.appendToPullDescription(result.url);
+      await github.appendToPullDescription(
+        github.getFinishedDescription(result.url)
+      );
     }
   } catch (error) {
     // await github.resetPullDescription();
