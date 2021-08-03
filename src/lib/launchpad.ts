@@ -1,5 +1,4 @@
 import * as github from '@actions/github';
-import * as core from '@actions/core';
 import axios from 'axios';
 
 import { getBranch } from './github';
@@ -56,7 +55,6 @@ export default class LaunchPad {
   public async createDeployment (): Promise<Deployment> {
     this.assertSetup();
 
-    core.info(`POST ${API_URL}/deployments`);
     const result = await axios.post(`${API_URL}/deployments`, {
       apiKey: this.apiKey,
       name: this.name,
@@ -69,7 +67,6 @@ export default class LaunchPad {
   }
 
   private async readOrganization (): Promise<Organization> {
-    core.info(`GET ${API_URL}/organizations/${this.apiKey}`);
     const result = await axios.get(`${API_URL}/organizations/${this.apiKey}`);
     return result.data;
   }

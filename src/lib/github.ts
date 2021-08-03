@@ -41,7 +41,6 @@ export function getFinishedDescription (url: string): string {
 
 async function updatePullRequest (updater: { (currentDescription: string | null): string }) {
   const prNumber = getPullRequestNumber();
-  core.info(`PR NUMBER: ${getPullRequestNumber()}`);
   const octokit = github.getOctokit(core.getInput('github_token'));
 
   const { data: pullRequest } = await octokit.rest.pulls.get({
@@ -62,11 +61,10 @@ async function updatePullRequest (updater: { (currentDescription: string | null)
   });
 }
 
-function cleanDescription (description: string) {
-  return _.chain(description)
-    .trimStart(MARK_BN_TOP_END)
-    .trimEnd(MARK_BN_BOTTOM_START)
-    .value();
+export function cleanDescription (description: string): string {
+  const [, descriptionStart] = description.split(MARK_BN_TOP_END);
+  const [descriptionEnd] = (descriptionStart || description).split(MARK_BN_BOTTOM_START);
+  return descriptionEnd;
 }
 
 // Public Methods

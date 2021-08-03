@@ -19,7 +19,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getBranch = exports.getPullRequestNumber = exports.isPullRequest = exports.resetPullDescription = exports.prependToPullDescription = exports.appendToPullDescription = exports.getFinishedDescription = exports.getRunningDescription = void 0;
+exports.getBranch = exports.getPullRequestNumber = exports.isPullRequest = exports.resetPullDescription = exports.prependToPullDescription = exports.appendToPullDescription = exports.cleanDescription = exports.getFinishedDescription = exports.getRunningDescription = void 0;
 const github = __importStar(require("@actions/github"));
 const core = __importStar(require("@actions/core"));
 const _ = __importStar(require("lodash"));
@@ -60,7 +60,6 @@ function getFinishedDescription(url) {
 exports.getFinishedDescription = getFinishedDescription;
 async function updatePullRequest(updater) {
     const prNumber = getPullRequestNumber();
-    core.info(`PR NUMBER: ${getPullRequestNumber()}`);
     const octokit = github.getOctokit(core.getInput('github_token'));
     const { data: pullRequest } = await octokit.rest.pulls.get({
         owner: github.context.repo.owner,
@@ -78,11 +77,11 @@ async function updatePullRequest(updater) {
     });
 }
 function cleanDescription(description) {
-    return _.chain(description)
-        .trimStart(MARK_BN_TOP_END)
-        .trimEnd(MARK_BN_BOTTOM_START)
-        .value();
+    const [, descriptionStart] = description.split(MARK_BN_TOP_END);
+    const [descriptionEnd] = (descriptionStart || description).split(MARK_BN_BOTTOM_START);
+    return descriptionEnd;
 }
+exports.cleanDescription = cleanDescription;
 // Public Methods
 // -----
 async function appendToPullDescription(url) {

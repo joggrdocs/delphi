@@ -124,7 +124,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.getBranch = exports.getPullRequestNumber = exports.isPullRequest = exports.resetPullDescription = exports.prependToPullDescription = exports.appendToPullDescription = exports.getFinishedDescription = exports.getRunningDescription = void 0;
+exports.getBranch = exports.getPullRequestNumber = exports.isPullRequest = exports.resetPullDescription = exports.prependToPullDescription = exports.appendToPullDescription = exports.cleanDescription = exports.getFinishedDescription = exports.getRunningDescription = void 0;
 const github = __importStar(__nccwpck_require__(5438));
 const core = __importStar(__nccwpck_require__(2186));
 const _ = __importStar(__nccwpck_require__(250));
@@ -165,7 +165,6 @@ function getFinishedDescription(url) {
 exports.getFinishedDescription = getFinishedDescription;
 async function updatePullRequest(updater) {
     const prNumber = getPullRequestNumber();
-    core.info(`PR NUMBER: ${getPullRequestNumber()}`);
     const octokit = github.getOctokit(core.getInput('github_token'));
     const { data: pullRequest } = await octokit.rest.pulls.get({
         owner: github.context.repo.owner,
@@ -183,11 +182,11 @@ async function updatePullRequest(updater) {
     });
 }
 function cleanDescription(description) {
-    return _.chain(description)
-        .trimStart(MARK_BN_TOP_END)
-        .trimEnd(MARK_BN_BOTTOM_START)
-        .value();
+    const [, descriptionStart] = description.split(MARK_BN_TOP_END);
+    const [descriptionEnd] = (descriptionStart || description).split(MARK_BN_BOTTOM_START);
+    return descriptionEnd;
 }
+exports.cleanDescription = cleanDescription;
 // Public Methods
 // -----
 async function appendToPullDescription(url) {
@@ -257,7 +256,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const github = __importStar(__nccwpck_require__(5438));
-const core = __importStar(__nccwpck_require__(2186));
 const axios_1 = __importDefault(__nccwpck_require__(6545));
 const github_1 = __nccwpck_require__(2979);
 const API_URL = 'https://alpha-launchpad.bluenova-app.com';
@@ -278,7 +276,6 @@ class LaunchPad {
     }
     async createDeployment() {
         this.assertSetup();
-        core.info(`POST ${API_URL}/deployments`);
         const result = await axios_1.default.post(`${API_URL}/deployments`, {
             apiKey: this.apiKey,
             name: this.name,
@@ -289,7 +286,6 @@ class LaunchPad {
         return result.data;
     }
     async readOrganization() {
-        core.info(`GET ${API_URL}/organizations/${this.apiKey}`);
         const result = await axios_1.default.get(`${API_URL}/organizations/${this.apiKey}`);
         return result.data;
     }
@@ -28743,7 +28739,7 @@ module.exports = eval("require")("encoding");
 /***/ ((module) => {
 
 "use strict";
-module.exports = JSON.parse("{\"name\":\"blueprint-action-typescript\",\"version\":\"1.0.0\",\"description\":\"Template repository for TypeScript Github Actions\",\"main\":\"dist/main.js\",\"repository\":\"git@github.com:bluenovaio/blueprint-action-typescript.git\",\"author\":\"@bluenovaio\",\"license\":\"MIT\",\"private\":false,\"scripts\":{\"build\":\"tsc\",\"format\":\"prettier --write **/*.ts\",\"format-check\":\"prettier --check **/*.ts\",\"lint\":\"eslint src/**/*.ts\",\"package\":\"ncc build --source-map --license licenses.txt\",\"test\":\"jest --passWithNoTests\"},\"dependencies\":{\"@actions/core\":\"^1.2.6\",\"@actions/exec\":\"^1.1.0\",\"@actions/github\":\"^5.0.0\",\"axios\":\"^0.21.1\",\"lodash\":\"^4.17.21\"},\"devDependencies\":{\"@jest/types\":\"^26.6.2\",\"@types/jest\":\"^26.0.20\",\"@types/lodash\":\"^4.14.171\",\"@types/node\":\"^14.14.35\",\"@typescript-eslint/eslint-plugin\":\"^4.16.1\",\"@typescript-eslint/parser\":\"^4.17.0\",\"@vercel/ncc\":\"^0.27.0\",\"eslint\":\"^7.22.0\",\"eslint-config-semistandard\":\"^15.0.1\",\"eslint-config-standard\":\"^16.0.2\",\"eslint-plugin-import\":\"^2.22.1\",\"eslint-plugin-node\":\"^11.1.0\",\"eslint-plugin-promise\":\"^4.3.1\",\"eslint-plugin-standard\":\"^5.0.0\",\"jest\":\"^26.6.3\",\"prettier\":\"^2.2.1\",\"ts-jest\":\"^26.5.3\",\"ts-node\":\"^9.1.1\",\"typescript\":\"^4.2.3\"}}");
+module.exports = JSON.parse("{\"name\":\"blueprint-action-typescript\",\"version\":\"1.0.0\",\"description\":\"Template repository for TypeScript Github Actions\",\"main\":\"dist/main.js\",\"repository\":\"git@github.com:bluenovaio/blueprint-action-typescript.git\",\"author\":\"@bluenovaio\",\"license\":\"MIT\",\"private\":false,\"scripts\":{\"build\":\"tsc\",\"format\":\"prettier --write **/*.ts\",\"format-check\":\"prettier --check **/*.ts\",\"lint\":\"eslint src/**/*.ts\",\"package\":\"ncc build --source-map --license licenses.txt\",\"test\":\"jest\"},\"dependencies\":{\"@actions/core\":\"^1.2.6\",\"@actions/exec\":\"^1.1.0\",\"@actions/github\":\"^5.0.0\",\"axios\":\"^0.21.1\",\"lodash\":\"^4.17.21\"},\"devDependencies\":{\"@jest/types\":\"^26.6.2\",\"@types/jest\":\"^26.0.24\",\"@types/lodash\":\"^4.14.171\",\"@types/node\":\"^14.14.35\",\"@typescript-eslint/eslint-plugin\":\"^4.16.1\",\"@typescript-eslint/parser\":\"^4.17.0\",\"@vercel/ncc\":\"^0.27.0\",\"eslint\":\"^7.22.0\",\"eslint-config-semistandard\":\"^15.0.1\",\"eslint-config-standard\":\"^16.0.2\",\"eslint-plugin-import\":\"^2.22.1\",\"eslint-plugin-node\":\"^11.1.0\",\"eslint-plugin-promise\":\"^4.3.1\",\"eslint-plugin-standard\":\"^5.0.0\",\"jest\":\"^26.6.3\",\"prettier\":\"^2.2.1\",\"ts-jest\":\"^26.5.3\",\"ts-node\":\"^9.1.1\",\"typescript\":\"^4.2.3\"}}");
 
 /***/ }),
 
