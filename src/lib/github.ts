@@ -28,7 +28,9 @@ BlueNova deploying a Preview of this change, please wait until completed before 
 export function getFinishedDescription (url: string): string {
   return `
 [//]: # (bn-bottom-start)
+
 ---
+
 🚀 **BlueNova Deployment**
 
 **Preview Url:** [${url}](${url})

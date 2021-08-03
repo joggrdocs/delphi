@@ -152,7 +152,9 @@ exports.getRunningDescription = getRunningDescription;
 function getFinishedDescription(url) {
     return `
 [//]: # (bn-bottom-start)
+
 ---
+
 🚀 **BlueNova Deployment**
 
 **Preview Url:** [${url}](${url})
