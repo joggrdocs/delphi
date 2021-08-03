@@ -360,7 +360,7 @@ async function run() {
         const result = await launchpad.createDeployment();
         // Add Preview URL to PR
         if (github.isPullRequest()) {
-            await github.appendToPullDescription(github.getFinishedDescription(result.url));
+            await github.prependToPullDescription(github.getFinishedDescription(result.url));
         }
     }
     catch (error) {

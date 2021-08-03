@@ -41,7 +41,7 @@ async function run (): Promise<void> {
 
     // Add Preview URL to PR
     if (github.isPullRequest()) {
-      await github.appendToPullDescription(
+      await github.prependToPullDescription(
         github.getFinishedDescription(result.url)
       );
     }
