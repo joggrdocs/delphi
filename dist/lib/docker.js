@@ -41,6 +41,7 @@ class Docker {
         this.isSetup = false;
         this.serviceAccountKey = props.serviceAccountKey;
         this.projectId = props.projectId;
+        this.directory = props.directory || '.';
         this.slug = props.slug;
         this.name = props.name;
     }
@@ -54,20 +55,22 @@ class Docker {
         }
     }
     async login() {
-        this.assertSetup();
         await exec.getExecOutput('docker', [
             'login',
             '-u _json_key',
-            `-p "${this.serviceAccountKey}"`,
-            'https://gcr.io'
-        ]);
+            'https://gcr.io',
+            '--password-stdin'
+        ], {
+            input: Buffer.from(this.serviceAccountKey)
+        });
     }
     async buildAndPush() {
         this.assertSetup();
         await exec.getExecOutput('docker', [
             'build',
-            `-t ${this.getTag()}`,
-            '.'
+            '--tag',
+            this.getTag(),
+            this.directory
         ]);
         await exec.getExecOutput('docker', [
             'push',

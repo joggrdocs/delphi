@@ -23,18 +23,18 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const core = __importStar(require("@actions/core"));
-const content = __importStar(require("./lib/content"));
 const launchpad_1 = __importDefault(require("./lib/launchpad"));
 const github = __importStar(require("./lib/github"));
 const docker_1 = __importDefault(require("./lib/docker"));
 async function run() {
     try {
         const serviceAccountKey = core.getInput('service_account_key');
+        const directory = core.getInput('directory');
         const apiKey = core.getInput('api_key');
         const name = core.getInput('name');
         // Update description that a deploy is in flight
         if (github.isPullRequest()) {
-            await github.prependToPullDescription(content.getRunningDescription());
+            await github.prependToPullDescription(github.getRunningDescription());
         }
         const launchpad = new launchpad_1.default({
             name,
@@ -45,6 +45,7 @@ async function run() {
         const docker = new docker_1.default({
             serviceAccountKey,
             name,
+            directory,
             projectId: launchpad.projectId,
             slug: launchpad.slugId,
             apiKey: apiKey
@@ -55,11 +56,11 @@ async function run() {
         const result = await launchpad.createDeployment();
         // Add Preview URL to PR
         if (github.isPullRequest()) {
-            await github.appendToPullDescription(content.getFinishedDescription(result.url));
+            await github.prependToPullDescription(github.getFinishedDescription(result.url));
         }
     }
     catch (error) {
-        await github.resetPullDescription();
+        // await github.resetPullDescription();
         core.setFailed(error.message);
     }
 }

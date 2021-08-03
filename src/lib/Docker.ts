@@ -27,18 +27,21 @@ interface DockerProps {
   slug: string;
   apiKey: string;
   serviceAccountKey: string;
+  directory?: string;
 }
 
 export default class Docker {
   private isSetup = false;
   private readonly serviceAccountKey: string;
   private readonly projectId: string;
+  private readonly directory: string;
   private readonly name: string;
   private readonly slug: string;
 
   constructor (props: DockerProps) {
     this.serviceAccountKey = props.serviceAccountKey;
     this.projectId = props.projectId;
+    this.directory = props.directory || '.';
     this.slug = props.slug;
     this.name = props.name;
   }
@@ -53,14 +56,14 @@ export default class Docker {
   }
 
   public async login (): Promise<void> {
-    this.assertSetup();
-
     await exec.getExecOutput('docker', [
       'login',
       '-u _json_key',
-      `-p "${this.serviceAccountKey}"`,
-      'https://gcr.io'
-    ]);
+      'https://gcr.io',
+      '--password-stdin'
+    ], {
+      input: Buffer.from(this.serviceAccountKey)
+    });
   }
 
   public async buildAndPush (): Promise<void> {
@@ -68,8 +71,9 @@ export default class Docker {
 
     await exec.getExecOutput('docker', [
       'build',
-      `-t ${this.getTag()}`,
-      '.'
+      '--tag',
+      this.getTag(),
+      this.directory
     ]);
 
     await exec.getExecOutput('docker', [
