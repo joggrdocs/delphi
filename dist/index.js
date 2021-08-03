@@ -69,7 +69,8 @@ class Docker {
             'docker',
             'login',
             '-u _json_key',
-            'https://gcr.io'
+            'https://gcr.io',
+            '--password-stdin'
         ]);
     }
     async buildAndPush() {
