@@ -1,6 +1,5 @@
 import * as core from '@actions/core';
 
-import * as content from './lib/content';
 import LaunchPad from './lib/launchpad';
 import * as github from './lib/github';
 import Docker from './lib/docker';
@@ -8,13 +7,14 @@ import Docker from './lib/docker';
 async function run (): Promise<void> {
   try {
     const serviceAccountKey = core.getInput('service_account_key');
+    const directory = core.getInput('directory');
     const apiKey = core.getInput('api_key');
     const name = core.getInput('name');
 
     // Update description that a deploy is in flight
     if (github.isPullRequest()) {
       await github.prependToPullDescription(
-        content.getRunningDescription()
+        github.getRunningDescription()
       );
     }
 
@@ -28,6 +28,7 @@ async function run (): Promise<void> {
     const docker = new Docker({
       serviceAccountKey,
       name,
+      directory,
       projectId: launchpad.projectId as string,
       slug: launchpad.slugId as string,
       apiKey: apiKey
@@ -40,12 +41,12 @@ async function run (): Promise<void> {
 
     // Add Preview URL to PR
     if (github.isPullRequest()) {
-      await github.appendToPullDescription(
-        content.getFinishedDescription(result.url)
+      await github.prependToPullDescription(
+        github.getFinishedDescription(result.url)
       );
     }
   } catch (error) {
-    await github.resetPullDescription();
+    // await github.resetPullDescription();
     core.setFailed(error.message);
   }
 }

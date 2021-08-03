@@ -1,4 +1,5 @@
 import * as github from '@actions/github';
+import * as core from '@actions/core';
 import * as _ from 'lodash';
 
 // eslint-disable-next-line no-unused-vars
@@ -11,25 +12,44 @@ const MARK_BN_BOTTOM_END = '[//]: # (bn-bottom-end)';
 // Utils
 // -----
 
+export function getRunningDescription (): string {
+  return `
+[//]: # (bn-top-start)
+⚠️  **BlueNova deployment in progress** ⚠️ 
+
+BlueNova deploying a Preview of this change, please wait until completed before pushing a new commit.
+
+---
+
+[//]: # (bn-top-end)
+`.trim();
+}
+
+export function getFinishedDescription (url: string): string {
+  return `
+[//]: # (bn-top-start)
+
+🚀 **BlueNova Deployment** | **Preview Url:** [${url}](${url})
+
+---
+
+[//]: # (bn-top-end)
+  `.trim();
+}
+
 async function updatePullRequest (updater: { (currentDescription: string | null): string }) {
-  const branch = getBranch();
+  const prNumber = getPullRequestNumber();
+  const octokit = github.getOctokit(core.getInput('github_token'));
 
-  const source = github.context.ref.replace(/^refs\/heads\//, '');
-
-  const octokit = github.getOctokit(process.env.GITHUB_TOKEN as string);
-
-  const { data: pulls } = await octokit.rest.pulls.list({
+  const { data: pullRequest } = await octokit.rest.pulls.get({
     owner: github.context.repo.owner,
     repo: github.context.repo.repo,
-    base: branch,
-    head: `${github.context.repo.owner}:${source}`
+    pull_number: prNumber
   });
 
-  if (pulls.length === 0) {
-    throw new Error(`No such pull request for branch: ${branch}`);
+  if (!pullRequest) {
+    throw new Error(`No such pull request for PR: ${prNumber}`);
   }
-
-  const pullRequest = pulls[0];
 
   await octokit.rest.pulls.update({
     owner: github.context.repo.owner,
@@ -39,11 +59,10 @@ async function updatePullRequest (updater: { (currentDescription: string | null)
   });
 }
 
-function cleanDescription (description: string) {
-  return _.chain(description)
-    .trimStart(MARK_BN_TOP_END)
-    .trimEnd(MARK_BN_BOTTOM_START)
-    .value();
+export function cleanDescription (description: string): string {
+  const [, descriptionStart] = description.split(MARK_BN_TOP_END);
+  const [descriptionEnd] = (descriptionStart || description).split(MARK_BN_BOTTOM_START);
+  return descriptionEnd;
 }
 
 // Public Methods
@@ -52,8 +71,8 @@ function cleanDescription (description: string) {
 export async function appendToPullDescription (description: string): Promise<void> {
   await updatePullRequest((currentDescription) => {
     return `
-${description}
 ${cleanDescription(currentDescription || '')}    
+${description}
 `;
   });
 }
@@ -61,8 +80,8 @@ ${cleanDescription(currentDescription || '')}
 export async function prependToPullDescription (description: string): Promise<void> {
   await updatePullRequest((currentDescription) => {
     return `
-${cleanDescription(currentDescription || '')}    
 ${description}
+${cleanDescription(currentDescription || '')}    
 `;
   });
 }
@@ -73,6 +92,16 @@ export async function resetPullDescription (): Promise<void> {
 
 export function isPullRequest (): boolean {
   return true;
+}
+
+export function getPullRequestNumber (): number {
+  return Number(
+    _.replace(
+      _.replace(github.context.ref, 'refs/pull/', ''),
+      '/merge',
+      ''
+    )
+  );
 }
 
 export function getBranch (): string {

@@ -19,8 +19,9 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getBranch = exports.isPullRequest = exports.resetPullDescription = exports.prependToPullDescription = exports.appendToPullDescription = void 0;
+exports.getBranch = exports.getPullRequestNumber = exports.isPullRequest = exports.resetPullDescription = exports.prependToPullDescription = exports.appendToPullDescription = exports.cleanDescription = exports.getFinishedDescription = exports.getRunningDescription = void 0;
 const github = __importStar(require("@actions/github"));
+const core = __importStar(require("@actions/core"));
 const _ = __importStar(require("lodash"));
 // eslint-disable-next-line no-unused-vars
 const MARK_BN_TOP_START = '[//]: # (bn-top-start)';
@@ -30,20 +31,42 @@ const MARK_BN_BOTTOM_START = '[//]: # (bn-bottom-start)';
 const MARK_BN_BOTTOM_END = '[//]: # (bn-bottom-end)';
 // Utils
 // -----
+function getRunningDescription() {
+    return `
+[//]: # (bn-top-start)
+⚠️  **BlueNova deployment in progress** ⚠️ 
+
+BlueNova deploying a Preview of this change, please wait until completed before pushing a new commit.
+
+---
+
+[//]: # (bn-top-end)
+`.trim();
+}
+exports.getRunningDescription = getRunningDescription;
+function getFinishedDescription(url) {
+    return `
+[//]: # (bn-top-start)
+
+🚀 **BlueNova Deployment** | **Preview Url:** [${url}](${url})
+
+---
+
+[//]: # (bn-top-end)
+  `.trim();
+}
+exports.getFinishedDescription = getFinishedDescription;
 async function updatePullRequest(updater) {
-    const branch = getBranch();
-    const source = github.context.ref.replace(/^refs\/heads\//, '');
-    const octokit = github.getOctokit(process.env.GITHUB_TOKEN);
-    const { data: pulls } = await octokit.rest.pulls.list({
+    const prNumber = getPullRequestNumber();
+    const octokit = github.getOctokit(core.getInput('github_token'));
+    const { data: pullRequest } = await octokit.rest.pulls.get({
         owner: github.context.repo.owner,
         repo: github.context.repo.repo,
-        base: branch,
-        head: `${github.context.repo.owner}:${source}`
+        pull_number: prNumber
     });
-    if (pulls.length === 0) {
-        throw new Error(`No such pull request for branch: ${branch}`);
+    if (!pullRequest) {
+        throw new Error(`No such pull request for PR: ${prNumber}`);
     }
-    const pullRequest = pulls[0];
     await octokit.rest.pulls.update({
         owner: github.context.repo.owner,
         repo: github.context.repo.repo,
@@ -52,18 +75,18 @@ async function updatePullRequest(updater) {
     });
 }
 function cleanDescription(description) {
-    return _.chain(description)
-        .trimStart(MARK_BN_TOP_END)
-        .trimEnd(MARK_BN_BOTTOM_START)
-        .value();
+    const [, descriptionStart] = description.split(MARK_BN_TOP_END);
+    const [descriptionEnd] = (descriptionStart || description).split(MARK_BN_BOTTOM_START);
+    return descriptionEnd;
 }
+exports.cleanDescription = cleanDescription;
 // Public Methods
 // -----
 async function appendToPullDescription(description) {
     await updatePullRequest((currentDescription) => {
         return `
-${description}
 ${cleanDescription(currentDescription || '')}    
+${description}
 `;
     });
 }
@@ -71,8 +94,8 @@ exports.appendToPullDescription = appendToPullDescription;
 async function prependToPullDescription(description) {
     await updatePullRequest((currentDescription) => {
         return `
-${cleanDescription(currentDescription || '')}    
 ${description}
+${cleanDescription(currentDescription || '')}    
 `;
     });
 }
@@ -85,6 +108,10 @@ function isPullRequest() {
     return true;
 }
 exports.isPullRequest = isPullRequest;
+function getPullRequestNumber() {
+    return Number(_.replace(_.replace(github.context.ref, 'refs/pull/', ''), '/merge', ''));
+}
+exports.getPullRequestNumber = getPullRequestNumber;
 function getBranch() {
     return _.replace(github.context.ref, 'refs/heads/', '');
 }

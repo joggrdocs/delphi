@@ -68,7 +68,6 @@ export default class LaunchPad {
 
   private async readOrganization (): Promise<Organization> {
     const result = await axios.get(`${API_URL}/organizations/${this.apiKey}`);
-
     return result.data;
   }
 
