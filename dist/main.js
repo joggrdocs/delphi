@@ -23,7 +23,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const core = __importStar(require("@actions/core"));
+const content = __importStar(require("./lib/content"));
 const launchpad_1 = __importDefault(require("./lib/launchpad"));
+const github = __importStar(require("./lib/github"));
 const docker_1 = __importDefault(require("./lib/docker"));
 async function run() {
     try {
@@ -31,12 +33,10 @@ async function run() {
         const directory = core.getInput('directory');
         const apiKey = core.getInput('api_key');
         const name = core.getInput('name');
-        // // Update description that a deploy is in flight
-        // if (github.isPullRequest()) {
-        //   await github.prependToPullDescription(
-        //     content.getRunningDescription()
-        //   );
-        // }
+        // Update description that a deploy is in flight
+        if (github.isPullRequest()) {
+            await github.prependToPullDescription(content.getRunningDescription());
+        }
         const launchpad = new launchpad_1.default({
             name,
             apiKey

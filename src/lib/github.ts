@@ -14,7 +14,7 @@ const MARK_BN_BOTTOM_END = '[//]: # (bn-bottom-end)';
 
 async function updatePullRequest (updater: { (currentDescription: string | null): string }) {
   const prNumber = getPullRequestNumber();
-
+  core.info(`PR NUMBER: ${prNumber}`);
   const octokit = github.getOctokit(core.getInput('github_token'));
 
   const { data: pullRequest } = await octokit.rest.pulls.get({

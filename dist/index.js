@@ -2,6 +2,40 @@ require('./sourcemap-register.js');module.exports =
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
+/***/ 7622:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.getFinishedDescription = exports.getRunningDescription = void 0;
+function getRunningDescription() {
+    return `
+[//]: # (bn-start)
+⚠️  **BlueNova deployment in progress** ⚠️ 
+
+BlueNova deploying a Preview of this change, please wait until completed before pushing a new commit.
+
+---
+[//]: # (bn-end)
+`.trim();
+}
+exports.getRunningDescription = getRunningDescription;
+function getFinishedDescription(url) {
+    return `
+[//]: # (bn-start)
+---
+🚀 **BlueNova Deployment**
+
+**Preview Url:** [${url}](${url})
+[//]: # (bn-end)
+  `.trim();
+}
+exports.getFinishedDescription = getFinishedDescription;
+//# sourceMappingURL=content.js.map
+
+/***/ }),
+
 /***/ 7458:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
@@ -138,6 +172,7 @@ const MARK_BN_BOTTOM_END = '[//]: # (bn-bottom-end)';
 // -----
 async function updatePullRequest(updater) {
     const prNumber = getPullRequestNumber();
+    core.info(`PR NUMBER: ${prNumber}`);
     const octokit = github.getOctokit(core.getInput('github_token'));
     const { data: pullRequest } = await octokit.rest.pulls.get({
         owner: github.context.repo.owner,
@@ -305,7 +340,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(2186));
+const content = __importStar(__nccwpck_require__(7622));
 const launchpad_1 = __importDefault(__nccwpck_require__(6624));
+const github = __importStar(__nccwpck_require__(2979));
 const docker_1 = __importDefault(__nccwpck_require__(7458));
 async function run() {
     try {
@@ -313,12 +350,10 @@ async function run() {
         const directory = core.getInput('directory');
         const apiKey = core.getInput('api_key');
         const name = core.getInput('name');
-        // // Update description that a deploy is in flight
-        // if (github.isPullRequest()) {
-        //   await github.prependToPullDescription(
-        //     content.getRunningDescription()
-        //   );
-        // }
+        // Update description that a deploy is in flight
+        if (github.isPullRequest()) {
+            await github.prependToPullDescription(content.getRunningDescription());
+        }
         const launchpad = new launchpad_1.default({
             name,
             apiKey

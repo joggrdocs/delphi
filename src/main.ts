@@ -12,12 +12,12 @@ async function run (): Promise<void> {
     const apiKey = core.getInput('api_key');
     const name = core.getInput('name');
 
-    // // Update description that a deploy is in flight
-    // if (github.isPullRequest()) {
-    //   await github.prependToPullDescription(
-    //     content.getRunningDescription()
-    //   );
-    // }
+    // Update description that a deploy is in flight
+    if (github.isPullRequest()) {
+      await github.prependToPullDescription(
+        content.getRunningDescription()
+      );
+    }
 
     const launchpad = new LaunchPad({
       name,
