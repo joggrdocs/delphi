@@ -9,7 +9,7 @@ This is ONLY available for use by those in the closed Alpha Program, if you are 
 [![CI](https://github.com/bluenovaio/action-launchpad/actions/workflows/ci.yaml/badge.svg)](https://github.com/bluenovaio/action-launchpad/actions/workflows/ci.yaml)
 [![js-semistandard-style](https://img.shields.io/badge/code%20style-semistandard-brightgreen.svg?style=flat-square)](https://github.com/standard/semistandard)
 
-Launch you products to the stars with LaunchPad.
+Launch your product(s) to the stars with LaunchPad.
 
 ## Usage
 ```yaml
