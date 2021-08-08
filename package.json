@@ -1,9 +1,9 @@
 {
-  "name": "blueprint-action-typescript",
-  "version": "1.0.0",
-  "description": "Template repository for TypeScript Github Actions",
+  "name": "action-launchpad",
+  "version": "0.1.0-alpha",
+  "description": "Launch your product(s) to the stars with LaunchPad.",
   "main": "dist/main.js",
-  "repository": "git@github.com:bluenovaio/blueprint-action-typescript.git",
+  "repository": "git@github.com:bluenovaio/action-launchpad.git",
   "author": "@bluenovaio",
   "license": "MIT",
   "private": false,
