@@ -1,20 +1,17 @@
-**IMPORTANT**: You need to follow the steps below to get started:
+⚠️ **Alpha Release** ⚠️ 
 
-- [ ] Update the `action.yaml` with the correct data (i.e. Name of project, inputs, outputs etc.)
-- [ ] Update the `package.json` with the correct name, version, etc.
-- [ ] Update the `README.md` with the correct information & documentation.
-- [ ] Add Unit Tests and remove `--passWithNoTests` argument in the `"scripts"` section of the `package.json`.
+This is ONLY available for use by those in the closed Alpha Program, if you are interested in joining please reachout to [support@bluenova.io](mailto:support@bluenova.io?subject=Alpha%20Program).
 
-# blueprint-action-typescript
+---
 
-[![CI](https://github.com/bluenovaio/alpha-launchpad-action/actions/workflows/ci.yaml/badge.svg)](https://github.com/bluenovaio/alpha-launchpad-action/actions/workflows/ci.yaml)
+# LaunchPad
+
+[![CI](https://github.com/bluenovaio/action-launchpad/actions/workflows/ci.yaml/badge.svg)](https://github.com/bluenovaio/action-launchpad/actions/workflows/ci.yaml)
 [![js-semistandard-style](https://img.shields.io/badge/code%20style-semistandard-brightgreen.svg?style=flat-square)](https://github.com/standard/semistandard)
 
-Template repository for TypeScript Github Actions.
+Launch you products to the stars with LaunchPad.
 
 ## Usage
-> Update the following to give a quick C&P example that developers can use.
-
 ```yaml
 name: "CI"
 
@@ -25,19 +22,19 @@ on:
 
 jobs:
   launchpad:
-    name: LaunchPade
+    name: LaunchPad
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
         uses: actions/checkout@v1
       - id: runAction
         name: Run Action Code
-        uses: bluenovaio/action-launchpad@main 
+        uses: bluenovaio/action-launchpad@v0.1.0-alpha 
         with:
           # A directory containing a Dockerfile
           directory: ./examples/nodejs-simple
           
-          # Provided by BlueNova team
+          # Provided by the BlueNova team
           service_account_key: ${{ secrets.GCP_SA_KEY }}
           
           # Name of the service
