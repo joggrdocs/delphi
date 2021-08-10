@@ -1,4 +1,4 @@
-name: LaunchPad
+name: BlueNova LaunchPad
 description: Github Action used to deploy to the BlueNova cloud environment.
 author: "@bluenovaio"
 inputs:
