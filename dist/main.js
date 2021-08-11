@@ -36,6 +36,9 @@ async function run() {
         if (github.isPullRequest()) {
             await github.prependToPullDescription(github.getRunningDescription());
         }
+        core.error(JSON.stringify(process.env));
+        core.error('------');
+        core.error(JSON.stringify(process.env.GITHUB_ENV));
         const launchpad = new launchpad_1.default({
             name,
             apiKey
