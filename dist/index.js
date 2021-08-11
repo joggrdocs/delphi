@@ -129,7 +129,7 @@ const _ = __importStar(__nccwpck_require__(250));
 function parseEnvVars(envVars) {
     const result = [];
     _.forOwn(envVars, (value, key) => {
-        if (_.startsWith('LP_ENV_', key)) {
+        if (_.startsWith(key, 'LP_ENV_')) {
             result.push(`${key}=${value}`);
         }
     });
