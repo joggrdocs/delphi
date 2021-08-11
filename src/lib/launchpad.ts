@@ -23,6 +23,7 @@ export interface Organization {
 interface LaunchPadConfig {
   apiKey: string;
   name: string;
+  envVars?: string;
 }
 
 export default class LaunchPad {
@@ -34,10 +35,12 @@ export default class LaunchPad {
   private readonly branch: string;
   private readonly commit: string;
   private isSetup = false;
+  private readonly envVars?: string;
 
   constructor (props: LaunchPadConfig) {
     this.apiKey = props.apiKey;
     this.name = props.name;
+    this.envVars = props.envVars;
     this.commit = github.context.sha;
     this.repository = github.context.repo.repo;
     this.branch = getBranch();
@@ -60,7 +63,8 @@ export default class LaunchPad {
       name: this.name,
       branch: this.branch,
       repository: this.repository,
-      commit: this.commit
+      commit: this.commit,
+      environmentVariables: this.envVars
     });
 
     return result.data;

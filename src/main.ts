@@ -3,6 +3,7 @@ import * as core from '@actions/core';
 import LaunchPad from './lib/launchpad';
 import * as github from './lib/github';
 import Docker from './lib/docker';
+import { parseEnvVars } from './lib/environment';
 
 async function run (): Promise<void> {
   try {
@@ -20,7 +21,8 @@ async function run (): Promise<void> {
 
     const launchpad = new LaunchPad({
       name,
-      apiKey
+      apiKey,
+      envVars: parseEnvVars(process.env as Record<string, string>)
     });
     await launchpad.setup();
 

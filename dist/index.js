@@ -99,6 +99,47 @@ exports.default = Docker;
 
 /***/ }),
 
+/***/ 6114:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.parseEnvVars = void 0;
+const _ = __importStar(__nccwpck_require__(250));
+function parseEnvVars(envVars) {
+    const result = [];
+    _.forOwn(envVars, (value, key) => {
+        if (_.startsWith(key, 'LP_ENV_')) {
+            result.push(`${key}=${value}`);
+        }
+    });
+    return result.join(',');
+}
+exports.parseEnvVars = parseEnvVars;
+//# sourceMappingURL=environment.js.map
+
+/***/ }),
+
 /***/ 2979:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
@@ -262,6 +303,7 @@ class LaunchPad {
         this.isSetup = false;
         this.apiKey = props.apiKey;
         this.name = props.name;
+        this.envVars = props.envVars;
         this.commit = github.context.sha;
         this.repository = github.context.repo.repo;
         this.branch = github_1.getBranch();
@@ -279,7 +321,8 @@ class LaunchPad {
             name: this.name,
             branch: this.branch,
             repository: this.repository,
-            commit: this.commit
+            commit: this.commit,
+            environmentVariables: this.envVars
         });
         return result.data;
     }
@@ -330,6 +373,7 @@ const core = __importStar(__nccwpck_require__(2186));
 const launchpad_1 = __importDefault(__nccwpck_require__(6624));
 const github = __importStar(__nccwpck_require__(2979));
 const docker_1 = __importDefault(__nccwpck_require__(7458));
+const environment_1 = __nccwpck_require__(6114);
 async function run() {
     try {
         const serviceAccountKey = core.getInput('service_account_key');
@@ -342,7 +386,8 @@ async function run() {
         }
         const launchpad = new launchpad_1.default({
             name,
-            apiKey
+            apiKey,
+            envVars: environment_1.parseEnvVars(process.env)
         });
         await launchpad.setup();
         // Build & Push Image to LaunchPad repository
@@ -28791,7 +28836,7 @@ module.exports = eval("require")("encoding");
 /***/ ((module) => {
 
 "use strict";
-module.exports = JSON.parse('{"name":"action-launchpad","version":"0.1.0-alpha","description":"Launch your product(s) to the stars with LaunchPad.","main":"dist/main.js","repository":"git@github.com:bluenovaio/action-launchpad.git","author":"@bluenovaio","license":"MIT","private":false,"scripts":{"build":"tsc","format":"prettier --write **/*.ts","format-check":"prettier --check **/*.ts","lint":"eslint src/**/*.ts","package":"ncc build --source-map --license licenses.txt","test":"jest"},"dependencies":{"@actions/core":"^1.4.0","@actions/exec":"^1.1.0","@actions/github":"^5.0.0","axios":"^0.21.1","lodash":"^4.17.21"},"devDependencies":{"@jest/types":"^27.0.6","@types/jest":"^26.0.24","@types/lodash":"^4.14.172","@types/node":"^16.4.13","@typescript-eslint/eslint-plugin":"^4.29.0","@typescript-eslint/parser":"^4.29.0","@vercel/ncc":"^0.29.0","eslint":"^7.32.0","eslint-config-semistandard":"^16.0.0","eslint-config-standard":"^16.0.3","eslint-plugin-import":"^2.24.0","eslint-plugin-node":"^11.1.0","eslint-plugin-promise":"^5.1.0","eslint-plugin-standard":"^5.0.0","jest":"^27.0.6","prettier":"^2.3.2","ts-jest":"^27.0.4","ts-node":"^10.1.0","typescript":"^4.3.5"}}');
+module.exports = JSON.parse('{"name":"action-launchpad","version":"0.1.0-alpha","description":"Launch your product(s) to the stars with LaunchPad.","main":"dist/main.js","repository":"git@github.com:bluenovaio/action-launchpad.git","author":"@bluenovaio","license":"MIT","private":false,"scripts":{"build":"tsc","format":"prettier --write **/*.ts","format-check":"prettier --check **/*.ts","lint":"eslint src/**/*.ts","package":"ncc build --source-map --license licenses.txt","test":"jest"},"dependencies":{"@actions/core":"^1.4.0","@actions/exec":"^1.1.0","@actions/github":"^5.0.0","axios":"^0.21.1","lodash":"^4.17.21"},"devDependencies":{"@jest/types":"^27.0.6","@types/jest":"^26.0.24","@types/lodash":"^4.14.172","@types/node":"^16.4.13","@typescript-eslint/eslint-plugin":"^4.29.1","@typescript-eslint/parser":"^4.29.1","@vercel/ncc":"^0.29.0","eslint":"^7.32.0","eslint-config-semistandard":"^16.0.0","eslint-config-standard":"^16.0.3","eslint-plugin-import":"^2.24.0","eslint-plugin-node":"^11.1.0","eslint-plugin-promise":"^5.1.0","eslint-plugin-standard":"^5.0.0","jest":"^27.0.6","prettier":"^2.3.2","ts-jest":"^27.0.4","ts-node":"^10.2.0","typescript":"^4.3.5"}}');
 
 /***/ }),
 
