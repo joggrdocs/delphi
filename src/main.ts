@@ -18,9 +18,9 @@ async function run (): Promise<void> {
       );
     }
 
-    core.info(JSON.stringify(process.env));
-    core.info('------');
-    core.info(JSON.stringify(process.env.GITHUB_ENV));
+    core.error(JSON.stringify(process.env));
+    core.error('------');
+    core.error(JSON.stringify(process.env.GITHUB_ENV));
 
     const launchpad = new LaunchPad({
       name,
