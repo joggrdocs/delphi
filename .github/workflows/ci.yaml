@@ -16,7 +16,7 @@ jobs:
         name: Run Action Code
         uses: ./
         env:
-          MESSAGE: 'Hello via ENV Vars'
+          LP_ENV_MESSAGE: 'Hello via ENV Vars'
         with:
           directory: ./examples/nodejs-simple
           service_account_key: ${{ secrets.GCP_SA_KEY }}

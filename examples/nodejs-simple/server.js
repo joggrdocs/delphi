@@ -4,7 +4,7 @@ const server = express();
 
 server.get('/hello', (req, res) => {
   res.json({
-    message: process.env.MESSAGE || 'Hello World!'
+    message: process.env.LP_ENV_MESSAGE || 'Hello World!'
   });
 });
 
