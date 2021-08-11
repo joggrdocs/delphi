@@ -26,6 +26,7 @@ const core = __importStar(require("@actions/core"));
 const launchpad_1 = __importDefault(require("./lib/launchpad"));
 const github = __importStar(require("./lib/github"));
 const docker_1 = __importDefault(require("./lib/docker"));
+const environment_1 = require("./lib/environment");
 async function run() {
     try {
         const serviceAccountKey = core.getInput('service_account_key');
@@ -36,12 +37,10 @@ async function run() {
         if (github.isPullRequest()) {
             await github.prependToPullDescription(github.getRunningDescription());
         }
-        core.error(JSON.stringify(process.env));
-        core.error('------');
-        core.error(JSON.stringify(process.env.GITHUB_ENV));
         const launchpad = new launchpad_1.default({
             name,
-            apiKey
+            apiKey,
+            envVars: environment_1.parseEnvVars(process.env)
         });
         await launchpad.setup();
         // Build & Push Image to LaunchPad repository

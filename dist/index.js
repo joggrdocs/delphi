@@ -99,6 +99,47 @@ exports.default = Docker;
 
 /***/ }),
 
+/***/ 6114:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.parseEnvVars = void 0;
+const _ = __importStar(__nccwpck_require__(250));
+function parseEnvVars(envVars) {
+    const result = [];
+    _.forOwn(envVars, (value, key) => {
+        if (_.startsWith('LP_ENV_', key)) {
+            result.push(`${key}=${value}`);
+        }
+    });
+    return result.join(',');
+}
+exports.parseEnvVars = parseEnvVars;
+//# sourceMappingURL=environment.js.map
+
+/***/ }),
+
 /***/ 2979:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
@@ -262,6 +303,7 @@ class LaunchPad {
         this.isSetup = false;
         this.apiKey = props.apiKey;
         this.name = props.name;
+        this.envVars = props.envVars;
         this.commit = github.context.sha;
         this.repository = github.context.repo.repo;
         this.branch = github_1.getBranch();
@@ -279,7 +321,8 @@ class LaunchPad {
             name: this.name,
             branch: this.branch,
             repository: this.repository,
-            commit: this.commit
+            commit: this.commit,
+            environmentVariables: this.envVars
         });
         return result.data;
     }
@@ -330,6 +373,7 @@ const core = __importStar(__nccwpck_require__(2186));
 const launchpad_1 = __importDefault(__nccwpck_require__(6624));
 const github = __importStar(__nccwpck_require__(2979));
 const docker_1 = __importDefault(__nccwpck_require__(7458));
+const environment_1 = __nccwpck_require__(6114);
 async function run() {
     try {
         const serviceAccountKey = core.getInput('service_account_key');
@@ -340,12 +384,10 @@ async function run() {
         if (github.isPullRequest()) {
             await github.prependToPullDescription(github.getRunningDescription());
         }
-        core.error(JSON.stringify(process.env));
-        core.error('------');
-        core.error(JSON.stringify(process.env.GITHUB_ENV));
         const launchpad = new launchpad_1.default({
             name,
-            apiKey
+            apiKey,
+            envVars: environment_1.parseEnvVars(process.env)
         });
         await launchpad.setup();
         // Build & Push Image to LaunchPad repository
