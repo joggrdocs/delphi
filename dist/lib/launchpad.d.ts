@@ -8,6 +8,7 @@ export interface Organization {
 interface LaunchPadConfig {
     apiKey: string;
     name: string;
+    envVars?: string;
 }
 export default class LaunchPad {
     slugId?: string;
@@ -18,6 +19,7 @@ export default class LaunchPad {
     private readonly branch;
     private readonly commit;
     private isSetup;
+    private readonly envVars?;
     constructor(props: LaunchPadConfig);
     setup(): Promise<void>;
     createDeployment(): Promise<Deployment>;

@@ -3,7 +3,9 @@ const express = require('express');
 const server = express();
 
 server.get('/hello', (req, res) => {
-  res.json({message: 'Hello World!'});
+  res.json({
+    message: process.env.LP_ENV_MESSAGE || 'Hello World!'
+  });
 });
 
 server.listen(8080, (err) => {
