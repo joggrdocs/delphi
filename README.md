@@ -29,7 +29,9 @@ jobs:
         uses: actions/checkout@v1
       - id: runAction
         name: Run Action Code
-        uses: bluenovaio/action-launchpad@v0.1.0-alpha 
+        uses: bluenovaio/action-launchpad@v0.1.0-alpha
+        env: 
+          LP_ENV_MY_VAR: "Foobar" # You MUST prefix all environment variables with "LP_ENV_
         with:
           # A directory containing a Dockerfile
           directory: ./examples/nodejs-simple
