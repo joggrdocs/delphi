@@ -21,6 +21,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const github = __importStar(require("@actions/github"));
 const exec = __importStar(require("@actions/exec"));
+const URL_ARTIFACT_REGISTRY = 'us-docker.pkg.dev';
 // Utils
 // -----
 async function isBuildXAvailable() {
@@ -58,7 +59,7 @@ class Docker {
         await exec.getExecOutput('docker', [
             'login',
             '-u _json_key',
-            'https://gcr.io',
+            `https://${URL_ARTIFACT_REGISTRY}`,
             '--password-stdin'
         ], {
             input: Buffer.from(this.serviceAccountKey)
@@ -78,7 +79,7 @@ class Docker {
         ]);
     }
     getTag() {
-        return `gcr.io/${this.projectId}/alpha-launchpad/${this.slug}/${this.name}:${github.context.sha}`;
+        return `${URL_ARTIFACT_REGISTRY}/${this.projectId}/${this.slug}/${this.name}:${github.context.sha}`;
     }
     assertSetup() {
         if (!this.isSetup) {
