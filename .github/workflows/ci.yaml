@@ -15,6 +15,8 @@ jobs:
       - id: runAction
         name: Run Action Code
         uses: ./
+        env:
+          EXAMPLE: fooooo
         with:
           directory: ./examples/nodejs-simple
           service_account_key: ${{ secrets.GCP_SA_KEY }}
