@@ -18,6 +18,10 @@ async function run (): Promise<void> {
       );
     }
 
+    core.info(JSON.stringify(process.env));
+    core.info('------');
+    core.info(JSON.stringify(process.env.GITHUB_ENV));
+
     const launchpad = new LaunchPad({
       name,
       apiKey
