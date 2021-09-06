@@ -390,7 +390,6 @@ const docker_1 = __importDefault(__nccwpck_require__(7458));
 const environment_1 = __nccwpck_require__(6114);
 async function run() {
     try {
-        throw new Error('THIS IS A TEST');
         const serviceAccountKey = core.getInput('service_account_key');
         const directory = core.getInput('directory');
         const apiKey = core.getInput('api_key');
@@ -405,6 +404,7 @@ async function run() {
             envVars: environment_1.parseEnvVars(process.env)
         });
         await launchpad.setup();
+        throw new Error('THIS IS A TEST');
         // Build & Push Image to LaunchPad repository
         const docker = new docker_1.default({
             serviceAccountKey,
