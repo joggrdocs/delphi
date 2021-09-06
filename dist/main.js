@@ -66,8 +66,7 @@ async function run() {
         await github.addComment(`
 ### LaunchPad Error
 
-LaunchPad failed to deploy, please contact support at 
-[support@bluenova.io](mailto:support@bluenova.io?subject=LaunchPad Error&body=Error Message: ${error.message}).
+LaunchPad failed to deploy, please contact support at [support@bluenova.io](mailto:support@bluenova.io).
 
 <details>
   <summary>Error Message</summary>
