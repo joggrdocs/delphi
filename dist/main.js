@@ -70,7 +70,9 @@ LaunchPad failed to deploy, please contact support at [support@bluenova.io](mail
 
 <details>
   <summary>Error Message</summary>
-  \`${error.message}\` 
+  <code>
+    ${error.message}
+  </code>
 </details>
     `);
         core.setFailed(error.message);
