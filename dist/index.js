@@ -165,7 +165,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.getBranch = exports.getPullRequestNumber = exports.isPullRequest = exports.resetPullDescription = exports.prependToPullDescription = exports.appendToPullDescription = exports.cleanDescription = exports.getFinishedDescription = exports.getRunningDescription = void 0;
+exports.getBranch = exports.getPullRequestNumber = exports.isPullRequest = exports.resetPullDescription = exports.prependToPullDescription = exports.appendToPullDescription = exports.cleanDescription = exports.addComment = exports.getFinishedDescription = exports.getRunningDescription = void 0;
 const github = __importStar(__nccwpck_require__(5438));
 const core = __importStar(__nccwpck_require__(2186));
 const _ = __importStar(__nccwpck_require__(250));
@@ -202,6 +202,20 @@ function getFinishedDescription(url) {
   `.trim();
 }
 exports.getFinishedDescription = getFinishedDescription;
+async function addComment(comment) {
+    const prNumber = getPullRequestNumber();
+    const octokit = github.getOctokit(core.getInput('github_token'));
+    const { data: issue } = await octokit.rest.issues.createComment({
+        owner: github.context.repo.owner,
+        repo: github.context.repo.repo,
+        issue_number: prNumber,
+        body: comment
+    });
+    if (!issue) {
+        throw new Error(`No such pull request for PR: ${prNumber}`);
+    }
+}
+exports.addComment = addComment;
 async function updatePullRequest(updater) {
     const prNumber = getPullRequestNumber();
     const octokit = github.getOctokit(core.getInput('github_token'));
@@ -376,6 +390,7 @@ const docker_1 = __importDefault(__nccwpck_require__(7458));
 const environment_1 = __nccwpck_require__(6114);
 async function run() {
     try {
+        throw new Error('THIS IS A TEST');
         const serviceAccountKey = core.getInput('service_account_key');
         const directory = core.getInput('directory');
         const apiKey = core.getInput('api_key');
@@ -409,7 +424,17 @@ async function run() {
         }
     }
     catch (error) {
-        // await github.resetPullDescription();
+        await github.addComment(`
+### LaunchPad Error
+
+LaunchPad failed to deploy, please contact support at 
+[support@bluenova.io](mailto:support@bluenova.io?subject=LaunchPad Error&body=Error Message: ${error.message}).
+
+<details>
+  <summary>Error Message</summary>
+  \`${error.message}\` 
+</details>
+    `);
         core.setFailed(error.message);
     }
 }

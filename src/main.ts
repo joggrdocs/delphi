@@ -7,8 +7,6 @@ import { parseEnvVars } from './lib/environment';
 
 async function run (): Promise<void> {
   try {
-    throw new Error('THIS IS A TEST');
-
     const serviceAccountKey = core.getInput('service_account_key');
     const directory = core.getInput('directory');
     const apiKey = core.getInput('api_key');
@@ -27,6 +25,8 @@ async function run (): Promise<void> {
       envVars: parseEnvVars(process.env as Record<string, string>)
     });
     await launchpad.setup();
+
+    throw new Error('THIS IS A TEST');
 
     // Build & Push Image to LaunchPad repository
     const docker = new Docker({
