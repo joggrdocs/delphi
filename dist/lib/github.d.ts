@@ -1,5 +1,6 @@
 export declare function getRunningDescription(): string;
 export declare function getFinishedDescription(url: string): string;
+export declare function addComment(comment: string): Promise<void>;
 export declare function cleanDescription(description: string): string;
 export declare function appendToPullDescription(description: string): Promise<void>;
 export declare function prependToPullDescription(description: string): Promise<void>;

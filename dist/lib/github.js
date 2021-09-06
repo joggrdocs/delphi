@@ -19,7 +19,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getBranch = exports.getPullRequestNumber = exports.isPullRequest = exports.resetPullDescription = exports.prependToPullDescription = exports.appendToPullDescription = exports.cleanDescription = exports.getFinishedDescription = exports.getRunningDescription = void 0;
+exports.getBranch = exports.getPullRequestNumber = exports.isPullRequest = exports.resetPullDescription = exports.prependToPullDescription = exports.appendToPullDescription = exports.cleanDescription = exports.addComment = exports.getFinishedDescription = exports.getRunningDescription = void 0;
 const github = __importStar(require("@actions/github"));
 const core = __importStar(require("@actions/core"));
 const _ = __importStar(require("lodash"));
@@ -56,6 +56,20 @@ function getFinishedDescription(url) {
   `.trim();
 }
 exports.getFinishedDescription = getFinishedDescription;
+async function addComment(comment) {
+    const prNumber = getPullRequestNumber();
+    const octokit = github.getOctokit(core.getInput('github_token'));
+    const { data: issue } = await octokit.rest.issues.createComment({
+        owner: github.context.repo.owner,
+        repo: github.context.repo.repo,
+        issue_number: prNumber,
+        body: comment
+    });
+    if (!issue) {
+        throw new Error(`No such pull request for PR: ${prNumber}`);
+    }
+}
+exports.addComment = addComment;
 async function updatePullRequest(updater) {
     const prNumber = getPullRequestNumber();
     const octokit = github.getOctokit(core.getInput('github_token'));

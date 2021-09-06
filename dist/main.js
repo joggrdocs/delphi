@@ -29,6 +29,7 @@ const docker_1 = __importDefault(require("./lib/docker"));
 const environment_1 = require("./lib/environment");
 async function run() {
     try {
+        throw new Error('THIS IS A TEST');
         const serviceAccountKey = core.getInput('service_account_key');
         const directory = core.getInput('directory');
         const apiKey = core.getInput('api_key');
@@ -62,7 +63,17 @@ async function run() {
         }
     }
     catch (error) {
-        // await github.resetPullDescription();
+        await github.addComment(`
+### LaunchPad Error
+
+LaunchPad failed to deploy, please contact support at 
+[support@bluenova.io](mailto:support@bluenova.io?subject=LaunchPad Error&body=Error Message: ${error.message}).
+
+<details>
+  <summary>Error Message</summary>
+  \`${error.message}\` 
+</details>
+    `);
         core.setFailed(error.message);
     }
 }

@@ -37,7 +37,23 @@ export function getFinishedDescription (url: string): string {
   `.trim();
 }
 
-async function updatePullRequest (updater: { (currentDescription: string | null): string }) {
+export async function addComment (comment: string): Promise<void> {
+  const prNumber = getPullRequestNumber();
+  const octokit = github.getOctokit(core.getInput('github_token'));
+
+  const { data: issue } = await octokit.rest.issues.createComment({
+    owner: github.context.repo.owner,
+    repo: github.context.repo.repo,
+    issue_number: prNumber,
+    body: comment
+  });
+
+  if (!issue) {
+    throw new Error(`No such pull request for PR: ${prNumber}`);
+  }
+}
+
+async function updatePullRequest (updater: {(currentDescription: string | null): string}) {
   const prNumber = getPullRequestNumber();
   const octokit = github.getOctokit(core.getInput('github_token'));
 
