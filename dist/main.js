@@ -62,7 +62,18 @@ async function run() {
         }
     }
     catch (error) {
-        // await github.resetPullDescription();
+        await github.addComment(`
+### LaunchPad Error
+
+LaunchPad failed to deploy, please contact support at [support@bluenova.io](mailto:support@bluenova.io).
+
+<details>
+  <summary>Error Message</summary>
+  <code>
+    ${error.message}
+  </code>
+</details>
+    `);
         core.setFailed(error.message);
     }
 }
