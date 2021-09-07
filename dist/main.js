@@ -43,7 +43,6 @@ async function run() {
             envVars: environment_1.parseEnvVars(process.env)
         });
         await launchpad.setup();
-        throw new Error('THIS IS A TEST');
         // Build & Push Image to LaunchPad repository
         const docker = new docker_1.default({
             serviceAccountKey,

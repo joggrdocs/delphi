@@ -26,8 +26,6 @@ async function run (): Promise<void> {
     });
     await launchpad.setup();
 
-    throw new Error('THIS IS A TEST');
-
     // Build & Push Image to LaunchPad repository
     const docker = new Docker({
       serviceAccountKey,
