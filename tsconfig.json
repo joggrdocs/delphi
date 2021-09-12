@@ -12,7 +12,7 @@
     "sourceMap": true,
     "baseUrl": ".",
     "lib": [
-      "es2020",
+      "esnext",
       "dom"
     ],
     "declaration": true,
