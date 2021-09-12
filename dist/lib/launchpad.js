@@ -34,7 +34,7 @@ class LaunchPad {
         this.envVars = props.envVars;
         this.commit = github.context.sha;
         this.repository = github.context.repo.repo;
-        this.branch = github_1.getBranch();
+        this.branch = (0, github_1.getBranch)();
     }
     async setup() {
         const organization = await this.readOrganization();

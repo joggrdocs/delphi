@@ -40,7 +40,7 @@ async function run() {
         const launchpad = new launchpad_1.default({
             name,
             apiKey,
-            envVars: environment_1.parseEnvVars(process.env)
+            envVars: (0, environment_1.parseEnvVars)(process.env)
         });
         await launchpad.setup();
         // Build & Push Image to LaunchPad repository
@@ -62,6 +62,7 @@ async function run() {
         }
     }
     catch (error) {
+        const message = error?.message ?? 'Unknown Fatal Error';
         await github.addComment(`
 ### LaunchPad Error
 
@@ -70,11 +71,11 @@ LaunchPad failed to deploy, please contact support at [support@bluenova.io](mail
 <details>
   <summary>Error Message</summary>
   <code>
-    ${error.message}
+    ${message}
   </code>
 </details>
     `);
-        core.setFailed(error.message);
+        core.setFailed(message);
     }
 }
 run();

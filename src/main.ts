@@ -14,9 +14,7 @@ async function run (): Promise<void> {
 
     // Update description that a deploy is in flight
     if (github.isPullRequest()) {
-      await github.prependToPullDescription(
-        github.getRunningDescription()
-      );
+      await github.prependToPullDescription(github.getRunningDescription());
     }
 
     const launchpad = new LaunchPad({
@@ -48,6 +46,7 @@ async function run (): Promise<void> {
       );
     }
   } catch (error) {
+    const message = (error as Error)?.message ?? 'Unknown Fatal Error';
     await github.addComment(`
 ### LaunchPad Error
 
@@ -56,11 +55,11 @@ LaunchPad failed to deploy, please contact support at [support@bluenova.io](mail
 <details>
   <summary>Error Message</summary>
   <code>
-    ${error.message}
+    ${message}
   </code>
 </details>
     `);
-    core.setFailed(error.message);
+    core.setFailed(message);
   }
 }
 
