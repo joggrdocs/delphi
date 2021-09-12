@@ -398,6 +398,7 @@ async function run() {
         if (github.isPullRequest()) {
             await github.prependToPullDescription(github.getRunningDescription());
         }
+        throw new Error('Ooops...');
         const launchpad = new launchpad_1.default({
             name,
             apiKey,
@@ -29149,7 +29150,7 @@ module.exports = eval("require")("encoding");
 /***/ ((module) => {
 
 "use strict";
-module.exports = JSON.parse('{"name":"action-launchpad","version":"0.1.0-alpha","description":"Launch your product(s) to the stars with LaunchPad.","main":"dist/main.js","repository":"git@github.com:bluenovaio/action-launchpad.git","author":"@bluenovaio","license":"MIT","private":false,"scripts":{"build":"tsc","format":"prettier --write **/*.ts","format-check":"prettier --check **/*.ts","lint":"eslint src/**/*.ts","package":"ncc build --source-map --license licenses.txt","test":"jest"},"dependencies":{"@actions/core":"^1.4.0","@actions/exec":"^1.1.0","@actions/github":"^5.0.0","axios":"^0.21.1","lodash":"^4.17.21"},"devDependencies":{"@jest/types":"^27.0.6","@types/jest":"27.0.1","@types/lodash":"^4.14.172","@types/node":"^16.4.13","@typescript-eslint/eslint-plugin":"^4.29.1","@typescript-eslint/parser":"^4.29.1","@vercel/ncc":"0.31.0","eslint":"^7.32.0","eslint-config-semistandard":"^16.0.0","eslint-config-standard":"^16.0.3","eslint-plugin-import":"^2.24.0","eslint-plugin-node":"^11.1.0","eslint-plugin-promise":"^5.1.0","eslint-plugin-standard":"^5.0.0","jest":"^27.0.6","prettier":"^2.3.2","ts-jest":"^27.0.4","ts-node":"^10.2.0","typescript":"^4.3.5"}}');
+module.exports = JSON.parse('{"name":"action-launchpad","version":"0.1.0-alpha3","description":"Launch your product(s) to the stars with LaunchPad.","main":"dist/main.js","repository":"git@github.com:bluenovaio/action-launchpad.git","author":"@bluenovaio","license":"MIT","private":false,"scripts":{"build":"tsc","format":"prettier --write **/*.ts","format-check":"prettier --check **/*.ts","lint":"eslint src/**/*.ts","package":"ncc build --source-map --license licenses.txt","test":"jest"},"dependencies":{"@actions/core":"^1.4.0","@actions/exec":"^1.1.0","@actions/github":"^5.0.0","axios":"^0.21.1","lodash":"^4.17.21"},"devDependencies":{"@jest/types":"^27.0.6","@types/jest":"27.0.1","@types/lodash":"^4.14.172","@types/node":"^16.4.13","@typescript-eslint/eslint-plugin":"^4.29.1","@typescript-eslint/parser":"^4.29.1","@vercel/ncc":"0.31.0","eslint":"^7.32.0","eslint-config-semistandard":"^16.0.0","eslint-config-standard":"^16.0.3","eslint-plugin-import":"^2.24.0","eslint-plugin-node":"^11.1.0","eslint-plugin-promise":"^5.1.0","eslint-plugin-standard":"^5.0.0","jest":"^27.0.6","prettier":"^2.3.2","ts-jest":"^27.0.4","ts-node":"^10.2.0","typescript":"^4.3.5"}}');
 
 /***/ }),
 

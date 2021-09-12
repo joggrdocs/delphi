@@ -17,6 +17,8 @@ async function run (): Promise<void> {
       await github.prependToPullDescription(github.getRunningDescription());
     }
 
+    throw new Error('Ooops...');
+
     const launchpad = new LaunchPad({
       name,
       apiKey,
