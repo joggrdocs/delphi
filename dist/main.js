@@ -28,6 +28,7 @@ const github = __importStar(require("./lib/github"));
 const docker_1 = __importDefault(require("./lib/docker"));
 const environment_1 = require("./lib/environment");
 async function run() {
+    var _a, _b;
     try {
         const serviceAccountKey = core.getInput('service_account_key');
         const directory = core.getInput('directory');
@@ -63,7 +64,7 @@ async function run() {
         }
     }
     catch (error) {
-        const message = error.message ?? 'Unknown Fatal Error';
+        const message = (_b = (_a = error) === null || _a === void 0 ? void 0 : _a.message) !== null && _b !== void 0 ? _b : 'Unknown Fatal Error';
         await github.addComment(`
 ### LaunchPad Error
 

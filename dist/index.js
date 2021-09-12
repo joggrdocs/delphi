@@ -389,6 +389,7 @@ const github = __importStar(__nccwpck_require__(2979));
 const docker_1 = __importDefault(__nccwpck_require__(7458));
 const environment_1 = __nccwpck_require__(6114);
 async function run() {
+    var _a, _b;
     try {
         const serviceAccountKey = core.getInput('service_account_key');
         const directory = core.getInput('directory');
@@ -424,7 +425,7 @@ async function run() {
         }
     }
     catch (error) {
-        const message = error.message ?? 'Unknown Fatal Error';
+        const message = (_b = (_a = error) === null || _a === void 0 ? void 0 : _a.message) !== null && _b !== void 0 ? _b : 'Unknown Fatal Error';
         await github.addComment(`
 ### LaunchPad Error
 
