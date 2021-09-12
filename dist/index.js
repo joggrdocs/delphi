@@ -424,7 +424,7 @@ async function run() {
         }
     }
     catch (error) {
-        const message = error?.message ?? 'Unknown Fatal Error';
+        const message = error.message ?? 'Unknown Fatal Error';
         await github.addComment(`
 ### LaunchPad Error
 
