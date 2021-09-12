@@ -399,7 +399,6 @@ async function run() {
         if (github.isPullRequest()) {
             await github.prependToPullDescription(github.getRunningDescription());
         }
-        throw new Error('Ooops...');
         const launchpad = new launchpad_1.default({
             name,
             apiKey,
