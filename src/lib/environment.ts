@@ -5,7 +5,7 @@ export function parseEnvVars (envVars: Record<string, string>): string {
 
   _.forOwn(envVars, (value, key) => {
     if (_.startsWith(key, 'LP_ENV_')) {
-      result.push(`${key}=${value}`);
+      result.push(`${_.replace(key, 'LP_ENV_', '')}=${value}`);
     }
   });
 
