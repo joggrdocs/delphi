@@ -11,6 +11,7 @@ async function run (): Promise<void> {
     const directory = core.getInput('directory');
     const apiKey = core.getInput('api_key');
     const name = core.getInput('name');
+    const port = core.getInput('port');
 
     // Update description that a deploy is in flight
     if (github.isPullRequest()) {
@@ -19,6 +20,7 @@ async function run (): Promise<void> {
 
     const launchpad = new LaunchPad({
       name,
+      port,
       apiKey,
       envVars: parseEnvVars(process.env as Record<string, string>)
     });
