@@ -5,6 +5,10 @@ inputs:
   name:
     description: "The name of the service (must be unique) to be deployed."
     required: true
+  port:
+    description: "The port that the application will run on in the container."
+    required: false
+    default: "8080"
   api_key:
     description: "The API Key provided by BlueNova, used to associate all requests."
     required: true
