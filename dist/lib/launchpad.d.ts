@@ -8,6 +8,7 @@ export interface Organization {
 interface LaunchPadConfig {
     apiKey: string;
     name: string;
+    port: string;
     envVars?: string;
 }
 export default class LaunchPad {
@@ -15,6 +16,7 @@ export default class LaunchPad {
     projectId?: string;
     private readonly apiKey;
     private readonly name;
+    private readonly port;
     private readonly repository;
     private readonly branch;
     private readonly commit;

@@ -31,6 +31,7 @@ class LaunchPad {
         this.isSetup = false;
         this.apiKey = props.apiKey;
         this.name = props.name;
+        this.port = props.port;
         this.envVars = props.envVars;
         this.commit = github.context.sha;
         this.repository = github.context.repo.repo;
@@ -48,6 +49,7 @@ class LaunchPad {
             apiKey: this.apiKey,
             name: this.name,
             branch: this.branch,
+            port: Number(this.port),
             repository: this.repository,
             commit: this.commit,
             environmentVariables: this.envVars

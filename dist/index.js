@@ -317,6 +317,7 @@ class LaunchPad {
         this.isSetup = false;
         this.apiKey = props.apiKey;
         this.name = props.name;
+        this.port = props.port;
         this.envVars = props.envVars;
         this.commit = github.context.sha;
         this.repository = github.context.repo.repo;
@@ -334,6 +335,7 @@ class LaunchPad {
             apiKey: this.apiKey,
             name: this.name,
             branch: this.branch,
+            port: Number(this.port),
             repository: this.repository,
             commit: this.commit,
             environmentVariables: this.envVars
@@ -395,12 +397,14 @@ async function run() {
         const directory = core.getInput('directory');
         const apiKey = core.getInput('api_key');
         const name = core.getInput('name');
+        const port = core.getInput('port');
         // Update description that a deploy is in flight
         if (github.isPullRequest()) {
             await github.prependToPullDescription(github.getRunningDescription());
         }
         const launchpad = new launchpad_1.default({
             name,
+            port,
             apiKey,
             envVars: (0, environment_1.parseEnvVars)(process.env)
         });
