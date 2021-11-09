@@ -4,11 +4,11 @@ const server = express();
 
 server.get('/hello', (req, res) => {
   res.json({
-    message: process.env.LP_ENV_MESSAGE || 'Hello World!'
+    message: process.env.MESSAGE || 'Hello World!'
   });
 });
 
-server.listen(8080, (err) => {
+server.listen(3000, (err) => {
   if (err) throw err;
 
   console.log('Server started on port 8080');

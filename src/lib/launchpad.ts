@@ -65,7 +65,7 @@ export default class LaunchPad {
       apiKey: this.apiKey,
       name: this.name,
       branch: this.branch,
-      port: this.port,
+      port: Number(this.port),
       repository: this.repository,
       commit: this.commit,
       environmentVariables: this.envVars
