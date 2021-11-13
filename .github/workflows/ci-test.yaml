@@ -8,7 +8,7 @@ on:
 
 jobs:
   testActionTwo:
-    name: Test Action
+    name: Test Action Two
     runs-on: ubuntu-latest
     steps:
       - name: Log Pull Request Number
