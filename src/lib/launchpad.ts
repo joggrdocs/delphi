@@ -52,8 +52,7 @@ export default class LaunchPad {
     this.repository = github.context.repo.repo;
     this.branch = getBranch();
 
-
-    core.info('This is the PR Number:' + this.pullRequestNumber);
+    core.notice('This is the PR Number:' + this.pullRequestNumber);
   }
 
   public async setup (): Promise<void> {

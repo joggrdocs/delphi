@@ -38,7 +38,7 @@ class LaunchPad {
         this.pullRequestNumber = (0, github_1.getPullRequestNumber)();
         this.repository = github.context.repo.repo;
         this.branch = (0, github_1.getBranch)();
-        core.info('This is the PR Number:' + this.pullRequestNumber);
+        core.notice('This is the PR Number:' + this.pullRequestNumber);
     }
     async setup() {
         const organization = await this.readOrganization();
