@@ -1,11 +1,5 @@
 name: "CI-Test"
 
-on:
-  workflow_run:
-    workflows: ["CI"]
-    types:
-      - completed
-
 jobs:
   testActionTwo:
     name: Test Action Two
