@@ -1,4 +1,6 @@
 import * as github from '@actions/github';
+import * as core from '@actions/core';
+
 import axios from 'axios';
 
 import { getBranch, getPullRequestNumber } from './github';
@@ -49,6 +51,9 @@ export default class LaunchPad {
     this.pullRequestNumber = getPullRequestNumber();
     this.repository = github.context.repo.repo;
     this.branch = getBranch();
+
+
+    core.info('This is the PR Number:' + this.pullRequestNumber);
   }
 
   public async setup (): Promise<void> {
