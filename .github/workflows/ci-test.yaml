@@ -7,7 +7,7 @@ on:
       - completed
 
 jobs:
-  testAction:
+  testActionTwo:
     name: Test Action
     runs-on: ubuntu-latest
     steps:
