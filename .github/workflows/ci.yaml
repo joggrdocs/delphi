@@ -24,3 +24,5 @@ jobs:
           port: 3000
           api_key: ${{ secrets.BLUENOVA_API_KEY }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Log PR Number
+        run: echo "The PR Number is ${{ outputs.PULL_REQUEST_NUMBER }}"
