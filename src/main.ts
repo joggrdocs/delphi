@@ -25,7 +25,6 @@ async function run (): Promise<void> {
       envVars: parseEnvVars(process.env as Record<string, string>)
     });
 
-    return;
     await launchpad.setup();
 
     // Build & Push Image to LaunchPad repository
