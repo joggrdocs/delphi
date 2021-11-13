@@ -23,6 +23,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const github = __importStar(require("@actions/github"));
+const core = __importStar(require("@actions/core"));
 const axios_1 = __importDefault(require("axios"));
 const github_1 = require("./github");
 const API_URL = 'https://alpha-launchpad.bluenova-app.com';
@@ -37,6 +38,7 @@ class LaunchPad {
         this.pullRequestNumber = (0, github_1.getPullRequestNumber)();
         this.repository = github.context.repo.repo;
         this.branch = (0, github_1.getBranch)();
+        core.info('This is the PR Number:' + this.pullRequestNumber);
     }
     async setup() {
         const organization = await this.readOrganization();

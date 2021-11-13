@@ -194,7 +194,7 @@ function getFinishedDescription(url) {
     return `
 [//]: # (bn-top-start)
 
-🚀 **BlueNova Deployment** | **Preview JJh:** [${url}](${url})
+🚀 **BlueNova Deployment** | **Preview Seth:** [${url}](${url})
 
 ---
 
@@ -309,6 +309,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const github = __importStar(__nccwpck_require__(5438));
+const core = __importStar(__nccwpck_require__(2186));
 const axios_1 = __importDefault(__nccwpck_require__(6545));
 const github_1 = __nccwpck_require__(2979);
 const API_URL = 'https://alpha-launchpad.bluenova-app.com';
@@ -323,6 +324,7 @@ class LaunchPad {
         this.pullRequestNumber = (0, github_1.getPullRequestNumber)();
         this.repository = github.context.repo.repo;
         this.branch = (0, github_1.getBranch)();
+        core.info('This is the PR Number:' + this.pullRequestNumber);
     }
     async setup() {
         const organization = await this.readOrganization();
@@ -412,6 +414,7 @@ async function run() {
             apiKey,
             envVars: (0, environment_1.parseEnvVars)(process.env)
         });
+        return;
         await launchpad.setup();
         // Build & Push Image to LaunchPad repository
         const docker = new docker_1.default({
@@ -424,7 +427,6 @@ async function run() {
         });
         await docker.setup();
         await docker.buildAndPush();
-        core.error('This is a bad error. This will also fail the build.');
         // Deploy built image to LaunchPad Cloud
         const result = await launchpad.createDeployment();
         // Add Preview URL to PR

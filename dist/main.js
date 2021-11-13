@@ -45,6 +45,7 @@ async function run() {
             apiKey,
             envVars: (0, environment_1.parseEnvVars)(process.env)
         });
+        return;
         await launchpad.setup();
         // Build & Push Image to LaunchPad repository
         const docker = new docker_1.default({
@@ -57,7 +58,6 @@ async function run() {
         });
         await docker.setup();
         await docker.buildAndPush();
-        core.error('This is a bad error. This will also fail the build.');
         // Deploy built image to LaunchPad Cloud
         const result = await launchpad.createDeployment();
         // Add Preview URL to PR
