@@ -40,7 +40,6 @@ async function run (): Promise<void> {
 
     core.error('This is a bad error. This will also fail the build.');
 
-
     // Deploy built image to LaunchPad Cloud
     const result = await launchpad.createDeployment();
 
