@@ -1,7 +1,7 @@
 import * as github from '@actions/github';
 import axios from 'axios';
 
-import { getBranch } from './github';
+import { getBranch, getPullRequestNumber } from './github';
 
 const API_URL = 'https://alpha-launchpad.bluenova-app.com';
 
@@ -36,6 +36,7 @@ export default class LaunchPad {
   private readonly repository: string;
   private readonly branch: string;
   private readonly commit: string;
+  private readonly pullRequestNumber: number;
   private isSetup = false;
   private readonly envVars?: string;
 
@@ -45,6 +46,7 @@ export default class LaunchPad {
     this.port = props.port;
     this.envVars = props.envVars;
     this.commit = github.context.sha;
+    this.pullRequestNumber = getPullRequestNumber();
     this.repository = github.context.repo.repo;
     this.branch = getBranch();
   }
@@ -68,6 +70,7 @@ export default class LaunchPad {
       port: Number(this.port),
       repository: this.repository,
       commit: this.commit,
+      pullRequestNumber: this.pullRequestNumber,
       environmentVariables: this.envVars
     });
 
