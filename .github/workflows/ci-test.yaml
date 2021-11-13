@@ -1,0 +1,18 @@
+name: "CI-Test"
+
+on:
+  workflow_run:
+    workflows: ["CI"]
+    types:
+      - completed
+
+jobs:
+  testAction:
+    name: Test Action
+    runs-on: ubuntu-latest
+    steps:
+      - name: Log Pull Request Number
+        run: echo '::set-output name=SELECTED_COLOR::green'
+        id: random-color-generator
+      - name: Get color
+        run: echo "The selected color is ${{ steps.random-color-generator.outputs.SELECTED_COLOR }}"

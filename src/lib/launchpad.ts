@@ -74,6 +74,7 @@ export default class LaunchPad {
       environmentVariables: this.envVars
     });
 
+    github.setOutput("PULL_REQUEST_NUMBER", result.pullRequestNumber);
     return result.data;
   }
 
