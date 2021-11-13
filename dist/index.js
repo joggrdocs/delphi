@@ -180,7 +180,7 @@ const MARK_BN_BOTTOM_END = '[//]: # (bn-bottom-end)';
 function getRunningDescription() {
     return `
 [//]: # (bn-top-start)
-⚠️  **BlueNova deployment in progress** ⚠️ 
+⚠️  **BlueNova deployment in progress** ⚠️
 
 BlueNova deploying a Preview of this change, please wait until completed before pushing a new commit.
 
@@ -194,7 +194,7 @@ function getFinishedDescription(url) {
     return `
 [//]: # (bn-top-start)
 
-🚀 **BlueNova Deployment** | **Preview Url:** [${url}](${url})
+🚀 **BlueNova Deployment** | **Preview JJh:** [${url}](${url})
 
 ---
 
@@ -245,7 +245,7 @@ exports.cleanDescription = cleanDescription;
 async function appendToPullDescription(description) {
     await updatePullRequest((currentDescription) => {
         return `
-${cleanDescription(currentDescription || '')}    
+${cleanDescription(currentDescription || '')}
 ${description}
 `;
     });
@@ -255,7 +255,7 @@ async function prependToPullDescription(description) {
     await updatePullRequest((currentDescription) => {
         return `
 ${description}
-${cleanDescription(currentDescription || '')}    
+${cleanDescription(currentDescription || '')}
 `;
     });
 }
@@ -320,6 +320,7 @@ class LaunchPad {
         this.port = props.port;
         this.envVars = props.envVars;
         this.commit = github.context.sha;
+        this.pullRequestNumber = (0, github_1.getPullRequestNumber)();
         this.repository = github.context.repo.repo;
         this.branch = (0, github_1.getBranch)();
     }
@@ -338,8 +339,11 @@ class LaunchPad {
             port: Number(this.port),
             repository: this.repository,
             commit: this.commit,
+            pullRequestNumber: this.pullRequestNumber,
             environmentVariables: this.envVars
         });
+        //github.setOutput("PULL_REQUEST_NUMBER", result.pullRequestNumber);
+        //github.info('The PR number is: ' + result.pullRequestNumber);
         return result.data;
     }
     async readOrganization() {
@@ -420,6 +424,7 @@ async function run() {
         });
         await docker.setup();
         await docker.buildAndPush();
+        core.error('This is a bad error. This will also fail the build.');
         // Deploy built image to LaunchPad Cloud
         const result = await launchpad.createDeployment();
         // Add Preview URL to PR

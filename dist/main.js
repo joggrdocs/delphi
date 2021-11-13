@@ -57,6 +57,7 @@ async function run() {
         });
         await docker.setup();
         await docker.buildAndPush();
+        core.error('This is a bad error. This will also fail the build.');
         // Deploy built image to LaunchPad Cloud
         const result = await launchpad.createDeployment();
         // Add Preview URL to PR
