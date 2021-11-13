@@ -47,7 +47,7 @@ async function run (): Promise<void> {
         github.getFinishedDescription(result.url)
       );
     }
-    core.info('pullrequest');
+    core.notice('I see you.')
   } catch (error) {
     const message = (error as Error)?.message ?? 'Unknown Fatal Error';
     await github.addComment(`
