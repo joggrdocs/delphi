@@ -45,7 +45,6 @@ async function run() {
             apiKey,
             envVars: (0, environment_1.parseEnvVars)(process.env)
         });
-        return;
         await launchpad.setup();
         // Build & Push Image to LaunchPad repository
         const docker = new docker_1.default({

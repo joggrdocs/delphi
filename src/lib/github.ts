@@ -29,7 +29,7 @@ export function getFinishedDescription (url: string): string {
   return `
 [//]: # (bn-top-start)
 
-🚀 **BlueNova Deployment** | **Preview Seth:** [${url}](${url})
+🚀 **BlueNova Deployment** | **Preview Url:** [${url}](${url})
 
 ---
 

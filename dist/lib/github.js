@@ -48,7 +48,7 @@ function getFinishedDescription(url) {
     return `
 [//]: # (bn-top-start)
 
-🚀 **BlueNova Deployment** | **Preview Seth:** [${url}](${url})
+🚀 **BlueNova Deployment** | **Preview Url:** [${url}](${url})
 
 ---
 
