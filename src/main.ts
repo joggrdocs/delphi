@@ -24,6 +24,7 @@ async function run (): Promise<void> {
       apiKey,
       envVars: parseEnvVars(process.env as Record<string, string>)
     });
+
     await launchpad.setup();
 
     // Build & Push Image to LaunchPad repository
@@ -38,6 +39,7 @@ async function run (): Promise<void> {
     await docker.setup();
     await docker.buildAndPush();
 
+
     // Deploy built image to LaunchPad Cloud
     const result = await launchpad.createDeployment();
 
@@ -47,6 +49,7 @@ async function run (): Promise<void> {
         github.getFinishedDescription(result.url)
       );
     }
+
   } catch (error) {
     const message = (error as Error)?.message ?? 'Unknown Fatal Error';
     await github.addComment(`

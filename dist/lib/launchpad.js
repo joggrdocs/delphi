@@ -34,6 +34,7 @@ class LaunchPad {
         this.port = props.port;
         this.envVars = props.envVars;
         this.commit = github.context.sha;
+        this.pullRequestNumber = (0, github_1.getPullRequestNumber)();
         this.repository = github.context.repo.repo;
         this.branch = (0, github_1.getBranch)();
     }
@@ -52,6 +53,7 @@ class LaunchPad {
             port: Number(this.port),
             repository: this.repository,
             commit: this.commit,
+            pullRequestNumber: this.pullRequestNumber,
             environmentVariables: this.envVars
         });
         return result.data;

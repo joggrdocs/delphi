@@ -15,7 +15,7 @@ const MARK_BN_BOTTOM_END = '[//]: # (bn-bottom-end)';
 export function getRunningDescription (): string {
   return `
 [//]: # (bn-top-start)
-⚠️  **BlueNova deployment in progress** ⚠️ 
+⚠️  **BlueNova deployment in progress** ⚠️
 
 BlueNova deploying a Preview of this change, please wait until completed before pushing a new commit.
 
@@ -87,7 +87,7 @@ export function cleanDescription (description: string): string {
 export async function appendToPullDescription (description: string): Promise<void> {
   await updatePullRequest((currentDescription) => {
     return `
-${cleanDescription(currentDescription || '')}    
+${cleanDescription(currentDescription || '')}
 ${description}
 `;
   });
@@ -97,7 +97,7 @@ export async function prependToPullDescription (description: string): Promise<vo
   await updatePullRequest((currentDescription) => {
     return `
 ${description}
-${cleanDescription(currentDescription || '')}    
+${cleanDescription(currentDescription || '')}
 `;
   });
 }
