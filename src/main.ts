@@ -50,6 +50,7 @@ async function run (): Promise<void> {
       );
     }
 
+    core.setOutput('url', result.url);
   } catch (error) {
     const message = (error as Error)?.message ?? 'Unknown Fatal Error';
     await github.addComment(`
