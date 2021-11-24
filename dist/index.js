@@ -308,10 +308,19 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.validateAppName = void 0;
 const github = __importStar(__nccwpck_require__(5438));
 const axios_1 = __importDefault(__nccwpck_require__(6545));
 const github_1 = __nccwpck_require__(2979);
 const API_URL = 'https://alpha-launchpad.bluenova-app.com';
+// Utils
+// -----
+function validateAppName(appName) {
+    if (!/^([a-z]+)$/.test(appName)) {
+        throw new Error(`The appName "${appName}" is invalid, as it must be all lower case, no number and no special characters`);
+    }
+}
+exports.validateAppName = validateAppName;
 class LaunchPad {
     constructor(props) {
         this.isSetup = false;
@@ -388,7 +397,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(2186));
-const launchpad_1 = __importDefault(__nccwpck_require__(6624));
+const launchpad_1 = __importStar(__nccwpck_require__(6624));
 const github = __importStar(__nccwpck_require__(2979));
 const docker_1 = __importDefault(__nccwpck_require__(7458));
 const environment_1 = __nccwpck_require__(6114);
@@ -400,6 +409,7 @@ async function run() {
         const apiKey = core.getInput('api_key');
         const name = core.getInput('name');
         const port = core.getInput('port');
+        (0, launchpad_1.validateAppName)(name);
         // Update description that a deploy is in flight
         if (github.isPullRequest()) {
             await github.prependToPullDescription(github.getRunningDescription());
