@@ -20,7 +20,7 @@ jobs:
         with:
           directory: ./examples/nodejs-simple
           service_account_key: ${{ secrets.GCP_SA_KEY }}
-          name: gha-example
+          name: ghaexample
           port: 3000
           api_key: ${{ secrets.BLUENOVA_API_KEY }}
           github_token: ${{ secrets.GITHUB_TOKEN }}

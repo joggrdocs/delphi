@@ -5,6 +5,7 @@ export interface Organization {
     projectId: string;
     slugId: string;
 }
+export declare function validateAppName(appName: string): void;
 interface LaunchPadConfig {
     apiKey: string;
     name: string;
