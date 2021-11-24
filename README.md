@@ -1,6 +1,6 @@
-⚠️ **Alpha Release** ⚠️ 
+⚠️ **Beta Release** ⚠️ 
 
-This is ONLY available for use by those in the closed Alpha Program, if you are interested in joining please reachout to [support@bluenova.io](mailto:support@bluenova.io?subject=Alpha%20Program).
+This is ONLY available for use by those in the closed Beta Program, if you are interested in joining please reachout to [support@bluenova.io](mailto:support@bluenova.io?subject=Beta%20Program).
 
 ---
 
