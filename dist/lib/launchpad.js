@@ -22,10 +22,19 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.validateAppName = void 0;
 const github = __importStar(require("@actions/github"));
 const axios_1 = __importDefault(require("axios"));
 const github_1 = require("./github");
 const API_URL = 'https://alpha-launchpad.bluenova-app.com';
+// Utils
+// -----
+function validateAppName(appName) {
+    if (!/^([a-z]+)$/.test(appName)) {
+        throw new Error(`The appName "${appName}" is invalid, as it must be all lower case, no number and no special characters`);
+    }
+}
+exports.validateAppName = validateAppName;
 class LaunchPad {
     constructor(props) {
         this.isSetup = false;

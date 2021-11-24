@@ -19,6 +19,15 @@ export interface Organization {
   slugId: string;
 }
 
+// Utils
+// -----
+
+export function validateAppName (appName: string) {
+  if (!/^([a-z]+)$/.test(appName)) {
+    throw new Error(`The appName "${appName}" is invalid, as it must be all lower case, no number and no special characters`);
+  }
+}
+
 // LaunchPad Class
 // -----
 
