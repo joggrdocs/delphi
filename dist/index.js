@@ -428,6 +428,7 @@ async function run() {
         if (github.isPullRequest()) {
             await github.prependToPullDescription(github.getFinishedDescription(result.url));
         }
+        core.setOutput('url', result.url);
     }
     catch (error) {
         const message = (_b = (_a = error) === null || _a === void 0 ? void 0 : _a.message) !== null && _b !== void 0 ? _b : 'Unknown Fatal Error';

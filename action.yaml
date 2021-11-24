@@ -22,7 +22,9 @@ inputs:
     description: "Directory where the DockerFile is located."
     required: false
     default: "."
-outputs: {}
+outputs:
+  url:
+    description: "The preview URL for the running application"
 runs:
   using: node12
   main: dist/index.js
