@@ -1,6 +1,6 @@
 import * as core from '@actions/core';
 
-import LaunchPad from './lib/launchpad';
+import LaunchPad, { validateAppName } from './lib/launchpad';
 import * as github from './lib/github';
 import Docker from './lib/docker';
 import { parseEnvVars } from './lib/environment';
@@ -12,6 +12,8 @@ async function run (): Promise<void> {
     const apiKey = core.getInput('api_key');
     const name = core.getInput('name');
     const port = core.getInput('port');
+
+    validateAppName(name);
 
     // Update description that a deploy is in flight
     if (github.isPullRequest()) {
