@@ -25,5 +25,6 @@ jobs:
           api_key: ${{ secrets.BLUENOVA_API_KEY }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
           build_args: BUILD_VAR=foo,BUILD_VAR2=bar
+          env_vars: MESSAGE="Hello via ENV Vars"
       - name: Test Outputs
         run: echo "${{ steps.runAction.outputs.url }}"

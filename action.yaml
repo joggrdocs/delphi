@@ -23,7 +23,10 @@ inputs:
     required: false
     default: "."
   build_args:
-    description: "Comma seperated list of arguments (i.e. FOO=bar,FOOBAR=foo)"
+    description: "Comma seperated list of arguments that will be injected during the build (i.e. FOO=bar,FOOBAR=foo)"
+    required: false
+  env_vars:
+    description: "Comma seperated list of environment variables that will be injected during runtime (i.e. FOO=bar,FOOBAR=foo)"
     required: false
 outputs:
   url:
