@@ -26,7 +26,7 @@ const core = __importStar(require("@actions/core"));
 const launchpad_1 = __importStar(require("./lib/launchpad"));
 const github = __importStar(require("./lib/github"));
 const docker_1 = __importDefault(require("./lib/docker"));
-const environment_1 = require("./lib/environment");
+const parser_1 = require("./lib/parser");
 async function run() {
     var _a, _b;
     try {
@@ -34,6 +34,8 @@ async function run() {
         const directory = core.getInput('directory');
         const apiKey = core.getInput('api_key');
         const name = core.getInput('name');
+        const buildArgs = core.getInput('build_args');
+        const envVars = core.getInput('env_vars');
         const port = core.getInput('port');
         (0, launchpad_1.validateAppName)(name);
         // Update description that a deploy is in flight
@@ -44,7 +46,7 @@ async function run() {
             name,
             port,
             apiKey,
-            envVars: (0, environment_1.parseEnvVars)(process.env)
+            envVars
         });
         await launchpad.setup();
         // Build & Push Image to LaunchPad repository
@@ -54,6 +56,7 @@ async function run() {
             directory,
             projectId: launchpad.projectId,
             slug: launchpad.slugId,
+            buildArgs: (0, parser_1.parseListInputs)(buildArgs),
             apiKey: apiKey
         });
         await docker.setup();

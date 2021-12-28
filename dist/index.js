@@ -28,6 +28,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const github = __importStar(__nccwpck_require__(5438));
 const exec = __importStar(__nccwpck_require__(1514));
+const _ = __importStar(__nccwpck_require__(250));
 const URL_ARTIFACT_REGISTRY = 'us-docker.pkg.dev';
 // Utils
 // -----
@@ -50,6 +51,7 @@ class Docker {
         this.serviceAccountKey = props.serviceAccountKey;
         this.projectId = props.projectId;
         this.directory = props.directory || '.';
+        this.buildArgs = props.buildArgs || [];
         this.slug = props.slug;
         this.name = props.name;
     }
@@ -74,12 +76,14 @@ class Docker {
     }
     async buildAndPush() {
         this.assertSetup();
-        await exec.getExecOutput('docker', [
-            'build',
-            '--tag',
-            this.getTag(),
-            this.directory
-        ]);
+        const buildCommand = ['build'];
+        if (this.buildArgs.length > 0) {
+            _.forEach(this.buildArgs, (value) => {
+                buildCommand.push(`--build-arg ${value}`);
+            });
+        }
+        buildCommand.push('--tag', this.getTag(), this.directory);
+        await exec.getExecOutput('docker', buildCommand);
         await exec.getExecOutput('docker', [
             'push',
             this.getTag()
@@ -96,47 +100,6 @@ class Docker {
 }
 exports["default"] = Docker;
 //# sourceMappingURL=docker.js.map
-
-/***/ }),
-
-/***/ 6114:
-/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
-
-"use strict";
-
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.parseEnvVars = void 0;
-const _ = __importStar(__nccwpck_require__(250));
-function parseEnvVars(envVars) {
-    const result = [];
-    _.forOwn(envVars, (value, key) => {
-        if (_.startsWith(key, 'LP_ENV_')) {
-            result.push(`${_.replace(key, 'LP_ENV_', '')}=${value}`);
-        }
-    });
-    return result.join(',');
-}
-exports.parseEnvVars = parseEnvVars;
-//# sourceMappingURL=environment.js.map
 
 /***/ }),
 
@@ -368,6 +331,26 @@ exports["default"] = LaunchPad;
 
 /***/ }),
 
+/***/ 4419:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.parseListInputs = void 0;
+function parseListInputs(buildArgs) {
+    if (buildArgs) {
+        return buildArgs.split(',');
+    }
+    else {
+        return [];
+    }
+}
+exports.parseListInputs = parseListInputs;
+//# sourceMappingURL=parser.js.map
+
+/***/ }),
+
 /***/ 9496:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
@@ -400,7 +383,7 @@ const core = __importStar(__nccwpck_require__(2186));
 const launchpad_1 = __importStar(__nccwpck_require__(6624));
 const github = __importStar(__nccwpck_require__(2979));
 const docker_1 = __importDefault(__nccwpck_require__(7458));
-const environment_1 = __nccwpck_require__(6114);
+const parser_1 = __nccwpck_require__(4419);
 async function run() {
     var _a, _b;
     try {
@@ -408,6 +391,8 @@ async function run() {
         const directory = core.getInput('directory');
         const apiKey = core.getInput('api_key');
         const name = core.getInput('name');
+        const buildArgs = core.getInput('build_args');
+        const envVars = core.getInput('env_vars');
         const port = core.getInput('port');
         (0, launchpad_1.validateAppName)(name);
         // Update description that a deploy is in flight
@@ -418,7 +403,7 @@ async function run() {
             name,
             port,
             apiKey,
-            envVars: (0, environment_1.parseEnvVars)(process.env)
+            envVars
         });
         await launchpad.setup();
         // Build & Push Image to LaunchPad repository
@@ -428,6 +413,7 @@ async function run() {
             directory,
             projectId: launchpad.projectId,
             slug: launchpad.slugId,
+            buildArgs: (0, parser_1.parseListInputs)(buildArgs),
             apiKey: apiKey
         });
         await docker.setup();

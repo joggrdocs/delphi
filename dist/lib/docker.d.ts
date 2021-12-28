@@ -5,6 +5,7 @@ interface DockerProps {
     apiKey: string;
     serviceAccountKey: string;
     directory?: string;
+    buildArgs?: string[];
 }
 export default class Docker {
     private isSetup;
@@ -13,6 +14,7 @@ export default class Docker {
     private readonly directory;
     private readonly name;
     private readonly slug;
+    private readonly buildArgs;
     constructor(props: DockerProps);
     setup(): Promise<void>;
     login(): Promise<void>;
