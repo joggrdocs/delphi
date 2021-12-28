@@ -3,7 +3,7 @@ import * as core from '@actions/core';
 import LaunchPad, { validateAppName } from './lib/launchpad';
 import * as github from './lib/github';
 import Docker from './lib/docker';
-import { parseEnvVars } from './lib/environment';
+import { parseBuildArgs, parseEnvVars } from './lib/parser';
 
 async function run (): Promise<void> {
   try {
@@ -11,6 +11,7 @@ async function run (): Promise<void> {
     const directory = core.getInput('directory');
     const apiKey = core.getInput('api_key');
     const name = core.getInput('name');
+    const buildArgs = core.getInput('build_args')
     const port = core.getInput('port');
 
     validateAppName(name);
@@ -36,6 +37,7 @@ async function run (): Promise<void> {
       directory,
       projectId: launchpad.projectId as string,
       slug: launchpad.slugId as string,
+      buildArgs: parseBuildArgs(buildArgs),
       apiKey: apiKey
     });
     await docker.setup();

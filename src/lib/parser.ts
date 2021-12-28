@@ -11,3 +11,11 @@ export function parseEnvVars (envVars: Record<string, string>): string {
 
   return result.join(',');
 }
+
+export function parseBuildArgs (buildArgs?: string): string[] {
+  if (buildArgs) {
+    return buildArgs.split(',');
+  } else {
+    return [];
+  }
+}

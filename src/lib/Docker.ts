@@ -1,5 +1,6 @@
 import * as github from '@actions/github';
 import * as exec from '@actions/exec';
+import * as _ from 'lodash';
 
 const URL_ARTIFACT_REGISTRY = 'us-docker.pkg.dev';
 
@@ -30,6 +31,7 @@ interface DockerProps {
   apiKey: string;
   serviceAccountKey: string;
   directory?: string;
+  buildArgs?: string[];
 }
 
 export default class Docker {
@@ -39,11 +41,13 @@ export default class Docker {
   private readonly directory: string;
   private readonly name: string;
   private readonly slug: string;
+  private readonly buildArgs: string[];
 
   constructor (props: DockerProps) {
     this.serviceAccountKey = props.serviceAccountKey;
     this.projectId = props.projectId;
     this.directory = props.directory || '.';
+    this.buildArgs = props.buildArgs || [];
     this.slug = props.slug;
     this.name = props.name;
   }
@@ -71,12 +75,21 @@ export default class Docker {
   public async buildAndPush (): Promise<void> {
     this.assertSetup();
 
-    await exec.getExecOutput('docker', [
-      'build',
+    const buildCommand = ['build'];
+
+    if (this.buildArgs.length > 0) {
+      _.forEach(this.buildArgs, (value) => {
+        buildCommand.push(`--build-arg ${value}`);
+      });
+    }
+
+    buildCommand.push(
       '--tag',
       this.getTag(),
       this.directory
-    ]);
+    );
+
+    await exec.getExecOutput('docker', buildCommand);
 
     await exec.getExecOutput('docker', [
       'push',

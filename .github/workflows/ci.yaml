@@ -24,5 +24,6 @@ jobs:
           port: 3000
           api_key: ${{ secrets.BLUENOVA_API_KEY }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          build_args: BUILD_VAR=foo,BUILD_VAR2=bar
       - name: Test Outputs
         run: echo "${{ steps.runAction.outputs.url }}"
