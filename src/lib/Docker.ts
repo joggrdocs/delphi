@@ -75,7 +75,11 @@ export default class Docker {
   public async buildAndPush (): Promise<void> {
     this.assertSetup();
 
-    const buildCommand = ['build'];
+    const buildCommand = [
+      'build',
+      '-t',
+      this.getTag()
+    ];
 
     if (this.buildArgs.length > 0) {
       _.forEach(this.buildArgs, (value) => {
@@ -84,8 +88,6 @@ export default class Docker {
     }
 
     buildCommand.push(
-      '--tag',
-      this.getTag(),
       this.directory
     );
 
