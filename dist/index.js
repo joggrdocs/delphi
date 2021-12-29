@@ -83,11 +83,12 @@ class Docker {
         ];
         if (this.buildArgs.length > 0) {
             _.forEach(this.buildArgs, (value) => {
-                buildCommand.push(`--build-arg ${value}`);
+                buildCommand.push('--build-arg', value);
             });
         }
         buildCommand.push(this.directory);
         await exec.getExecOutput('docker', ['build', '--help']);
+        await exec.getExecOutput('docker', ['--version']);
         await exec.getExecOutput('docker', buildCommand);
         await exec.getExecOutput('docker', [
             'push',

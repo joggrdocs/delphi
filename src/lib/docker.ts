@@ -92,6 +92,7 @@ export default class Docker {
     );
 
     await exec.getExecOutput('docker', ['build', '--help'])
+    await exec.getExecOutput('docker', ['--version'])
 
     await exec.getExecOutput('docker', buildCommand);
 
