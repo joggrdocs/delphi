@@ -34,10 +34,10 @@ jobs:
         uses: bluenovaio/action-launchpad@v0.1.0-beta2
         with:
           # Provided by the BlueNova team
-          service_account_key: ${{ secrets.GCP_SA_KEY }}
+          service_account_key: ${{ secrets.BLUENOVA_SERVICE_ACCOUNT_KEY }}
           
           # Name of the service
-          name: gha-example
+          name: ghaexample
           
           # API Key provided by the BlueNova team
           api_key: ${{ secrets.BLUENOVA_API_KEY }}
