@@ -1,6 +1,9 @@
 name: BlueNova LaunchPad
 description: Github Action used to deploy to the BlueNova cloud environment.
 author: "@bluenovaio"
+branding:
+  icon: 'aperture'  
+  color: 'blue'
 inputs:
   name:
     description: "The name of the service (must be unique) to be deployed."
