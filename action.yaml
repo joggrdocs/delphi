@@ -20,8 +20,18 @@ inputs:
     required: true
   directory:
     description: "Directory where the DockerFile is located."
-    required: false
+    required: true
     default: "."
+  dockerfile:
+    description: "The DevDockerfile name, you can override for custom names (i.e. DevDockerfile)"
+    required: true
+    default: "DevDockerfile"
+  build_args:
+    description: "Comma seperated list of arguments that will be injected during the build (i.e. FOO=bar,FOOBAR=foo)"
+    required: false
+  env_vars:
+    description: "Comma seperated list of environment variables that will be injected during runtime (i.e. FOO=bar,FOOBAR=foo)"
+    required: false
 outputs:
   url:
     description: "The preview URL for the running application"

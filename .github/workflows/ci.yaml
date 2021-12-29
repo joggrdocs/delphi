@@ -15,14 +15,15 @@ jobs:
       - id: runAction
         name: Run Action Code
         uses: ./
-        env:
-          LP_ENV_MESSAGE: 'Hello via ENV Vars'
         with:
           directory: ./examples/nodejs-simple
           service_account_key: ${{ secrets.GCP_SA_KEY }}
           name: ghaexample
           port: 3000
+          dockerfile: DevDockerfile
           api_key: ${{ secrets.BLUENOVA_API_KEY }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          build_args: BUILD_VAR=foo,BUILD_VAR2=bar
+          env_vars: MESSAGE="Hello via ENV Vars"
       - name: Test Outputs
         run: echo "${{ steps.runAction.outputs.url }}"

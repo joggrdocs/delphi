@@ -1,5 +1,6 @@
 import * as github from '@actions/github';
 import * as exec from '@actions/exec';
+import * as _ from 'lodash';
 
 const URL_ARTIFACT_REGISTRY = 'us-docker.pkg.dev';
 
@@ -29,7 +30,9 @@ interface DockerProps {
   slug: string;
   apiKey: string;
   serviceAccountKey: string;
+  dockerfile?: string;
   directory?: string;
+  buildArgs?: string[];
 }
 
 export default class Docker {
@@ -37,13 +40,17 @@ export default class Docker {
   private readonly serviceAccountKey: string;
   private readonly projectId: string;
   private readonly directory: string;
+  private readonly dockerfile: string;
   private readonly name: string;
   private readonly slug: string;
+  private readonly buildArgs: string[];
 
   constructor (props: DockerProps) {
     this.serviceAccountKey = props.serviceAccountKey;
     this.projectId = props.projectId;
+    this.dockerfile = props.dockerfile || 'Dockerfile';
     this.directory = props.directory || '.';
+    this.buildArgs = props.buildArgs || [];
     this.slug = props.slug;
     this.name = props.name;
   }
@@ -71,12 +78,28 @@ export default class Docker {
   public async buildAndPush (): Promise<void> {
     this.assertSetup();
 
-    await exec.getExecOutput('docker', [
+    const buildCommand = [
       'build',
-      '--tag',
+      '-t',
       this.getTag(),
+      '-f',
+      `${this.directory}/${this.dockerfile}`
+    ];
+
+    if (this.buildArgs.length > 0) {
+      _.forEach(this.buildArgs, (value) => {
+        buildCommand.push('--build-arg', value);
+      });
+    }
+
+    buildCommand.push(
       this.directory
-    ]);
+    );
+
+    // await exec.getExecOutput('docker', ['build', '--help']);
+    // await exec.getExecOutput('docker', ['--version']);
+
+    await exec.getExecOutput('docker', buildCommand);
 
     await exec.getExecOutput('docker', [
       'push',

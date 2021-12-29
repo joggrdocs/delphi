@@ -29,13 +29,8 @@ jobs:
         uses: actions/checkout@v1
       - id: runAction
         name: Run Action Code
-        uses: bluenovaio/action-launchpad@v0.1.0-alpha
-        env: 
-          LP_ENV_MY_VAR: "Foobar" # You MUST prefix all environment variables with "LP_ENV_"
+        uses: bluenovaio/action-launchpad@v0.1.0-beta2
         with:
-          # A directory containing a Dockerfile
-          directory: ./examples/nodejs-simple
-          
           # Provided by the BlueNova team
           service_account_key: ${{ secrets.GCP_SA_KEY }}
           
@@ -47,6 +42,18 @@ jobs:
           
           # Default token for the repository
           github_token: ${{ secrets.GITHUB_TOKEN }}
+
+          # (Optional) A directory containing a DevDockerfile
+          directory: ./examples/nodejs-simple
+
+          # (Optional) The DevDockerfile name, you can override for custom names (i.e. DevDockerfile)
+          dockerfile: DevDockerfile
+
+          # (Optional) Environment Variables that will be injected during runtime
+          env_vars: FOO=bar,BAR=foo
+
+          # (Optional) Docker Build Arguments (i.e. --build-args) that will be injected during the build 
+          build_args: FOO=bar,BAR=foo
 ```
 
 #### Attribution

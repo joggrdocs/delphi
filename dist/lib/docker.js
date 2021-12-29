@@ -21,6 +21,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const github = __importStar(require("@actions/github"));
 const exec = __importStar(require("@actions/exec"));
+const _ = __importStar(require("lodash"));
 const URL_ARTIFACT_REGISTRY = 'us-docker.pkg.dev';
 // Utils
 // -----
@@ -42,7 +43,9 @@ class Docker {
         this.isSetup = false;
         this.serviceAccountKey = props.serviceAccountKey;
         this.projectId = props.projectId;
+        this.dockerfile = props.dockerfile || 'Dockerfile';
         this.directory = props.directory || '.';
+        this.buildArgs = props.buildArgs || [];
         this.slug = props.slug;
         this.name = props.name;
     }
@@ -67,12 +70,22 @@ class Docker {
     }
     async buildAndPush() {
         this.assertSetup();
-        await exec.getExecOutput('docker', [
+        const buildCommand = [
             'build',
-            '--tag',
+            '-t',
             this.getTag(),
-            this.directory
-        ]);
+            '-f',
+            `${this.directory}/${this.dockerfile}`
+        ];
+        if (this.buildArgs.length > 0) {
+            _.forEach(this.buildArgs, (value) => {
+                buildCommand.push('--build-arg', value);
+            });
+        }
+        buildCommand.push(this.directory);
+        // await exec.getExecOutput('docker', ['build', '--help']);
+        // await exec.getExecOutput('docker', ['--version']);
+        await exec.getExecOutput('docker', buildCommand);
         await exec.getExecOutput('docker', [
             'push',
             this.getTag()
