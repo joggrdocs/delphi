@@ -1,6 +1,0 @@
-#!/bin/sh
-. "$(dirname "$0")/_/husky.sh"
-
-#yarn build
-#yarn package
-#git commit -am "Build & Package"
