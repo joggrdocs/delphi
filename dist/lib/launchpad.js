@@ -26,7 +26,7 @@ exports.validateAppName = void 0;
 const github = __importStar(require("@actions/github"));
 const axios_1 = __importDefault(require("axios"));
 const github_1 = require("./github");
-const API_URL = 'https://alpha-launchpad.bluenova-app.com';
+const API_URL = 'https://launchpad-api.bluenova-app.com';
 // Utils
 // -----
 function validateAppName(appName) {
