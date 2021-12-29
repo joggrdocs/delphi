@@ -23,9 +23,9 @@ inputs:
     required: true
     default: "."
   dockerfile:
-    description: "The Dev.Dockerfile name, you can override for custom names (i.e. Dev.Dockerfile)"
+    description: "The DevDockerfile name, you can override for custom names (i.e. DevDockerfile)"
     required: true
-    default: "Dev.Dockerfile"
+    default: "DevDockerfile"
   build_args:
     description: "Comma seperated list of arguments that will be injected during the build (i.e. FOO=bar,FOOBAR=foo)"
     required: false
