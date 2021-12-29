@@ -1,6 +1,6 @@
 name-template: '$NEXT_PATCH_VERSION'
 tag-template: '$NEXT_PATCH_VERSION'
-version-template: v0.1.0-beta{PATCH}
+version-template: v0.$MAJOR.$MINOR-beta$PATCH
 categories:
   - title: '🚀 Features'
     labels:
