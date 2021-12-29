@@ -15,7 +15,7 @@ Launch your product(s) to the stars with LaunchPad.
 
 ## Usage
 ```yaml
-name: "CI"
+name: "LaunchPad: Preview"
 
 on:
   pull_request:
