@@ -87,8 +87,8 @@ class Docker {
             });
         }
         buildCommand.push(this.directory);
-        await exec.getExecOutput('docker', ['build', '--help']);
-        await exec.getExecOutput('docker', ['--version']);
+        // await exec.getExecOutput('docker', ['build', '--help']);
+        // await exec.getExecOutput('docker', ['--version']);
         await exec.getExecOutput('docker', buildCommand);
         await exec.getExecOutput('docker', [
             'push',
@@ -8427,7 +8427,7 @@ function setup(env) {
 
 	/**
 	* Selects a color for a debug namespace
-	* @param {String} namespace The namespace string for the for the debug instance to be colored
+	* @param {String} namespace The namespace string for the debug instance to be colored
 	* @return {Number|String} An ANSI color code for the given namespace
 	* @api private
 	*/
@@ -9536,11 +9536,12 @@ function removeMatchingHeaders(regex, headers) {
   var lastValue;
   for (var header in headers) {
     if (regex.test(header)) {
-      lastValue = headers[header].toString().trim();
+      lastValue = headers[header];
       delete headers[header];
     }
   }
-  return lastValue;
+  return (lastValue === null || typeof lastValue === "undefined") ?
+    undefined : String(lastValue).trim();
 }
 
 function createErrorType(code, defaultMessage) {
