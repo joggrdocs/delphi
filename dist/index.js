@@ -82,7 +82,7 @@ class Docker {
             '-t',
             this.getTag(),
             '-f',
-            this.dockerfile
+            `${this.directory}/${this.dockerfile}`
         ];
         if (this.buildArgs.length > 0) {
             _.forEach(this.buildArgs, (value) => {
