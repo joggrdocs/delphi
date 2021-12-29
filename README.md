@@ -7,6 +7,8 @@ This is ONLY available for use by those in the closed Beta Program, if you are i
 # LaunchPad
 
 [![CI](https://github.com/bluenovaio/action-launchpad/actions/workflows/ci.yaml/badge.svg)](https://github.com/bluenovaio/action-launchpad/actions/workflows/ci.yaml)
+[![CodeQL](https://github.com/bluenovaio/action-launchpad/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/bluenovaio/action-launchpad/actions/workflows/codeql-analysis.yml)
+[![Security Scans](https://github.com/bluenovaio/action-launchpad/actions/workflows/security.yaml/badge.svg)](https://github.com/bluenovaio/action-launchpad/actions/workflows/security.yaml)
 [![js-semistandard-style](https://img.shields.io/badge/code%20style-semistandard-brightgreen.svg?style=flat-square)](https://github.com/standard/semistandard)
 
 Launch your product(s) to the stars with LaunchPad.
