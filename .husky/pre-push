@@ -3,3 +3,4 @@
 
 yarn build
 yarn package
+git commit -am "Build & Package"
