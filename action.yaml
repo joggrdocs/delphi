@@ -2,7 +2,7 @@ name: BlueNova LaunchPad
 description: Github Action used to deploy to the BlueNova cloud environment.
 author: "@bluenovaio"
 branding:
-  icon: 'aperture'  
+  icon: 'aperture'
   color: 'blue'
 inputs:
   name:
@@ -26,9 +26,9 @@ inputs:
     required: true
     default: "."
   dockerfile:
-    description: "The DevDockerfile name, you can override for custom names (i.e. DevDockerfile)"
+    description: "The Dockerfile name, you can override for custom names (i.e. DevDockerfile)"
     required: true
-    default: "DevDockerfile"
+    default: "Dockerfile"
   build_args:
     description: "Comma seperated list of arguments that will be injected during the build (i.e. FOO=bar,FOOBAR=foo)"
     required: false
