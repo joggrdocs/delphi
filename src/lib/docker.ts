@@ -83,7 +83,7 @@ export default class Docker {
 
     if (this.buildArgs.length > 0) {
       _.forEach(this.buildArgs, (value) => {
-        buildCommand.push(`--build-arg ${value}`);
+        buildCommand.push(`--build-args ${value}`);
       });
     }
 
