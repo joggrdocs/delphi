@@ -43,6 +43,7 @@ class Docker {
         this.isSetup = false;
         this.serviceAccountKey = props.serviceAccountKey;
         this.projectId = props.projectId;
+        this.dockerfile = props.dockerfile || 'Dockerfile';
         this.directory = props.directory || '.';
         this.buildArgs = props.buildArgs || [];
         this.slug = props.slug;
@@ -72,7 +73,9 @@ class Docker {
         const buildCommand = [
             'build',
             '-t',
-            this.getTag()
+            this.getTag(),
+            '-f',
+            this.dockerfile
         ];
         if (this.buildArgs.length > 0) {
             _.forEach(this.buildArgs, (value) => {

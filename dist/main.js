@@ -32,6 +32,7 @@ async function run() {
     try {
         const serviceAccountKey = core.getInput('service_account_key');
         const directory = core.getInput('directory');
+        const dockerfile = core.getInput('dockerfile');
         const apiKey = core.getInput('api_key');
         const name = core.getInput('name');
         const buildArgs = core.getInput('build_args');
@@ -54,6 +55,7 @@ async function run() {
             serviceAccountKey,
             name,
             directory,
+            dockerfile,
             projectId: launchpad.projectId,
             slug: launchpad.slugId,
             buildArgs: (0, parser_1.parseListInputs)(buildArgs),

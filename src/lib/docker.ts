@@ -30,6 +30,7 @@ interface DockerProps {
   slug: string;
   apiKey: string;
   serviceAccountKey: string;
+  dockerfile?: string;
   directory?: string;
   buildArgs?: string[];
 }
@@ -39,6 +40,7 @@ export default class Docker {
   private readonly serviceAccountKey: string;
   private readonly projectId: string;
   private readonly directory: string;
+  private readonly dockerfile: string;
   private readonly name: string;
   private readonly slug: string;
   private readonly buildArgs: string[];
@@ -46,6 +48,7 @@ export default class Docker {
   constructor (props: DockerProps) {
     this.serviceAccountKey = props.serviceAccountKey;
     this.projectId = props.projectId;
+    this.dockerfile = props.dockerfile || 'Dockerfile';
     this.directory = props.directory || '.';
     this.buildArgs = props.buildArgs || [];
     this.slug = props.slug;
@@ -78,7 +81,9 @@ export default class Docker {
     const buildCommand = [
       'build',
       '-t',
-      this.getTag()
+      this.getTag(),
+      '-f',
+      this.dockerfile
     ];
 
     if (this.buildArgs.length > 0) {

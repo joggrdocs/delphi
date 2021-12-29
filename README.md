@@ -31,9 +31,6 @@ jobs:
         name: Run Action Code
         uses: bluenovaio/action-launchpad@v0.1.0-beta2
         with:
-          # A directory containing a Dockerfile
-          directory: ./examples/nodejs-simple
-          
           # Provided by the BlueNova team
           service_account_key: ${{ secrets.GCP_SA_KEY }}
           
@@ -45,6 +42,12 @@ jobs:
           
           # Default token for the repository
           github_token: ${{ secrets.GITHUB_TOKEN }}
+
+          # (Optional) A directory containing a Dev.Dockerfile
+          directory: ./examples/nodejs-simple
+
+          # (Optional) The Dev.Dockerfile name, you can override for custom names (i.e. Dev.Dockerfile)
+          dockerfile: Dev.Dockerfile
 
           # (Optional) Environment Variables that will be injected during runtime
           env_vars: FOO=bar,BAR=foo

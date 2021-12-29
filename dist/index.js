@@ -50,6 +50,7 @@ class Docker {
         this.isSetup = false;
         this.serviceAccountKey = props.serviceAccountKey;
         this.projectId = props.projectId;
+        this.dockerfile = props.dockerfile || 'Dockerfile';
         this.directory = props.directory || '.';
         this.buildArgs = props.buildArgs || [];
         this.slug = props.slug;
@@ -79,7 +80,9 @@ class Docker {
         const buildCommand = [
             'build',
             '-t',
-            this.getTag()
+            this.getTag(),
+            '-f',
+            this.dockerfile
         ];
         if (this.buildArgs.length > 0) {
             _.forEach(this.buildArgs, (value) => {
@@ -395,6 +398,7 @@ async function run() {
     try {
         const serviceAccountKey = core.getInput('service_account_key');
         const directory = core.getInput('directory');
+        const dockerfile = core.getInput('dockerfile');
         const apiKey = core.getInput('api_key');
         const name = core.getInput('name');
         const buildArgs = core.getInput('build_args');
@@ -417,6 +421,7 @@ async function run() {
             serviceAccountKey,
             name,
             directory,
+            dockerfile,
             projectId: launchpad.projectId,
             slug: launchpad.slugId,
             buildArgs: (0, parser_1.parseListInputs)(buildArgs),
