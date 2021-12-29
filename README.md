@@ -45,10 +45,10 @@ jobs:
           # Default token for the repository
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
-          # (Optional) A directory containing a DevDockerfile
+          # (Optional) A directory containing a Dockerfile
           directory: ./examples/nodejs-simple
 
-          # (Optional) The DevDockerfile name, you can override for custom names (i.e. DevDockerfile)
+          # (Optional) The Dockerfile name, you can override for custom names (i.e. DevDockerfile)
           dockerfile: DevDockerfile
 
           # (Optional) Environment Variables that will be injected during runtime
