@@ -284,7 +284,7 @@ exports.validateAppName = void 0;
 const github = __importStar(__nccwpck_require__(5438));
 const axios_1 = __importDefault(__nccwpck_require__(6545));
 const github_1 = __nccwpck_require__(2979);
-const API_URL = 'https://alpha-launchpad.bluenova-app.com';
+const API_URL = 'https://launchpad-api.bluenova-app.com';
 // Utils
 // -----
 function validateAppName(appName) {
