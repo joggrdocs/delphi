@@ -50,6 +50,7 @@ async function run() {
             envVars
         });
         await launchpad.setup();
+        await launchpad.registerEvents();
         // Build & Push Image to LaunchPad repository
         const docker = new docker_1.default({
             serviceAccountKey,

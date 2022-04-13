@@ -22,11 +22,22 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.validateAppName = void 0;
+exports.validateAppName = exports.EventState = exports.EventKind = void 0;
 const github = __importStar(require("@actions/github"));
 const axios_1 = __importDefault(require("axios"));
 const github_1 = require("./github");
 const API_URL = 'https://launchpad-api.bluenova-app.com';
+var EventKind;
+(function (EventKind) {
+    EventKind["PullRequest"] = "pull-request";
+})(EventKind = exports.EventKind || (exports.EventKind = {}));
+var EventState;
+(function (EventState) {
+    EventState["Opened"] = "opened";
+    EventState["Edited"] = "edited";
+    EventState["Merged"] = "merged";
+    EventState["Closed"] = "closed";
+})(EventState = exports.EventState || (exports.EventState = {}));
 // Utils
 // -----
 function validateAppName(appName) {
@@ -37,6 +48,7 @@ function validateAppName(appName) {
 exports.validateAppName = validateAppName;
 class LaunchPad {
     constructor(props) {
+        var _a, _b;
         this.isSetup = false;
         this.apiKey = props.apiKey;
         this.name = props.name;
@@ -46,6 +58,8 @@ class LaunchPad {
         this.pullRequestNumber = (0, github_1.getPullRequestNumber)();
         this.repository = github.context.repo.repo;
         this.branch = (0, github_1.getBranch)();
+        this.userEmail = (_a = github.context.payload.sender) === null || _a === void 0 ? void 0 : _a.email;
+        this.userName = (_b = github.context.payload.sender) === null || _b === void 0 ? void 0 : _b.login;
     }
     async setup() {
         const organization = await this.readOrganization();
@@ -66,6 +80,67 @@ class LaunchPad {
             environmentVariables: this.envVars
         });
         return result.data;
+    }
+    async registerEvents() {
+        if (github.context.eventName === 'pull_request') {
+            if (['opened', 'closed', 'edited'].includes(github.context.action)) {
+                await this.createEvent();
+            }
+        }
+    }
+    async createEvent() {
+        this.assertSetup();
+        console.log('THIS HERE');
+        console.log({
+            apiKey: this.apiKey,
+            kind: this.getEventKind(),
+            state: this.getEventState(),
+            user: this.getUser(),
+            data: this.getEventData()
+        });
+        // await axios.post(`${API_URL}/events`, {
+        //   apiKey: this.apiKey,
+        //   kind: this.getEventKind(),
+        //   state: this.getEventState(),
+        //   user: this.getUser(),
+        //   data: this.getEventData()
+        // });
+    }
+    getEventKind() {
+        switch (github.context.eventName) {
+            case 'pull_request':
+                return EventKind.PullRequest;
+            default:
+                throw new Error(`Event not supported: ${github.context.eventName}`);
+        }
+    }
+    getEventState() {
+        const payload = github.context.payload;
+        switch (github.context.action) {
+            case 'opened':
+                return EventState.Opened;
+            case 'edited':
+                return EventState.Edited;
+            case 'closed':
+                return payload.pull_request.merged ? EventState.Merged : EventState.Closed;
+            default:
+                throw new Error(`Action not supported: ${github.context.action}`);
+        }
+    }
+    getUser() {
+        return {
+            email: this.userEmail,
+            githubUserName: this.userName
+        };
+    }
+    getEventData() {
+        return {
+            name: this.name,
+            branch: this.branch,
+            repository: this.repository,
+            commit: this.commit,
+            pullRequestNumber: this.pullRequestNumber,
+        };
     }
     async readOrganization() {
         const result = await axios_1.default.get(`${API_URL}/organizations/${this.apiKey}`);

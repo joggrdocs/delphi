@@ -280,11 +280,22 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.validateAppName = void 0;
+exports.validateAppName = exports.EventState = exports.EventKind = void 0;
 const github = __importStar(__nccwpck_require__(5438));
 const axios_1 = __importDefault(__nccwpck_require__(6545));
 const github_1 = __nccwpck_require__(2979);
 const API_URL = 'https://launchpad-api.bluenova-app.com';
+var EventKind;
+(function (EventKind) {
+    EventKind["PullRequest"] = "pull-request";
+})(EventKind = exports.EventKind || (exports.EventKind = {}));
+var EventState;
+(function (EventState) {
+    EventState["Opened"] = "opened";
+    EventState["Edited"] = "edited";
+    EventState["Merged"] = "merged";
+    EventState["Closed"] = "closed";
+})(EventState = exports.EventState || (exports.EventState = {}));
 // Utils
 // -----
 function validateAppName(appName) {
@@ -295,6 +306,7 @@ function validateAppName(appName) {
 exports.validateAppName = validateAppName;
 class LaunchPad {
     constructor(props) {
+        var _a, _b;
         this.isSetup = false;
         this.apiKey = props.apiKey;
         this.name = props.name;
@@ -304,6 +316,8 @@ class LaunchPad {
         this.pullRequestNumber = (0, github_1.getPullRequestNumber)();
         this.repository = github.context.repo.repo;
         this.branch = (0, github_1.getBranch)();
+        this.userEmail = (_a = github.context.payload.sender) === null || _a === void 0 ? void 0 : _a.email;
+        this.userName = (_b = github.context.payload.sender) === null || _b === void 0 ? void 0 : _b.login;
     }
     async setup() {
         const organization = await this.readOrganization();
@@ -324,6 +338,67 @@ class LaunchPad {
             environmentVariables: this.envVars
         });
         return result.data;
+    }
+    async registerEvents() {
+        if (github.context.eventName === 'pull_request') {
+            if (['opened', 'closed', 'edited'].includes(github.context.action)) {
+                await this.createEvent();
+            }
+        }
+    }
+    async createEvent() {
+        this.assertSetup();
+        console.log('THIS HERE');
+        console.log({
+            apiKey: this.apiKey,
+            kind: this.getEventKind(),
+            state: this.getEventState(),
+            user: this.getUser(),
+            data: this.getEventData()
+        });
+        // await axios.post(`${API_URL}/events`, {
+        //   apiKey: this.apiKey,
+        //   kind: this.getEventKind(),
+        //   state: this.getEventState(),
+        //   user: this.getUser(),
+        //   data: this.getEventData()
+        // });
+    }
+    getEventKind() {
+        switch (github.context.eventName) {
+            case 'pull_request':
+                return EventKind.PullRequest;
+            default:
+                throw new Error(`Event not supported: ${github.context.eventName}`);
+        }
+    }
+    getEventState() {
+        const payload = github.context.payload;
+        switch (github.context.action) {
+            case 'opened':
+                return EventState.Opened;
+            case 'edited':
+                return EventState.Edited;
+            case 'closed':
+                return payload.pull_request.merged ? EventState.Merged : EventState.Closed;
+            default:
+                throw new Error(`Action not supported: ${github.context.action}`);
+        }
+    }
+    getUser() {
+        return {
+            email: this.userEmail,
+            githubUserName: this.userName
+        };
+    }
+    getEventData() {
+        return {
+            name: this.name,
+            branch: this.branch,
+            repository: this.repository,
+            commit: this.commit,
+            pullRequestNumber: this.pullRequestNumber,
+        };
     }
     async readOrganization() {
         const result = await axios_1.default.get(`${API_URL}/organizations/${this.apiKey}`);
@@ -416,6 +491,7 @@ async function run() {
             envVars
         });
         await launchpad.setup();
+        await launchpad.registerEvents();
         // Build & Push Image to LaunchPad repository
         const docker = new docker_1.default({
             serviceAccountKey,
@@ -9408,9 +9484,9 @@ RedirectableRequest.prototype._processResponse = function (response) {
     var redirectUrlParts = url.parse(redirectUrl);
     Object.assign(this._options, redirectUrlParts);
 
-    // Drop the Authorization header if redirecting to another domain
+    // Drop the confidential headers when redirecting to another domain
     if (!(redirectUrlParts.host === currentHost || isSubdomainOf(redirectUrlParts.host, currentHost))) {
-      removeMatchingHeaders(/^authorization$/i, this._options.headers);
+      removeMatchingHeaders(/^(?:authorization|cookie)$/i, this._options.headers);
     }
 
     // Evaluate the beforeRedirect callback
@@ -28446,9 +28522,17 @@ AbortError.prototype = Object.create(Error.prototype);
 AbortError.prototype.constructor = AbortError;
 AbortError.prototype.name = 'AbortError';
 
+const URL$1 = Url.URL || whatwgUrl.URL;
+
 // fix an issue where "PassThrough", "resolve" aren't a named export for node <10
 const PassThrough$1 = Stream.PassThrough;
-const resolve_url = Url.resolve;
+
+const isDomainOrSubdomain = function isDomainOrSubdomain(destination, original) {
+	const orig = new URL$1(original).hostname;
+	const dest = new URL$1(destination).hostname;
+
+	return orig === dest || orig[orig.length - dest.length - 1] === '.' && orig.endsWith(dest);
+};
 
 /**
  * Fetch function
@@ -28536,7 +28620,19 @@ function fetch(url, opts) {
 				const location = headers.get('Location');
 
 				// HTTP fetch step 5.3
-				const locationURL = location === null ? null : resolve_url(request.url, location);
+				let locationURL = null;
+				try {
+					locationURL = location === null ? null : new URL$1(location, request.url).toString();
+				} catch (err) {
+					// error here can only be invalid URL in Location: header
+					// do not throw when options.redirect == manual
+					// let the user extract the errorneous redirect URL
+					if (request.redirect !== 'manual') {
+						reject(new FetchError(`uri requested responds with an invalid redirect URL: ${location}`, 'invalid-redirect'));
+						finalize();
+						return;
+					}
+				}
 
 				// HTTP fetch step 5.5
 				switch (request.redirect) {
@@ -28583,6 +28679,12 @@ function fetch(url, opts) {
 							timeout: request.timeout,
 							size: request.size
 						};
+
+						if (!isDomainOrSubdomain(request.url, locationURL)) {
+							for (const name of ['authorization', 'www-authenticate', 'cookie', 'cookie2']) {
+								requestOpts.headers.delete(name);
+							}
+						}
 
 						// HTTP-redirect fetch step 9
 						if (res.statusCode !== 303 && request.body && getTotalBytes(request) === null) {

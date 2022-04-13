@@ -113,6 +113,7 @@ export default class LaunchPad {
   private async createEvent (): Promise<void> {
     this.assertSetup();
 
+    console.log('THIS HERE');
     console.log({
       apiKey: this.apiKey,
       kind: this.getEventKind(),
