@@ -113,13 +113,21 @@ export default class LaunchPad {
   private async createEvent (): Promise<void> {
     this.assertSetup();
 
-    await axios.post(`${API_URL}/events`, {
+    console.log({
       apiKey: this.apiKey,
       kind: this.getEventKind(),
       state: this.getEventState(),
       user: this.getUser(),
       data: this.getEventData()
     });
+
+    // await axios.post(`${API_URL}/events`, {
+    //   apiKey: this.apiKey,
+    //   kind: this.getEventKind(),
+    //   state: this.getEventState(),
+    //   user: this.getUser(),
+    //   data: this.getEventData()
+    // });
   }
 
   private getEventKind (): EventKind {
