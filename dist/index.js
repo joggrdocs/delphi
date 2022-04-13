@@ -341,7 +341,7 @@ class LaunchPad {
         return result.data;
     }
     async registerEvents() {
-        core.info(JSON.stringify(github.context));
+        core.info(JSON.stringify(github.context, null, 1));
         if (github.context.eventName === 'pull_request') {
             if (['opened', 'closed', 'edited'].includes(github.context.action)) {
                 await this.createEvent();
@@ -357,7 +357,7 @@ class LaunchPad {
             state: this.getEventState(),
             user: this.getUser(),
             data: this.getEventData()
-        }));
+        }, null, 1));
         // await axios.post(`${API_URL}/events`, {
         //   apiKey: this.apiKey,
         //   kind: this.getEventKind(),
