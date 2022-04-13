@@ -1,5 +1,6 @@
 import { PullRequestEvent } from '@octokit/webhooks-definitions/schema';
 import * as github from '@actions/github';
+import * as core from '@actions/core';
 import axios from 'axios';
 
 import { getBranch, getPullRequestNumber } from './github';
@@ -103,6 +104,7 @@ export default class LaunchPad {
   }
 
   public async registerEvents () {
+    core.info(JSON.stringify(github.context));
     if (github.context.eventName === 'pull_request') {
       if (['opened', 'closed', 'edited'].includes(github.context.action)) {
         await this.createEvent();
@@ -113,14 +115,14 @@ export default class LaunchPad {
   private async createEvent (): Promise<void> {
     this.assertSetup();
 
-    console.log('THIS HERE');
-    console.log({
+    core.info('THIS HERE');
+    core.info(JSON.stringify({
       apiKey: this.apiKey,
       kind: this.getEventKind(),
       state: this.getEventState(),
       user: this.getUser(),
       data: this.getEventData()
-    });
+    }));
 
     // await axios.post(`${API_URL}/events`, {
     //   apiKey: this.apiKey,

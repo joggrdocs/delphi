@@ -282,6 +282,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.validateAppName = exports.EventState = exports.EventKind = void 0;
 const github = __importStar(__nccwpck_require__(5438));
+const core = __importStar(__nccwpck_require__(2186));
 const axios_1 = __importDefault(__nccwpck_require__(6545));
 const github_1 = __nccwpck_require__(2979);
 const API_URL = 'https://launchpad-api.bluenova-app.com';
@@ -340,6 +341,7 @@ class LaunchPad {
         return result.data;
     }
     async registerEvents() {
+        core.info(JSON.stringify(github.context));
         if (github.context.eventName === 'pull_request') {
             if (['opened', 'closed', 'edited'].includes(github.context.action)) {
                 await this.createEvent();
@@ -348,14 +350,14 @@ class LaunchPad {
     }
     async createEvent() {
         this.assertSetup();
-        console.log('THIS HERE');
-        console.log({
+        core.info('THIS HERE');
+        core.info(JSON.stringify({
             apiKey: this.apiKey,
             kind: this.getEventKind(),
             state: this.getEventState(),
             user: this.getUser(),
             data: this.getEventData()
-        });
+        }));
         // await axios.post(`${API_URL}/events`, {
         //   apiKey: this.apiKey,
         //   kind: this.getEventKind(),
