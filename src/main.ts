@@ -1,11 +1,11 @@
 import * as core from '@actions/core';
 
-import LaunchPad, {validateAppName} from './lib/launchpad';
+import LaunchPad, { validateAppName } from './lib/launchpad';
 import * as github from './lib/github';
 import Docker from './lib/docker';
-import {parseListInputs} from './lib/parser';
+import { parseListInputs } from './lib/parser';
 
-async function run(): Promise<void> {
+async function run (): Promise<void> {
   try {
     const serviceAccountKey = core.getInput('service_account_key');
     const directory = core.getInput('directory');
@@ -31,6 +31,7 @@ async function run(): Promise<void> {
     });
 
     await launchpad.setup();
+    await launchpad.registerEvents();
 
     // Build & Push Image to LaunchPad repository
     const docker = new Docker({
