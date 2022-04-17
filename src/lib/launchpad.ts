@@ -5,7 +5,7 @@ import axios from 'axios';
 
 import { getBranch, getPullRequestNumber } from './github';
 
-const API_URL = 'https://launchpad-api.bluenova-app.com';
+const API_URL = process.env.URL_API_LAUNCHPAD ?? 'https://launchpad-api.bluenova-app.com';
 
 // Types
 // -----
@@ -58,8 +58,8 @@ export default class LaunchPad {
   private readonly repository: string;
   private readonly branch: string;
   private readonly commit: string;
-  private readonly userEmail: string;
-  private readonly userName: string;
+  private readonly actorUserEmail: string;
+  private readonly actorUserName: string;
   private readonly pullRequestNumber: number;
   private isSetup = false;
   private readonly envVars?: string;
@@ -73,8 +73,8 @@ export default class LaunchPad {
     this.pullRequestNumber = getPullRequestNumber();
     this.repository = github.context.repo.repo;
     this.branch = getBranch();
-    this.userEmail = github.context.payload.sender?.email;
-    this.userName = github.context.payload.sender?.login;
+    this.actorUserEmail = github.context.payload.sender?.email;
+    this.actorUserName = github.context.payload.sender?.login;
   }
 
   public async setup (): Promise<void> {
@@ -115,22 +115,13 @@ export default class LaunchPad {
   private async createEvent (): Promise<void> {
     this.assertSetup();
 
-    core.info('THIS HERE');
-    core.info(JSON.stringify({
+    await axios.post(`${API_URL}/events`, {
       apiKey: this.apiKey,
       kind: this.getEventKind(),
       state: this.getEventState(),
       user: this.getUser(),
       data: this.getEventData()
-    }, null, 1));
-
-    // await axios.post(`${API_URL}/events`, {
-    //   apiKey: this.apiKey,
-    //   kind: this.getEventKind(),
-    //   state: this.getEventState(),
-    //   user: this.getUser(),
-    //   data: this.getEventData()
-    // });
+    });
   }
 
   private getEventKind (): EventKind {
@@ -158,8 +149,8 @@ export default class LaunchPad {
 
   private getUser (): Record<string, string | number> {
     return {
-      email: this.userEmail,
-      githubUserName: this.userName
+      email: this.actorUserEmail,
+      githubUserName: this.actorUserName
     };
   }
 
