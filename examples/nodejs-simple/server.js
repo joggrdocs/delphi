@@ -3,7 +3,7 @@ const express = require('express');
 const server = express();
 
 server.get('/', (req, res) => {
-  res.sendFile('index.html');
+  res.sendFile('./index.html');
 });
 
 server.get('/hello', (req, res) => {
