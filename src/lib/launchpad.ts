@@ -104,6 +104,8 @@ export default class LaunchPad {
   }
 
   public async registerEvents () {
+    core.info('REGISTER EVENT');
+    core.info(github.context.eventName);
     if (github.context.eventName === 'pull_request') {
       if (['opened', 'closed', 'synchronize', 'reopened'].includes(github.context.action)) {
         core.info('CREATE EVENT');
