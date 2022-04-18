@@ -21,13 +21,14 @@ var __importStar = (this && this.__importStar) || function (mod) {
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
+var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.validateAppName = exports.EventState = exports.EventKind = void 0;
 const github = __importStar(require("@actions/github"));
 const core = __importStar(require("@actions/core"));
 const axios_1 = __importDefault(require("axios"));
 const github_1 = require("./github");
-const API_URL = 'https://launchpad-api.bluenova-app.com';
+const API_URL = (_a = process.env.URL_API_LAUNCHPAD) !== null && _a !== void 0 ? _a : 'https://launchpad-api.bluenova-app.com';
 var EventKind;
 (function (EventKind) {
     EventKind["PullRequest"] = "pull-request";
@@ -59,8 +60,8 @@ class LaunchPad {
         this.pullRequestNumber = (0, github_1.getPullRequestNumber)();
         this.repository = github.context.repo.repo;
         this.branch = (0, github_1.getBranch)();
-        this.userEmail = (_a = github.context.payload.sender) === null || _a === void 0 ? void 0 : _a.email;
-        this.userName = (_b = github.context.payload.sender) === null || _b === void 0 ? void 0 : _b.login;
+        this.actorUserEmail = (_a = github.context.payload.sender) === null || _a === void 0 ? void 0 : _a.email;
+        this.actorUserName = (_b = github.context.payload.sender) === null || _b === void 0 ? void 0 : _b.login;
     }
     async setup() {
         const organization = await this.readOrganization();
@@ -92,21 +93,13 @@ class LaunchPad {
     }
     async createEvent() {
         this.assertSetup();
-        core.info('THIS HERE');
-        core.info(JSON.stringify({
+        await axios_1.default.post(`${API_URL}/events`, {
             apiKey: this.apiKey,
             kind: this.getEventKind(),
             state: this.getEventState(),
             user: this.getUser(),
             data: this.getEventData()
-        }, null, 1));
-        // await axios.post(`${API_URL}/events`, {
-        //   apiKey: this.apiKey,
-        //   kind: this.getEventKind(),
-        //   state: this.getEventState(),
-        //   user: this.getUser(),
-        //   data: this.getEventData()
-        // });
+        });
     }
     getEventKind() {
         switch (github.context.eventName) {
@@ -131,8 +124,8 @@ class LaunchPad {
     }
     getUser() {
         return {
-            email: this.userEmail,
-            githubUserName: this.userName
+            email: this.actorUserEmail,
+            githubUserName: this.actorUserName
         };
     }
     getEventData() {

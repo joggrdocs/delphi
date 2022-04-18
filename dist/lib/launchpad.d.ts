@@ -30,8 +30,8 @@ export default class LaunchPad {
     private readonly repository;
     private readonly branch;
     private readonly commit;
-    private readonly userEmail;
-    private readonly userName;
+    private readonly actorUserEmail;
+    private readonly actorUserName;
     private readonly pullRequestNumber;
     private isSetup;
     private readonly envVars?;
