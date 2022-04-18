@@ -343,7 +343,7 @@ class LaunchPad {
     }
     async registerEvents() {
         if (github.context.eventName === 'pull_request') {
-            if (['opened', 'closed', 'edited'].includes(github.context.action)) {
+            if (['opened', 'closed', 'synchronize', 'reopened'].includes(github.context.action)) {
                 core.info('CREATE EVENT');
                 await this.createEvent();
             }
@@ -371,8 +371,9 @@ class LaunchPad {
         const payload = github.context.payload;
         switch (github.context.action) {
             case 'opened':
+            case 'reopened':
                 return EventState.Opened;
-            case 'edited':
+            case 'synchronize':
                 return EventState.Edited;
             case 'closed':
                 return payload.pull_request.merged ? EventState.Merged : EventState.Closed;
