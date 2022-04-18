@@ -1,9 +1,15 @@
+const path = require('path');
+const fs = require('fs');
 const express = require('express');
 
 const server = express();
 
 server.get('/', (req, res) => {
-  res.sendFile('./index.html');
+  fs.readFile(path.join(__dirname, 'index.html'), (err, file) => {
+    if (err) return res.send(`Fatal Error: ${err.message}`);
+
+    res.send(file.toString());
+  });
 });
 
 server.get('/hello', (req, res) => {
