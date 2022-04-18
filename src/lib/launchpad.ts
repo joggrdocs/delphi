@@ -108,6 +108,8 @@ export default class LaunchPad {
   }
 
   public async registerEvents () {
+    core.info(API_URL);
+
     if (this.eventName === 'pull_request') {
       if (['opened', 'closed', 'synchronize', 'reopened'].includes(this.eventType)) {
         await this.createEvent();

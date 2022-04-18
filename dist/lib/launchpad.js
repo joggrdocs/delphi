@@ -25,6 +25,7 @@ var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.validateAppName = exports.EventState = exports.EventKind = void 0;
 const github = __importStar(require("@actions/github"));
+const core = __importStar(require("@actions/core"));
 const axios_1 = __importDefault(require("axios"));
 const github_1 = require("./github");
 const API_URL = (_a = process.env.URL_API_LAUNCHPAD) !== null && _a !== void 0 ? _a : 'https://launchpad-api.bluenova-app.com';
@@ -85,6 +86,7 @@ class LaunchPad {
         return result.data;
     }
     async registerEvents() {
+        core.info(API_URL);
         if (this.eventName === 'pull_request') {
             if (['opened', 'closed', 'synchronize', 'reopened'].includes(this.eventType)) {
                 await this.createEvent();
