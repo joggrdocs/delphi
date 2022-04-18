@@ -283,7 +283,6 @@ var _a;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.validateAppName = exports.EventState = exports.EventKind = void 0;
 const github = __importStar(__nccwpck_require__(5438));
-const core = __importStar(__nccwpck_require__(2186));
 const axios_1 = __importDefault(__nccwpck_require__(6545));
 const github_1 = __nccwpck_require__(2979);
 const API_URL = (_a = process.env.URL_API_LAUNCHPAD) !== null && _a !== void 0 ? _a : 'https://launchpad-api.bluenova-app.com';
@@ -308,7 +307,7 @@ function validateAppName(appName) {
 exports.validateAppName = validateAppName;
 class LaunchPad {
     constructor(props) {
-        var _a, _b;
+        var _a, _b, _c;
         this.isSetup = false;
         this.apiKey = props.apiKey;
         this.name = props.name;
@@ -318,8 +317,10 @@ class LaunchPad {
         this.pullRequestNumber = (0, github_1.getPullRequestNumber)();
         this.repository = github.context.repo.repo;
         this.branch = (0, github_1.getBranch)();
-        this.actorUserEmail = (_a = github.context.payload.sender) === null || _a === void 0 ? void 0 : _a.email;
-        this.actorUserName = (_b = github.context.payload.sender) === null || _b === void 0 ? void 0 : _b.login;
+        this.eventName = github.context.eventName;
+        this.eventType = (_a = github.context.payload.action) !== null && _a !== void 0 ? _a : '';
+        this.actorUserEmail = (_b = github.context.payload.sender) === null || _b === void 0 ? void 0 : _b.email;
+        this.actorUserName = (_c = github.context.payload.sender) === null || _c === void 0 ? void 0 : _c.login;
     }
     async setup() {
         const organization = await this.readOrganization();
@@ -342,11 +343,8 @@ class LaunchPad {
         return result.data;
     }
     async registerEvents() {
-        var _a;
-        core.info('REGISTER EVENT');
-        if (github.context.eventName === 'pull_request') {
-            if (['opened', 'closed', 'synchronize', 'reopened'].includes((_a = github.context.payload.action) !== null && _a !== void 0 ? _a : '')) {
-                core.info('CREATE EVENT');
+        if (this.eventName === 'pull_request') {
+            if (['opened', 'closed', 'synchronize', 'reopened'].includes(this.eventType)) {
                 await this.createEvent();
             }
         }
@@ -362,16 +360,16 @@ class LaunchPad {
         });
     }
     getEventKind() {
-        switch (github.context.eventName) {
+        switch (this.eventName) {
             case 'pull_request':
                 return EventKind.PullRequest;
             default:
-                throw new Error(`Event not supported: ${github.context.eventName}`);
+                throw new Error(`Event not supported: ${this.eventName}`);
         }
     }
     getEventState() {
         const payload = github.context.payload;
-        switch (github.context.action) {
+        switch (this.eventType) {
             case 'opened':
             case 'reopened':
                 return EventState.Opened;

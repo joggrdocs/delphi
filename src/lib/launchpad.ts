@@ -58,6 +58,8 @@ export default class LaunchPad {
   private readonly repository: string;
   private readonly branch: string;
   private readonly commit: string;
+  private readonly eventName: string;
+  private readonly eventType: string;
   private readonly actorUserEmail: string;
   private readonly actorUserName: string;
   private readonly pullRequestNumber: number;
@@ -73,6 +75,8 @@ export default class LaunchPad {
     this.pullRequestNumber = getPullRequestNumber();
     this.repository = github.context.repo.repo;
     this.branch = getBranch();
+    this.eventName = github.context.eventName;
+    this.eventType = github.context.payload.action ?? '';
     this.actorUserEmail = github.context.payload.sender?.email;
     this.actorUserName = github.context.payload.sender?.login;
   }
@@ -104,10 +108,8 @@ export default class LaunchPad {
   }
 
   public async registerEvents () {
-    core.info('REGISTER EVENT');
-    if (github.context.eventName === 'pull_request') {
-      if (['opened', 'closed', 'synchronize', 'reopened'].includes(github.context.payload.action ?? '')) {
-        core.info('CREATE EVENT');
+    if (this.eventName === 'pull_request') {
+      if (['opened', 'closed', 'synchronize', 'reopened'].includes(this.eventType)) {
         await this.createEvent();
       }
     }
@@ -126,17 +128,17 @@ export default class LaunchPad {
   }
 
   private getEventKind (): EventKind {
-    switch (github.context.eventName) {
+    switch (this.eventName) {
       case 'pull_request':
         return EventKind.PullRequest;
       default:
-        throw new Error(`Event not supported: ${github.context.eventName}`);
+        throw new Error(`Event not supported: ${this.eventName}`);
     }
   }
 
   private getEventState (): EventState {
     const payload = github.context.payload as PullRequestEvent;
-    switch (github.context.action) {
+    switch (this.eventType) {
       case 'opened':
       case 'reopened':
         return EventState.Opened;
