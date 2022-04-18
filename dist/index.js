@@ -353,6 +353,12 @@ class LaunchPad {
     }
     async createEvent() {
         this.assertSetup();
+        core.info(JSON.stringify({
+            kind: this.getEventKind(),
+            state: this.getEventState(),
+            user: this.getUser(),
+            data: this.getEventData()
+        }));
         await axios_1.default.post(`${API_URL}/events`, {
             apiKey: this.apiKey,
             kind: this.getEventKind(),
