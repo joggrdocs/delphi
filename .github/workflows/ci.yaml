@@ -17,7 +17,7 @@ jobs:
         name: Run Action Code
         uses: ./
         env:
-          URL_API_LAUNCHPAD: 'https://stg-launchpad-api.bluenova-app.com'
+          URL_API_LAUNCHPAD: 'https://launchpad-api.bluenova-app.com'
         with:
           directory: ./examples/nodejs-simple
           service_account_key: ${{ secrets.GCP_SA_KEY }}
