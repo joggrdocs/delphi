@@ -5,7 +5,7 @@ import axios from 'axios';
 
 import { getBranch, getPullRequestNumber } from './github';
 
-const API_URL = 'https://launchpad-api.bluenova-app.com';
+const API_URL = process.env.DEBUG___URL_API_LAUNCHPAD ?? 'https://launchpad-api.bluenova-app.com';
 
 // Types
 // -----
@@ -93,7 +93,7 @@ export default class LaunchPad {
   public async createDeployment (): Promise<Deployment> {
     this.assertSetup();
 
-    const result = await axios.post(`${process.env.URL_API_LAUNCHPAD ?? API_URL}/deployments`, {
+    const result = await axios.post(`${API_URL}/deployments`, {
       apiKey: this.apiKey,
       name: this.name,
       branch: this.branch,

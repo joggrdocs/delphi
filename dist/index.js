@@ -90,8 +90,6 @@ class Docker {
             });
         }
         buildCommand.push(this.directory);
-        // await exec.getExecOutput('docker', ['build', '--help']);
-        // await exec.getExecOutput('docker', ['--version']);
         await exec.getExecOutput('docker', buildCommand);
         await exec.getExecOutput('docker', [
             'push',
@@ -286,7 +284,7 @@ const github = __importStar(__nccwpck_require__(5438));
 const core = __importStar(__nccwpck_require__(2186));
 const axios_1 = __importDefault(__nccwpck_require__(6545));
 const github_1 = __nccwpck_require__(2979);
-const API_URL = (_a = process.env.URL_API_LAUNCHPAD) !== null && _a !== void 0 ? _a : 'https://launchpad-api.bluenova-app.com';
+const API_URL = (_a = process.env.DEBUG___URL_API_LAUNCHPAD) !== null && _a !== void 0 ? _a : 'https://launchpad-api.bluenova-app.com';
 var EventKind;
 (function (EventKind) {
     EventKind["PullRequest"] = "pull-request";
@@ -469,11 +467,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(2186));
 const launchpad_1 = __importStar(__nccwpck_require__(6624));
+const parser_1 = __nccwpck_require__(4419);
 const github = __importStar(__nccwpck_require__(2979));
 const docker_1 = __importDefault(__nccwpck_require__(7458));
-const parser_1 = __nccwpck_require__(4419);
 async function run() {
-    var _a, _b;
+    var _a, _b, _c;
     try {
         const serviceAccountKey = core.getInput('service_account_key');
         const directory = core.getInput('directory');
@@ -519,6 +517,7 @@ async function run() {
     }
     catch (error) {
         const message = (_b = (_a = error) === null || _a === void 0 ? void 0 : _a.message) !== null && _b !== void 0 ? _b : 'Unknown Fatal Error';
+        console.log((_c = error) === null || _c === void 0 ? void 0 : _c.response);
         await github.addComment(`
 ### LaunchPad Error
 

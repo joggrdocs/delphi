@@ -24,11 +24,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const core = __importStar(require("@actions/core"));
 const launchpad_1 = __importStar(require("./lib/launchpad"));
+const parser_1 = require("./lib/parser");
 const github = __importStar(require("./lib/github"));
 const docker_1 = __importDefault(require("./lib/docker"));
-const parser_1 = require("./lib/parser");
 async function run() {
-    var _a, _b;
+    var _a, _b, _c;
     try {
         const serviceAccountKey = core.getInput('service_account_key');
         const directory = core.getInput('directory');
@@ -74,6 +74,7 @@ async function run() {
     }
     catch (error) {
         const message = (_b = (_a = error) === null || _a === void 0 ? void 0 : _a.message) !== null && _b !== void 0 ? _b : 'Unknown Fatal Error';
+        console.log((_c = error) === null || _c === void 0 ? void 0 : _c.response);
         await github.addComment(`
 ### LaunchPad Error
 

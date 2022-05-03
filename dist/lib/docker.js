@@ -83,8 +83,6 @@ class Docker {
             });
         }
         buildCommand.push(this.directory);
-        // await exec.getExecOutput('docker', ['build', '--help']);
-        // await exec.getExecOutput('docker', ['--version']);
         await exec.getExecOutput('docker', buildCommand);
         await exec.getExecOutput('docker', [
             'push',

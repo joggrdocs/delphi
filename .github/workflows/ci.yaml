@@ -7,7 +7,7 @@ on:
       - main
 
 jobs:
-  testAction:
+  test_action:
     name: Test Action
     runs-on: ubuntu-latest
     steps:
@@ -17,7 +17,7 @@ jobs:
         name: Run Action Code
         uses: ./
         env:
-          URL_API_LAUNCHPAD: 'https://stg-launchpad-api.bluenova-app.com'
+          DEBUG___URL_API_LAUNCHPAD: 'https://stg-launchpad-api.bluenova-app.com'
         with:
           directory: ./examples/nodejs-simple
           service_account_key: ${{ secrets.GCP_SA_KEY }}

@@ -53,7 +53,7 @@ export async function addComment (comment: string): Promise<void> {
   }
 }
 
-async function updatePullRequest (updater: {(currentDescription: string | null): string}) {
+async function updatePullRequest (updater: { (currentDescription: string | null): string }) {
   const prNumber = getPullRequestNumber();
   const octokit = github.getOctokit(core.getInput('github_token'));
 

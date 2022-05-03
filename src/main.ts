@@ -1,9 +1,9 @@
 import * as core from '@actions/core';
 
 import LaunchPad, { validateAppName } from './lib/launchpad';
+import { parseListInputs } from './lib/parser';
 import * as github from './lib/github';
 import Docker from './lib/docker';
-import { parseListInputs } from './lib/parser';
 
 async function run (): Promise<void> {
   try {
@@ -60,6 +60,7 @@ async function run (): Promise<void> {
     core.setOutput('url', result.url);
   } catch (error) {
     const message = (error as Error)?.message ?? 'Unknown Fatal Error';
+    console.log((error as any)?.response);
     await github.addComment(`
 ### LaunchPad Error
 
