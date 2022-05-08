@@ -4,6 +4,13 @@ This is ONLY available for use by those in the closed Beta Program, if you are i
 
 ---
 
+<div>
+    <p align="center">
+        <img src="/logo.png" align="center" width="300" />
+    </p>
+    <hr>
+</div>
+
 # LaunchPad
 
 [![CI](https://github.com/bluenovaio/action-launchpad/actions/workflows/ci.yaml/badge.svg)](https://github.com/bluenovaio/action-launchpad/actions/workflows/ci.yaml)
