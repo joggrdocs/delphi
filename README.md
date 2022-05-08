@@ -25,6 +25,8 @@ name: "LaunchPad: Preview"
 
 on:
   pull_request:
+    # These types are required or the action will not function properly 
+    types: [ 'opened', 'closed', 'synchronize', 'reopened' ]
     branches:
       - main
 
@@ -35,6 +37,8 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v1
+        # Required to prevent failed builds while collecting data
+        if: github.event.action != 'closed'
       - id: runAction
         name: Run Action Code
         uses: bluenovaio/action-launchpad@v0.1.0-beta2
