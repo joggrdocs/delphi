@@ -243,7 +243,8 @@ function getPullRequestNumber() {
 }
 exports.getPullRequestNumber = getPullRequestNumber;
 function getBranch() {
-    return _.replace(github.context.ref, 'refs/heads/', '');
+    const payload = github.context.payload;
+    return _.replace(payload.pull_request.head.ref, 'refs/heads/', '');
 }
 exports.getBranch = getBranch;
 //# sourceMappingURL=github.js.map
