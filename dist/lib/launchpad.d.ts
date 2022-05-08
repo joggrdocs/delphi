@@ -42,6 +42,7 @@ export default class LaunchPad {
     setup(): Promise<void>;
     createDeployment(): Promise<Deployment>;
     registerEvents(): Promise<void>;
+    isDeployable(): boolean;
     private createEvent;
     private getEventKind;
     private getEventState;

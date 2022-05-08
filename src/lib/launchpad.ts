@@ -119,6 +119,10 @@ export default class LaunchPad {
     }
   }
 
+  public isDeployable () {
+    return this.eventType !== 'closed';
+  }
+
   private async createEvent (): Promise<void> {
     this.assertSetup();
 

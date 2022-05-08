@@ -18,49 +18,51 @@ async function run (): Promise<void> {
 
     validateAppName(name);
 
-    // Update description that a deploy is in flight
-    if (github.isPullRequest()) {
-      await github.prependToPullDescription(github.getRunningDescription());
-    }
-
     const launchpad = new LaunchPad({
       name,
       port,
       apiKey,
       envVars
     });
-
     await launchpad.setup();
     await launchpad.registerEvents();
 
-    // Build & Push Image to LaunchPad repository
-    const docker = new Docker({
-      serviceAccountKey,
-      name,
-      directory,
-      dockerfile,
-      projectId: launchpad.projectId as string,
-      slug: launchpad.slugId as string,
-      buildArgs: parseListInputs(buildArgs),
-      apiKey: apiKey
-    });
-    await docker.setup();
-    await docker.buildAndPush();
+    // We have to allow for OTHER events aka things that are not deployable to fire....
+    if (launchpad.isDeployable()) {
+      // Update description that a deployment is in flight
+      if (github.isPullRequest()) {
+        await github.prependToPullDescription(github.getRunningDescription());
+      }
 
-    // Deploy built image to LaunchPad Cloud
-    const result = await launchpad.createDeployment();
+      // Build & Push Image to LaunchPad repository
+      const docker = new Docker({
+        serviceAccountKey,
+        name,
+        directory,
+        dockerfile,
+        projectId: launchpad.projectId as string,
+        slug: launchpad.slugId as string,
+        buildArgs: parseListInputs(buildArgs),
+        apiKey: apiKey
+      });
+      await docker.setup();
+      await docker.buildAndPush();
 
-    // Add Preview URL to PR
-    if (github.isPullRequest()) {
-      await github.prependToPullDescription(
-        github.getFinishedDescription(result.url)
-      );
+      // Deploy built image to LaunchPad Cloud
+      const result = await launchpad.createDeployment();
+
+      // Add Preview URL to PR
+      if (github.isPullRequest()) {
+        await github.prependToPullDescription(
+          github.getFinishedDescription(result.url)
+        );
+      }
+
+      core.setOutput('url', result.url);
     }
-
-    core.setOutput('url', result.url);
   } catch (error) {
     const message = (error as Error)?.message ?? 'Unknown Fatal Error';
-    console.log((error as any)?.response);
+
     await github.addComment(`
 ### LaunchPad Error
 

@@ -123,7 +123,8 @@ function isPullRequest() {
 }
 exports.isPullRequest = isPullRequest;
 function getPullRequestNumber() {
-    return Number(_.replace(_.replace(github.context.ref, 'refs/pull/', ''), '/merge', ''));
+    const payload = github.context.payload;
+    return payload.pull_request.number;
 }
 exports.getPullRequestNumber = getPullRequestNumber;
 function getBranch() {

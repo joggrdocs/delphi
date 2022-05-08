@@ -94,6 +94,9 @@ class LaunchPad {
             }
         }
     }
+    isDeployable() {
+        return this.eventType !== 'closed';
+    }
     async createEvent() {
         this.assertSetup();
         core.info(JSON.stringify({

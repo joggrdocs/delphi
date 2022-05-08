@@ -239,7 +239,8 @@ function isPullRequest() {
 }
 exports.isPullRequest = isPullRequest;
 function getPullRequestNumber() {
-    return Number(_.replace(_.replace(github.context.ref, 'refs/pull/', ''), '/merge', ''));
+    const payload = github.context.payload;
+    return payload.pull_request.number;
 }
 exports.getPullRequestNumber = getPullRequestNumber;
 function getBranch() {
@@ -350,6 +351,9 @@ class LaunchPad {
                 await this.createEvent();
             }
         }
+    }
+    isDeployable() {
+        return this.eventType !== 'closed';
     }
     async createEvent() {
         this.assertSetup();
@@ -474,7 +478,7 @@ const parser_1 = __nccwpck_require__(4419);
 const github = __importStar(__nccwpck_require__(2979));
 const docker_1 = __importDefault(__nccwpck_require__(7458));
 async function run() {
-    var _a, _b, _c;
+    var _a, _b;
     try {
         const serviceAccountKey = core.getInput('service_account_key');
         const directory = core.getInput('directory');
@@ -485,10 +489,6 @@ async function run() {
         const envVars = core.getInput('env_vars');
         const port = core.getInput('port');
         (0, launchpad_1.validateAppName)(name);
-        // Update description that a deploy is in flight
-        if (github.isPullRequest()) {
-            await github.prependToPullDescription(github.getRunningDescription());
-        }
         const launchpad = new launchpad_1.default({
             name,
             port,
@@ -497,30 +497,36 @@ async function run() {
         });
         await launchpad.setup();
         await launchpad.registerEvents();
-        // Build & Push Image to LaunchPad repository
-        const docker = new docker_1.default({
-            serviceAccountKey,
-            name,
-            directory,
-            dockerfile,
-            projectId: launchpad.projectId,
-            slug: launchpad.slugId,
-            buildArgs: (0, parser_1.parseListInputs)(buildArgs),
-            apiKey: apiKey
-        });
-        await docker.setup();
-        await docker.buildAndPush();
-        // Deploy built image to LaunchPad Cloud
-        const result = await launchpad.createDeployment();
-        // Add Preview URL to PR
-        if (github.isPullRequest()) {
-            await github.prependToPullDescription(github.getFinishedDescription(result.url));
+        // We have to allow for OTHER events aka things that are not deployable to fire....
+        if (launchpad.isDeployable()) {
+            // Update description that a deployment is in flight
+            if (github.isPullRequest()) {
+                await github.prependToPullDescription(github.getRunningDescription());
+            }
+            // Build & Push Image to LaunchPad repository
+            const docker = new docker_1.default({
+                serviceAccountKey,
+                name,
+                directory,
+                dockerfile,
+                projectId: launchpad.projectId,
+                slug: launchpad.slugId,
+                buildArgs: (0, parser_1.parseListInputs)(buildArgs),
+                apiKey: apiKey
+            });
+            await docker.setup();
+            await docker.buildAndPush();
+            // Deploy built image to LaunchPad Cloud
+            const result = await launchpad.createDeployment();
+            // Add Preview URL to PR
+            if (github.isPullRequest()) {
+                await github.prependToPullDescription(github.getFinishedDescription(result.url));
+            }
+            core.setOutput('url', result.url);
         }
-        core.setOutput('url', result.url);
     }
     catch (error) {
         const message = (_b = (_a = error) === null || _a === void 0 ? void 0 : _a.message) !== null && _b !== void 0 ? _b : 'Unknown Fatal Error';
-        console.log((_c = error) === null || _c === void 0 ? void 0 : _c.response);
         await github.addComment(`
 ### LaunchPad Error
 
