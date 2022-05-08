@@ -321,6 +321,7 @@ class LaunchPad {
         this.eventType = (_a = github.context.payload.action) !== null && _a !== void 0 ? _a : '';
         this.actorUserEmail = (_b = github.context.payload.sender) === null || _b === void 0 ? void 0 : _b.email;
         this.actorUserName = (_c = github.context.payload.sender) === null || _c === void 0 ? void 0 : _c.login;
+        this.organization = github.context.repo.owner;
     }
     async setup() {
         const organization = await this.readOrganization();

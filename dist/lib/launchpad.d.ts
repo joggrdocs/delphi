@@ -28,6 +28,7 @@ export default class LaunchPad {
     private readonly name;
     private readonly port;
     private readonly repository;
+    private readonly organization;
     private readonly branch;
     private readonly commit;
     private readonly eventName;
