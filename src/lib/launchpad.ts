@@ -56,6 +56,7 @@ export default class LaunchPad {
   private readonly name: string;
   private readonly port: string;
   private readonly repository: string;
+  private readonly organization: string;
   private readonly branch: string;
   private readonly commit: string;
   private readonly eventName: string;
@@ -79,6 +80,7 @@ export default class LaunchPad {
     this.eventType = github.context.payload.action ?? '';
     this.actorUserEmail = github.context.payload.sender?.email;
     this.actorUserName = github.context.payload.sender?.login;
+    this.organization = github.context.repo.owner;
   }
 
   public async setup (): Promise<void> {
