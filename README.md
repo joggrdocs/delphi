@@ -6,7 +6,7 @@ This is ONLY available for use by those in the closed Beta Program, if you are i
 
 <div>
     <p align="center">
-        <img src="/logo.png" align="center" width="200" />
+        <img src="/logo.png" align="center" width="280" />
     </p>
     <hr>
 </div>
