@@ -11,12 +11,8 @@ jobs:
     name: Test Action
     runs-on: ubuntu-latest
     steps:
-      - run: echo "event name is:" ${{ github.event_name }}
-      - run: echo "event type is:" ${{ github.event.action }}
       - name: Checkout Code
         uses: actions/checkout@v1
-        if: github.event.action != 'closed'
-
       - id: runAction
         name: Run Action Code
         uses: ./
