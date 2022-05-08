@@ -13,6 +13,8 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v1
+        if: github.event.pull_request.action != "closed"
+
       - id: runAction
         name: Run Action Code
         uses: ./
