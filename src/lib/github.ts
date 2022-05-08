@@ -1,6 +1,7 @@
 import * as github from '@actions/github';
 import * as core from '@actions/core';
 import * as _ from 'lodash';
+import { PullRequestEvent } from '@octokit/webhooks-definitions/schema';
 
 // eslint-disable-next-line no-unused-vars
 const MARK_BN_TOP_START = '[//]: # (bn-top-start)';
@@ -53,7 +54,7 @@ export async function addComment (comment: string): Promise<void> {
   }
 }
 
-async function updatePullRequest (updater: {(currentDescription: string | null): string}) {
+async function updatePullRequest (updater: { (currentDescription: string | null): string }) {
   const prNumber = getPullRequestNumber();
   const octokit = github.getOctokit(core.getInput('github_token'));
 
@@ -121,5 +122,6 @@ export function getPullRequestNumber (): number {
 }
 
 export function getBranch (): string {
-  return _.replace(github.context.ref, 'refs/heads/', '');
+  const payload = github.context.payload as PullRequestEvent;
+  return _.replace(payload.pull_request.head.ref, 'refs/heads/', '');
 }
