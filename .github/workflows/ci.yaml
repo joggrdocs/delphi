@@ -2,7 +2,7 @@ name: "CI"
 
 on:
   pull_request:
-    types: ['opened', 'closed', 'synchronize', 'reopened']
+    types: [ 'opened', 'closed', 'synchronize', 'reopened' ]
     branches:
       - main
 
@@ -17,10 +17,14 @@ jobs:
         name: Run Action Code
         uses: ./
         env:
+          # If you want to test against production comment out the line below, you MUST update the service_account_key
           DEBUG___URL_API_LAUNCHPAD: 'https://stg-launchpad-api.bluenova-app.com'
         with:
           directory: ./examples/nodejs-simple
-          service_account_key: ${{ secrets.GCP_SA_KEY }}
+          # If you want to test against production comment out the line with "STAGING" and uncomment below, you MUST
+          # update the DEBUG___URL_API_LAUNCHPAD env var above
+          # service_account_key: ${{ secrets.GCP_SA_KEY }}
+          service_account_key: ${{ secrets.GCP_SA_KEY_STAGING }}
           name: ghaexample
           port: 3000
           dockerfile: DevDockerfile
