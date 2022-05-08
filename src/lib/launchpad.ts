@@ -176,6 +176,7 @@ export default class LaunchPad {
       repository: this.repository,
       commit: this.commit,
       pullRequestNumber: this.pullRequestNumber,
+      organization: this.organization
     };
   }
 
