@@ -40,7 +40,7 @@ jobs:
         if: github.event.action != 'closed'
       - id: runAction
         name: Run Action Code
-        uses: bluenovaio/action-launchpad@v0.1.0-beta2
+        uses: bluenovaio/action-launchpad@v0.1.0-beta3
         with:
           # Provided by the BlueNova team
           service_account_key: ${{ secrets.BLUENOVA_SERVICE_ACCOUNT_KEY }}
