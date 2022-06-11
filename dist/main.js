@@ -46,34 +46,30 @@ async function run() {
             envVars
         });
         await launchpad.setup();
-        await launchpad.registerEvents();
-        // We have to allow for OTHER events aka things that are not deployable to fire....
-        if (launchpad.isDeployable()) {
-            // Update description that a deployment is in flight
-            if (github.isPullRequest()) {
-                await github.prependToPullDescription(github.getRunningDescription());
-            }
-            // Build & Push Image to LaunchPad repository
-            const docker = new docker_1.default({
-                serviceAccountKey,
-                name,
-                directory,
-                dockerfile,
-                projectId: launchpad.projectId,
-                slug: launchpad.slugId,
-                buildArgs: (0, parser_1.parseListInputs)(buildArgs),
-                apiKey: apiKey
-            });
-            await docker.setup();
-            await docker.buildAndPush();
-            // Deploy built image to LaunchPad Cloud
-            const result = await launchpad.createDeployment();
-            // Add Preview URL to PR
-            if (github.isPullRequest()) {
-                await github.prependToPullDescription(github.getFinishedDescription(result.url));
-            }
-            core.setOutput('url', result.url);
+        // Update description that a deployment is in flight
+        if (github.isPullRequest()) {
+            await github.prependToPullDescription(github.getRunningDescription());
         }
+        // Build & Push Image to LaunchPad repository
+        const docker = new docker_1.default({
+            serviceAccountKey,
+            name,
+            directory,
+            dockerfile,
+            projectId: launchpad.projectId,
+            slug: launchpad.slugId,
+            buildArgs: (0, parser_1.parseListInputs)(buildArgs),
+            apiKey: apiKey
+        });
+        await docker.setup();
+        await docker.buildAndPush();
+        // Deploy built image to LaunchPad Cloud
+        const result = await launchpad.createDeployment();
+        // Add Preview URL to PR
+        if (github.isPullRequest()) {
+            await github.prependToPullDescription(github.getFinishedDescription(result.url));
+        }
+        core.setOutput('url', result.url);
     }
     catch (error) {
         const message = (_b = (_a = error) === null || _a === void 0 ? void 0 : _a.message) !== null && _b !== void 0 ? _b : 'Unknown Fatal Error';
