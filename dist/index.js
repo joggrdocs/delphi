@@ -281,23 +281,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 var _a;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.validateAppName = exports.EventState = exports.EventKind = void 0;
+exports.validateAppName = void 0;
 const github = __importStar(__nccwpck_require__(5438));
-const core = __importStar(__nccwpck_require__(2186));
 const axios_1 = __importDefault(__nccwpck_require__(6545));
 const github_1 = __nccwpck_require__(2979);
 const API_URL = (_a = process.env.DEBUG___URL_API_LAUNCHPAD) !== null && _a !== void 0 ? _a : 'https://launchpad-api.bluenova-app.com';
-var EventKind;
-(function (EventKind) {
-    EventKind["PullRequest"] = "pull-request";
-})(EventKind = exports.EventKind || (exports.EventKind = {}));
-var EventState;
-(function (EventState) {
-    EventState["Opened"] = "opened";
-    EventState["Edited"] = "edited";
-    EventState["Merged"] = "merged";
-    EventState["Closed"] = "closed";
-})(EventState = exports.EventState || (exports.EventState = {}));
 // Utils
 // -----
 function validateAppName(appName) {
@@ -308,7 +296,6 @@ function validateAppName(appName) {
 exports.validateAppName = validateAppName;
 class LaunchPad {
     constructor(props) {
-        var _a, _b, _c;
         this.isSetup = false;
         this.apiKey = props.apiKey;
         this.name = props.name;
@@ -318,11 +305,6 @@ class LaunchPad {
         this.pullRequestNumber = (0, github_1.getPullRequestNumber)();
         this.repository = github.context.repo.repo;
         this.branch = (0, github_1.getBranch)();
-        this.eventName = github.context.eventName;
-        this.eventType = (_a = github.context.payload.action) !== null && _a !== void 0 ? _a : '';
-        this.actorUserEmail = (_b = github.context.payload.sender) === null || _b === void 0 ? void 0 : _b.email;
-        this.actorUserName = (_c = github.context.payload.sender) === null || _c === void 0 ? void 0 : _c.login;
-        this.organization = github.context.repo.owner;
     }
     async setup() {
         const organization = await this.readOrganization();
@@ -343,71 +325,6 @@ class LaunchPad {
             environmentVariables: this.envVars
         });
         return result.data;
-    }
-    async registerEvents() {
-        core.info(API_URL);
-        if (this.eventName === 'pull_request') {
-            if (['opened', 'closed', 'synchronize', 'reopened'].includes(this.eventType)) {
-                await this.createEvent();
-            }
-        }
-    }
-    isDeployable() {
-        return this.eventType !== 'closed';
-    }
-    async createEvent() {
-        this.assertSetup();
-        core.info(JSON.stringify({
-            kind: this.getEventKind(),
-            state: this.getEventState(),
-            user: this.getUser(),
-            data: this.getEventData()
-        }));
-        await axios_1.default.post(`${API_URL}/events`, {
-            apiKey: this.apiKey,
-            kind: this.getEventKind(),
-            state: this.getEventState(),
-            user: this.getUser(),
-            data: this.getEventData()
-        });
-    }
-    getEventKind() {
-        switch (this.eventName) {
-            case 'pull_request':
-                return EventKind.PullRequest;
-            default:
-                throw new Error(`Event not supported: ${this.eventName}`);
-        }
-    }
-    getEventState() {
-        const payload = github.context.payload;
-        switch (this.eventType) {
-            case 'opened':
-            case 'reopened':
-                return EventState.Opened;
-            case 'synchronize':
-                return EventState.Edited;
-            case 'closed':
-                return payload.pull_request.merged ? EventState.Merged : EventState.Closed;
-            default:
-                throw new Error(`Action not supported: ${github.context.action}`);
-        }
-    }
-    getUser() {
-        return {
-            email: this.actorUserEmail,
-            githubUserName: this.actorUserName
-        };
-    }
-    getEventData() {
-        return {
-            name: this.name,
-            branch: this.branch,
-            repository: this.repository,
-            commit: this.commit,
-            pullRequestNumber: this.pullRequestNumber,
-            organization: this.organization
-        };
     }
     async readOrganization() {
         const result = await axios_1.default.get(`${API_URL}/organizations/${this.apiKey}`);
@@ -496,34 +413,30 @@ async function run() {
             envVars
         });
         await launchpad.setup();
-        await launchpad.registerEvents();
-        // We have to allow for OTHER events aka things that are not deployable to fire....
-        if (launchpad.isDeployable()) {
-            // Update description that a deployment is in flight
-            if (github.isPullRequest()) {
-                await github.prependToPullDescription(github.getRunningDescription());
-            }
-            // Build & Push Image to LaunchPad repository
-            const docker = new docker_1.default({
-                serviceAccountKey,
-                name,
-                directory,
-                dockerfile,
-                projectId: launchpad.projectId,
-                slug: launchpad.slugId,
-                buildArgs: (0, parser_1.parseListInputs)(buildArgs),
-                apiKey: apiKey
-            });
-            await docker.setup();
-            await docker.buildAndPush();
-            // Deploy built image to LaunchPad Cloud
-            const result = await launchpad.createDeployment();
-            // Add Preview URL to PR
-            if (github.isPullRequest()) {
-                await github.prependToPullDescription(github.getFinishedDescription(result.url));
-            }
-            core.setOutput('url', result.url);
+        // Update description that a deployment is in flight
+        if (github.isPullRequest()) {
+            await github.prependToPullDescription(github.getRunningDescription());
         }
+        // Build & Push Image to LaunchPad repository
+        const docker = new docker_1.default({
+            serviceAccountKey,
+            name,
+            directory,
+            dockerfile,
+            projectId: launchpad.projectId,
+            slug: launchpad.slugId,
+            buildArgs: (0, parser_1.parseListInputs)(buildArgs),
+            apiKey: apiKey
+        });
+        await docker.setup();
+        await docker.buildAndPush();
+        // Deploy built image to LaunchPad Cloud
+        const result = await launchpad.createDeployment();
+        // Add Preview URL to PR
+        if (github.isPullRequest()) {
+            await github.prependToPullDescription(github.getFinishedDescription(result.url));
+        }
+        core.setOutput('url', result.url);
     }
     catch (error) {
         const message = (_b = (_a = error) === null || _a === void 0 ? void 0 : _a.message) !== null && _b !== void 0 ? _b : 'Unknown Fatal Error';

@@ -24,8 +24,6 @@ name: "LaunchPad: Preview"
 
 on:
   pull_request:
-    # These types are required or the action will not function properly 
-    types: [ 'opened', 'closed', 'synchronize', 'reopened' ]
     branches:
       - main
 
