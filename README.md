@@ -34,8 +34,6 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v1
-        # Required to prevent failed builds while collecting data
-        if: github.event.action != 'closed'
       - id: runAction
         name: Run Action Code
         uses: bluenovaio/action-launchpad@v0.1.0-beta3
