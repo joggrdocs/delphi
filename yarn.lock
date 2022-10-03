@@ -487,6 +487,13 @@
     terminal-link "^2.0.0"
     v8-to-istanbul "^8.1.0"
 
+"@jest/schemas@^29.0.0":
+  version "29.0.0"
+  resolved "https://registry.yarnpkg.com/@jest/schemas/-/schemas-29.0.0.tgz#5f47f5994dd4ef067fb7b4188ceac45f77fe952a"
+  integrity sha512-3Ab5HgYIIAnS0HjqJHQYZS+zXc4tUmTmBH3z83ajI6afXp8X3ZtdLX+nXx+I7LNkJD7uN9LAVhgnjDgZa2z0kA==
+  dependencies:
+    "@sinclair/typebox" "^0.24.1"
+
 "@jest/source-map@^27.4.0":
   version "27.4.0"
   resolved "https://registry.yarnpkg.com/@jest/source-map/-/source-map-27.4.0.tgz#2f0385d0d884fb3e2554e8f71f8fa957af9a74b6"
@@ -546,6 +553,18 @@
     "@types/istanbul-reports" "^3.0.0"
     "@types/node" "*"
     "@types/yargs" "^16.0.0"
+    chalk "^4.0.0"
+
+"@jest/types@^29.1.2":
+  version "29.1.2"
+  resolved "https://registry.yarnpkg.com/@jest/types/-/types-29.1.2.tgz#7442d32b16bcd7592d9614173078b8c334ec730a"
+  integrity sha512-DcXGtoTykQB5jiwCmVr8H4vdg2OJhQex3qPkG+ISyDO7xQXbt/4R6dowcRyPemRnkH7JoHvZuxPBdlq+9JxFCg==
+  dependencies:
+    "@jest/schemas" "^29.0.0"
+    "@types/istanbul-lib-coverage" "^2.0.0"
+    "@types/istanbul-reports" "^3.0.0"
+    "@types/node" "*"
+    "@types/yargs" "^17.0.8"
     chalk "^4.0.0"
 
 "@nodelib/fs.scandir@2.1.5":
@@ -659,6 +678,11 @@
   version "3.67.3"
   resolved "https://registry.yarnpkg.com/@octokit/webhooks-definitions/-/webhooks-definitions-3.67.3.tgz#d2a905a90b04af8111982d0c13658a49fc4eecb9"
   integrity sha512-do4Z1r2OVhuI0ihJhQ8Hg+yPWnBYEBNuFNCrvtPKoYT1w81jD7pBXgGe86lYuuNirkDHb0Nxt+zt4O5GiFJfgA==
+
+"@sinclair/typebox@^0.24.1":
+  version "0.24.44"
+  resolved "https://registry.yarnpkg.com/@sinclair/typebox/-/typebox-0.24.44.tgz#0a0aa3bf4a155a678418527342a3ee84bd8caa5c"
+  integrity sha512-ka0W0KN5i6LfrSocduwliMMpqVgohtPFidKdMEOUjoOFCHcOOYkKsPRxfs5f15oPNHTm6ERAm0GV/+/LTKeiWg==
 
 "@sinonjs/commons@^1.7.0":
   version "1.8.3"
@@ -805,6 +829,13 @@
   version "16.0.4"
   resolved "https://registry.yarnpkg.com/@types/yargs/-/yargs-16.0.4.tgz#26aad98dd2c2a38e421086ea9ad42b9e51642977"
   integrity sha512-T8Yc9wt/5LbJyCaLiHPReJa0kApcIgJ7Bn735GjItUfh08Z1pJvu8QZqb9s+mMvKV6WUQRV7K2R46YbjMXTTJw==
+  dependencies:
+    "@types/yargs-parser" "*"
+
+"@types/yargs@^17.0.8":
+  version "17.0.13"
+  resolved "https://registry.yarnpkg.com/@types/yargs/-/yargs-17.0.13.tgz#34cced675ca1b1d51fcf4d34c3c6f0fa142a5c76"
+  integrity sha512-9sWaruZk2JGxIQU+IhI1fhPYRcQ0UuTNuKuCW9bR5fp7qi2Llf7WDzNa17Cy7TKnh3cdxDOiyTu6gaLS0eDatg==
   dependencies:
     "@types/yargs-parser" "*"
 
