@@ -1,6 +1,6 @@
-⚠️ **Beta Release** ⚠️ 
+⚠️ **Alpha Release** ⚠️ 
 
-This is ONLY available for use by those in the closed Beta Program, if you are interested in joining please reachout to [support@bluenova.io](mailto:support@bluenova.io?subject=Beta%20Program).
+This is ONLY available for use by those in the closed Alpha Program, if you are interested in joining please reachout to [support@codereviews.ai](mailto:support@codereviews.ai?subject=Alpha%20Program).
 
 ---
 
@@ -11,16 +11,12 @@ This is ONLY available for use by those in the closed Beta Program, if you are i
     <hr>
 </div>
 
-[![CodeQL](https://github.com/bluenovaio/action-launchpad/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/bluenovaio/action-launchpad/actions/workflows/codeql-analysis.yml)
-[![Security Scans](https://github.com/bluenovaio/action-launchpad/actions/workflows/security.yaml/badge.svg)](https://github.com/bluenovaio/action-launchpad/actions/workflows/security.yaml)
-[![js-semistandard-style](https://img.shields.io/badge/code%20style-semistandard-brightgreen.svg?style=flat-square)](https://github.com/standard/semistandard)
-
-Launch your product(s) to the stars with LaunchPad.
+Preview environments for every Pull Request.
 
 ## Usage
 
 ```yaml
-name: "LaunchPad: Preview"
+name: "Preview Environments"
 
 on:
   pull_request:
