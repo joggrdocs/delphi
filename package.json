@@ -20,7 +20,7 @@
     "@actions/exec": "^1.1.0",
     "@actions/github": "^5.0.0",
     "@octokit/webhooks-definitions": "^3.67.3",
-    "axios": "^0.24.0",
+    "axios": "^1.2.1",
     "lodash": "^4.17.21"
   },
   "devDependencies": {
