@@ -5,7 +5,7 @@ import { parseListInputs } from './lib/parser';
 import * as github from './lib/github';
 import Docker from './lib/docker';
 
-async function run (): Promise<void> {
+async function run(): Promise<void> {
   try {
     const serviceAccountKey = core.getInput('service_account_key');
     const directory = core.getInput('directory');

@@ -20,7 +20,7 @@ export interface Organization {
 // Utils
 // -----
 
-export function validateAppName (appName: string) {
+export function validateAppName(appName: string) {
   if (!/^([a-z]+)$/.test(appName)) {
     throw new Error(`The appName "${appName}" is invalid, as it must be all lower case, no number and no special characters`);
   }
@@ -49,7 +49,7 @@ export default class LaunchPad {
   private isSetup = false;
   private readonly envVars?: string;
 
-  constructor (props: LaunchPadConfig) {
+  constructor(props: LaunchPadConfig) {
     this.apiKey = props.apiKey;
     this.name = props.name;
     this.port = props.port;
@@ -60,7 +60,7 @@ export default class LaunchPad {
     this.branch = getBranch();
   }
 
-  public async setup (): Promise<void> {
+  public async setup(): Promise<void> {
     const organization = await this.readOrganization();
 
     this.projectId = organization.projectId;
@@ -69,7 +69,7 @@ export default class LaunchPad {
     this.isSetup = true;
   }
 
-  public async createDeployment (): Promise<Deployment> {
+  public async createDeployment(): Promise<Deployment> {
     this.assertSetup();
 
     const result = await axios.post(`${API_URL}/deployments`, {
@@ -86,12 +86,12 @@ export default class LaunchPad {
     return result.data;
   }
 
-  private async readOrganization (): Promise<Organization> {
+  private async readOrganization(): Promise<Organization> {
     const result = await axios.get(`${API_URL}/organizations/${this.apiKey}`);
     return result.data;
   }
 
-  private assertSetup () {
+  private assertSetup() {
     if (!this.isSetup) {
       throw new Error('You must call the "LaunchPad#setup" method before running any commands');
     }

@@ -285,7 +285,7 @@ exports.validateAppName = void 0;
 const github = __importStar(__nccwpck_require__(5438));
 const axios_1 = __importDefault(__nccwpck_require__(6545));
 const github_1 = __nccwpck_require__(2979);
-const API_URL = (_a = process.env.DEBUG___URL_API_LAUNCHPAD) !== null && _a !== void 0 ? _a : 'https://launchpad-api.bluenova-app.com';
+const API_URL = (_a = process.env.DEBUG___URL_API_LAUNCHPAD) !== null && _a !== void 0 ? _a : 'https://api.codereviews.ai';
 // Utils
 // -----
 function validateAppName(appName) {

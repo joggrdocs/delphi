@@ -27,7 +27,7 @@ exports.validateAppName = void 0;
 const github = __importStar(require("@actions/github"));
 const axios_1 = __importDefault(require("axios"));
 const github_1 = require("./github");
-const API_URL = (_a = process.env.DEBUG___URL_API_LAUNCHPAD) !== null && _a !== void 0 ? _a : 'https://launchpad-api.bluenova-app.com';
+const API_URL = (_a = process.env.DEBUG___URL_API_LAUNCHPAD) !== null && _a !== void 0 ? _a : 'https://api.codereviews.ai';
 // Utils
 // -----
 function validateAppName(appName) {
