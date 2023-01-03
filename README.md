@@ -32,7 +32,7 @@ jobs:
         uses: actions/checkout@v1
       - id: runAction
         name: Run Action Code
-        uses: bluenovaio/action-launchpad@v0.1.0-beta3
+        uses: codereviewsai/previews@v0.1.0-beta3
         with:
           # Provided by the BlueNova team
           service_account_key: ${{ secrets.BLUENOVA_SERVICE_ACCOUNT_KEY }}
