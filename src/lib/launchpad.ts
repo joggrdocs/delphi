@@ -3,7 +3,7 @@ import axios from 'axios';
 
 import { getBranch, getPullRequestNumber } from './github';
 
-const API_URL = process.env.DEBUG___URL_API_LAUNCHPAD ?? 'https://launchpad-api.bluenova-app.com';
+const API_URL = process.env.DEBUG___URL_API_LAUNCHPAD ?? 'https://api.codereviews.ai';
 
 // Types
 // -----
