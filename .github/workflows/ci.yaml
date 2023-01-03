@@ -15,9 +15,9 @@ jobs:
       - id: runAction
         name: Run Action Code
         uses: ./
-        env:
-          # If you want to test against production comment out the line below, you MUST update the service_account_key
-          DEBUG___URL_API_LAUNCHPAD: 'https://stg-launchpad-api.bluenova-app.com'
+#         env:
+#           # If you want to test against production comment out the line below, you MUST update the service_account_key
+#           DEBUG___URL_API_LAUNCHPAD: 'https://stg-launchpad-api.bluenova-app.com'
         with:
           directory: ./examples/nodejs-simple
           # If you want to test against production comment out the line with "STAGING" and uncomment below, you MUST
