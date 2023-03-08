@@ -1,0 +1,35 @@
+name: "CI"
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test_action:
+    name: Test Action
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v1
+      - id: runAction
+        name: Run Action Code
+        uses: ./
+#         env:
+#           # If you want to test against production comment out the line below, you MUST update the service_account_key
+#           DEBUG___URL_API_LAUNCHPAD: 'https://stg-launchpad-api.bluenova-app.com'
+        with:
+          directory: ./examples/nodejs-simple
+          # If you want to test against production comment out the line with "STAGING" and uncomment below, you MUST
+          # update the DEBUG___URL_API_LAUNCHPAD env var above
+          service_account_key: ${{ secrets.GCP_SA_KEY }}
+          # service_account_key: ${{ secrets.GCP_SA_KEY_STAGING }}
+          name: ghaexample
+          port: 3000
+          dockerfile: DevDockerfile
+          api_key: ${{ secrets.BLUENOVA_API_KEY }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          build_args: BUILD_VAR=foo,BUILD_VAR2=bar
+          env_vars: MESSAGE="Hello via ENV Vars"
+      - name: Test Outputs
+        run: echo "${{ steps.runAction.outputs.url }}"

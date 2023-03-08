@@ -1,0 +1,43 @@
+name: Previews
+description: Github Action used to deploy preview environments.
+author: "@joggrdocs"
+branding:
+  icon: 'aperture'
+  color: 'blue'
+inputs:
+  name:
+    description: "The name of the service (must be unique) to be deployed."
+    required: true
+  port:
+    description: "The port that the application will run on in the container."
+    required: false
+    default: "8080"
+  api_key:
+    description: "The API Key provided by BlueNova, used to associate all requests."
+    required: true
+  service_account_key:
+    description: "The Service Account JSON Key used to push images to the BlueNova Container Registry."
+    required: true
+  github_token:
+    description: "Github Token, pass in the secrets.GITHUB_TOKEN."
+    required: true
+  directory:
+    description: "Directory where the DockerFile is located."
+    required: true
+    default: "."
+  dockerfile:
+    description: "The Dockerfile name, you can override for custom names (i.e. DevDockerfile)"
+    required: true
+    default: "Dockerfile"
+  build_args:
+    description: "Comma seperated list of arguments that will be injected during the build (i.e. FOO=bar,FOOBAR=foo)"
+    required: false
+  env_vars:
+    description: "Comma seperated list of environment variables that will be injected during runtime (i.e. FOO=bar,FOOBAR=foo)"
+    required: false
+outputs:
+  url:
+    description: "The preview URL for the running application"
+runs:
+  using: node12
+  main: dist/index.js
