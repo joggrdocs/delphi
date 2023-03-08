@@ -1,6 +1,6 @@
-⚠️ **Alpha Release** ⚠️ 
+⚠️ **Beta Release** ⚠️ 
 
-This is ONLY available for use by those in the closed Alpha Program, if you are interested in joining please reachout to [support@codereviews.ai](mailto:support@codereviews.ai?subject=Alpha%20Program).
+This is ONLY available for use by those in the closed Beta Program, if you are interested in joining please reachout to [support@joggr.io](mailto:support@joggr.io?subject=Previews).
 
 ---
 
