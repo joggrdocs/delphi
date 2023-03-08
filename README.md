@@ -35,13 +35,13 @@ jobs:
         uses: codereviewsai/previews@v0.1.0-beta3
         with:
           # Provided by the BlueNova team
-          service_account_key: ${{ secrets.BLUENOVA_SERVICE_ACCOUNT_KEY }}
+          service_account_key: ${{ secrets.PREVIEWS_SERVICE_ACCOUNT_KEY }}
           
           # Name of the service
           name: ghaexample
           
-          # API Key provided by the BlueNova team
-          api_key: ${{ secrets.BLUENOVA_API_KEY }}
+          # API Key provided by the Previews team
+          api_key: ${{ secrets.PREVIEWS_API_KEY }}
           
           # Default token for the repository
           github_token: ${{ secrets.GITHUB_TOKEN }}
