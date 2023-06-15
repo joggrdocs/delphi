@@ -1,6 +1,9 @@
-⚠️ **DEPRECATED** ⚠️ 
-
-This repository is deprecated and will not longer be maintained outside of bugfixes and security updates.
+<h1 align="center">
+⚠️ <strong>DEPRECATED</strong> ⚠️ 
+</h1>
+<p align="center">
+This repository is deprecated and will not longer be maintained outside of bugfixes and security updates. 
+</p>
 
 ---
 
