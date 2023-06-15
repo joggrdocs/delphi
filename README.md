@@ -1,6 +1,6 @@
-⚠️ **Beta Release** ⚠️ 
+⚠️ **DEPRECATED** ⚠️ 
 
-This is ONLY available for use by those in the closed Beta Program, if you are interested in joining please reachout to [support@joggr.io](mailto:support@joggr.io?subject=Previews).
+This repository is deprecated and will not longer be maintained outside of bugfixes and security updates.
 
 ---
 
