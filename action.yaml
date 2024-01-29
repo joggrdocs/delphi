@@ -70,7 +70,7 @@ runs:
         script: |
           (async () => {
             try {
-              const { number: prNumber, repository, runId } = context.payload;
+              const { number: prNumber, repository } = context.payload;
               
               const { data: pullRequest } = await github.rest.pulls.get({
                 repo: repository.name,
@@ -84,7 +84,7 @@ runs:
           <!-- previews -->
           ---
           ### :warning: Deploying Preview :warning:
-          Current deploying preview environment, check progress here: [GitHub Action for Previews](/actions/runs/${runId})
+          Current deploying preview environment, check progress here: [GitHub Action for Previews](/actions/runs/${context.runId})
                 `.trim();
               
               await github.rest.pulls.update({
