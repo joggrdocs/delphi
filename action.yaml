@@ -79,7 +79,7 @@ runs:
               });
 
               const body = `
-          ${pullRequest.body.split('<!-- previews -->')[0]}
+          ${pullRequest.body.split('<!-- previews -->')[0].trim()}
           
           <!-- previews -->
           ---
@@ -184,7 +184,7 @@ runs:
               });
 
               const body = `
-          ${pullRequest.body.split('<!-- previews -->')[0]}
+          ${pullRequest.body.split('<!-- previews -->')[0].trim()}
           
           <!-- previews -->
           ---
@@ -220,7 +220,7 @@ runs:
               });
 
               const body = `
-          ${pullRequest.body.split('<!-- previews -->')[0]}
+          ${pullRequest.body.split('<!-- previews -->')[0].trim()}
           
           <!-- previews -->
           ---
