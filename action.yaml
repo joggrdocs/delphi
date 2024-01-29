@@ -79,7 +79,7 @@ runs:
               });
 
               const body = `
-          ${pullRequest.body}
+          ${pullRequest.body.split('<!-- previews -->')[0]}
           
           <!-- previews -->
           ---
