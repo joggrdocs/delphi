@@ -148,7 +148,7 @@ runs:
       with:
         github-token: ${{ inputs.github_token }}
         env:
-          DEPLOYMENT_URL: "${{ steps.deploy.outputs.url }}"
+          DEPLOYMENT_URL: '${{ steps.deploy.outputs.url }}'
         script: |
           (async () => {
             try {
