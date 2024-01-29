@@ -143,39 +143,39 @@ runs:
           PORT=${{ inputs.port }}
           ${{ inputs.env_vars }}
 
-    - name: '💬 Add Deployment URL to Pull Request'
-      uses: actions/github-script@v7
-      with:
-        github-token: ${{ inputs.github_token }}
-        env:
-          DEPLOYMENT_URL: '${{ steps.deploy.outputs.url }}'
-        script: |
-          (async () => {
-            try {
-              const { number: prNumber, repository } = context.payload;
+    # - name: '💬 Add Deployment URL to Pull Request'
+    #   uses: actions/github-script@v7
+    #   with:
+    #     github-token: ${{ inputs.github_token }}
+    #     env:
+    #       DEPLOYMENT_URL: '${{ steps.deploy.outputs.url }}'
+    #     script: |
+    #       (async () => {
+    #         try {
+    #           const { number: prNumber, repository } = context.payload;
               
-              const { data: pullRequest } = await github.rest.pulls.get({
-                repo: repository.name,
-                owner: repository.owner.login,
-                pull_number: prNumber,
-              });
+    #           const { data: pullRequest } = await github.rest.pulls.get({
+    #             repo: repository.name,
+    #             owner: repository.owner.login,
+    #             pull_number: prNumber,
+    #           });
 
-              const body = `
-                ${pullRequest.body.split('<!-- previews -->')[0]}
+    #           const body = `
+    #             ${pullRequest.body.split('<!-- previews -->')[0]}
                 
-                <!-- previews -->
-                ---
-                :rocket: Preview deployed: ${process.env.DEPLOYMENT_URL}️
-                `.trim();
+    #             <!-- previews -->
+    #             ---
+    #             :rocket: Preview deployed: ${process.env.DEPLOYMENT_URL}️
+    #             `.trim();
               
-              await github.rest.pulls.update({
-                repo: repository.name,
-                owner: repository.owner.login,
-                pull_number: prNumber,
-                body: body,
-              });
-            } catch (error) {
-              core.setFailed(error);
-            }
-          })();
+    #           await github.rest.pulls.update({
+    #             repo: repository.name,
+    #             owner: repository.owner.login,
+    #             pull_number: prNumber,
+    #             body: body,
+    #           });
+    #         } catch (error) {
+    #           core.setFailed(error);
+    #         }
+    #       })();
           
