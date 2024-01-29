@@ -9,6 +9,8 @@ Preview environments for every Pull Request.
 
 ## Usage
 
+### Full Example
+
 ```yaml
 name: "Preview Environments"
 
@@ -62,7 +64,40 @@ jobs:
 
           # (Optional) Docker Build Arguments (i.e. --build-args) that will be injected during the build 
           docker_build_args: FOO=bar,BAR=foo
+```
 
+### Basic Example
+
+```yaml
+name: "Preview Environments"
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  launchpad:
+    name: LaunchPad
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v1
+      - id: runAction
+        name: '🚀 Launch Preview Environment'
+        uses: joggrdocs/previews@v1
+        with:
+          # The name of your application (must be unique)
+          name: my-application 
+          
+          # The GCP Service Account Key, used to authenticate with GCP
+          gcp_service_account_key: ${{ secrets.PREVIEWS_SERVICE_ACCOUNT_KEY }}
+          
+          # The GCP Project ID
+          gcp_project_id: ${{ secrets.GCP_PROJECT_ID }}
+
+          # Default token for the repository
+          github_token: ${{ secrets.GITHUB_TOKEN }}
 ```
 
 #### Attribution
