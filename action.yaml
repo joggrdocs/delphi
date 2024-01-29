@@ -73,7 +73,7 @@ runs:
               const { number: prNumber, repository } = context.payload;
               
               const { data: pullRequest } = await github.rest.pulls.get({
-                repo: repository.name,
+                repo: issue,
                 owner: repository.owner.login,
                 pull_number: prNumber,
               });
@@ -84,7 +84,7 @@ runs:
           <!-- previews -->
           ---
           ### :warning: Deploying Preview :warning:
-          Current deploying preview environment, check progress here: [GitHub Action for Previews](/actions/runs/${context.runId})
+          Current deploying preview environment, check progress here: [GitHub Action for Previews](https://github.com/${repository.owner.login}/${repository.name}/actions/runs/${context.runId})
                 `.trim();
               
               await github.rest.pulls.update({
