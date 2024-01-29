@@ -151,10 +151,10 @@ runs:
         BUILD_ARGS: '${{ steps.docker-build-args.outputs.result }}' 
       run: |-
         docker build \
-          -t ${{ inputs.gcp_artifact_registry }}/${{ inputs.name }}:${{ github.sha }} \
+          -t us-docker.pkg.dev/${{ gcp_project_id }}/${{ inputs.gcp_artifact_repository }}/${{ inputs.name }}:${{ github.sha }} \
           -f ${{ inputs.docker_directory }}/${{ inputs.docker_file_name }} \
           ${{ inputs.docker_directory }}
-        docker push ${{ inputs.gcp_artifact_registry }}/${{ inputs.name }}:${{ github.sha }}
+        docker push us-docker.pkg.dev/${{ gcp_project_id }}/${{ inputs.gcp_artifact_repository }}/${{ inputs.name }}:${{ github.sha }}
 
     - name: '🚀 Deploy to Cloud Run'
       id: deploy
