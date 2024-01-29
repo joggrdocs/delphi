@@ -73,7 +73,7 @@ runs:
               const { number: prNumber, repository } = context.payload;
               
               const { data: pullRequest } = await github.rest.pulls.get({
-                repo: issue,
+                repo: repository.name,
                 owner: repository.owner.login,
                 pull_number: prNumber,
               });
