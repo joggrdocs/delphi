@@ -164,10 +164,8 @@ runs:
         image: 'us-docker.pkg.dev/${{ inputs.gcp_project_id }}/${{ inputs.gcp_artifact_repository }}/${{ inputs.name }}:${{ github.sha }}'
         region: '${{ inputs.gcp_region }}'
         suffix: '${{ github.sha }}'
-        flags: '--allow-unauthenticated'
-        env_vars: |
-          PORT=${{ inputs.port }}
-          ${{ inputs.env_vars }}
+        flags: '--allow-unauthenticated --port=${{ inputs.port }}'
+        env_vars: ${{ inputs.env_vars }}
 
     - name: '💬 Add Deployment URL to Pull Request'
       uses: actions/github-script@v7
