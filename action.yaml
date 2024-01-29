@@ -1,10 +1,14 @@
 name: Previews
-description: Github Action used to deploy preview environments.
+description: Github Action used to deploy preview environments, to Google Cloud Run.
 author: "@joggrdocs"
 branding:
   icon: 'aperture'
   color: 'blue'
 inputs:
+  #------------------
+  # Deployment
+  #------------------
+
   name:
     description: "The name of the service (must be unique) to be deployed."
     required: true
@@ -12,32 +16,66 @@ inputs:
     description: "The port that the application will run on in the container."
     required: false
     default: "8080"
-  api_key:
-    description: "The API Key provided by BlueNova, used to associate all requests."
+  gcp_project_id:
+    description: "The GCP Project ID where the service will be deployed."
     required: true
-  service_account_key:
-    description: "The Service Account JSON Key used to push images to the BlueNova Container Registry."
+  gcp_service_account_key:
+    description: "The Service Account JSON Key used to push images to the GCP Artifact Registry."
     required: true
+  gcp_artifact_registry:
+    description: "The Artifact Registry name, you can override for custom names (i.e. us-docker.pkg.dev/able-sailor-21423/acme)"
+    required: true
+  environment_variables:
+    description: "List of environment variables that will be injected during runtime, each on a new line."
+    required: false
+  
+  #------------------
+  # Pull Request Integration
+  #------------------
+
   github_token:
-    description: "Github Token, pass in the secrets.GITHUB_TOKEN."
+    description: "Github Token, pass in the `secrets.GITHUB_TOKEN`."
     required: true
-  directory:
-    description: "Directory where the DockerFile is located."
-    required: true
-    default: "."
+
+  #------------------
+  # Docker
+  #------------------
+
   dockerfile:
     description: "The Dockerfile name, you can override for custom names (i.e. DevDockerfile)"
     required: true
     default: "Dockerfile"
-  build_args:
-    description: "Comma seperated list of arguments that will be injected during the build (i.e. FOO=bar,FOOBAR=foo)"
-    required: false
-  env_vars:
-    description: "Comma seperated list of environment variables that will be injected during runtime (i.e. FOO=bar,FOOBAR=foo)"
+  dockerfile_directory:
+    description: "Directory where the DockerFile is located."
+    required: true
+    default: "."
+  dockerfile_build_args:
+    description: "Comma separated list of arguments that will be injected during the build (i.e. FOO=bar,FOOBAR=foo)"
     required: false
 outputs:
   url:
     description: "The preview URL for the running application"
+    value: ${{ steps.deploy.outputs.url }}
 runs:
-  using: node12
-  main: dist/index.js
+  using: "composite"
+  steps:
+    - name: '☁️ Authenticate to Google Cloud'
+      uses: 'google-github-actions/auth@v1'
+      with:
+        project_id: ${{ inputs.gcp_project_id }}
+        credentials_json: '${{ inputs.gcp_service_account_key }}'
+
+    - name: '☁️ Setup Cloud SDK'
+      uses: google-github-actions/setup-gcloud@v1
+      with:
+        project_id: ${{ inputs.gcp_project_id }}
+    
+    - name: '🐳 Authorize Docker push'
+      shell: bash
+      run: gcloud auth configure-docker us-docker.pkg.dev/durable-primacy-268722/intuscare --quiet
+
+    - name: '🐳 Build and Push Container'
+      shell: bash
+      run: |-
+        docker build -t gcr.io/${{ inputs.gcp_project_id }}/${{ inputs.name }}:${{ github.sha }} .
+        docker push gcr.io/${{ inputs.gcp_project_id }}/${{ inputs.name }}:${{ github.sha }}
