@@ -160,10 +160,10 @@ runs:
       id: deploy
       uses: google-github-actions/deploy-cloudrun@v2
       with:
-        service: ${{ inputs.name }}-${{ github.sha }}
+        service: ${{ inputs.name }}-pr${{ steps.pr-number.outputs.result }}
         image: us-docker.pkg.dev/${{ inputs.gcp_project_id }}/${{ inputs.gcp_artifact_repository }}/${{ inputs.name }}:${{ github.sha }}
         region: ${{ inputs.gcp_region }}
-        suffix: pr${{ steps.pr-number.outputs.result }}-${{ github.sha }}
+        suffix: -${{ github.sha }}
         flags: --allow-unauthenticated
         env_vars: |
           PORT=${{ inputs.port }}
