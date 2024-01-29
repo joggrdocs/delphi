@@ -190,7 +190,7 @@ runs:
           <!-- previews -->
           ---
           ### :rocket: Preview deployed
-          View the preview here [Preview Environment](${process.env.DEPLOY_URL}️)
+          View the preview here: [${process.env.DEPLOY_URL}️](${process.env.DEPLOY_URL}️)
                 `.trim();
               
               await github.rest.pulls.update({
