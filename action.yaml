@@ -16,6 +16,10 @@ inputs:
     description: "The port that the application will run on in the container."
     required: false
     default: "8080"
+  gcp_region:
+    description: "The GCP Region where the service will be deployed."
+    required: true
+    default: "us-central1"
   gcp_project_id:
     description: "The GCP Project ID where the service will be deployed."
     required: true
@@ -25,7 +29,7 @@ inputs:
   gcp_artifact_registry:
     description: "The Artifact Registry name, you can override for custom names (i.e. us-docker.pkg.dev/able-sailor-21423/acme)"
     required: true
-  environment_variables:
+  env_vars:
     description: "List of environment variables that will be injected during runtime, each on a new line."
     required: false
   
@@ -59,6 +63,55 @@ outputs:
 runs:
   using: "composite"
   steps:
+
+    - name: '💬 Add Deployment in progress to Pull Request'
+      uses: actions/github-script@v5
+      with:
+        github-token: ${{ inputs.github_token }}
+        env:
+          DEPLOYMENT_URL: ${{ steps.deploy.outputs.url }}
+        script: |
+          (async () => {
+            try {
+              const { number: prNumber, repository } = context.payload;
+              
+              const { data: pullRequest } = await github.rest.pulls.get({
+                repo: repository.name,
+                owner: repository.owner.login,
+                pull_number: prNumber,
+              });
+
+              const body = `
+                ${pullRequest.body}
+                
+                <!-- previews -->
+                ---
+                :warning: Preview in progress :warning:
+                `.trim();
+              
+              await github.rest.pulls.update({
+                repo: repository.name,
+                owner: repository.owner.login,
+                pull_number: prNumber,
+                body: body,
+              });
+            } catch (error) {
+              core.setFailed(error);
+            }
+          })();
+
+    - name: '#️⃣ Extract Pull Request #'
+      uses: actions/github-script@v7
+      id: pr-number
+      with:
+        result-encoding: string
+        script: |
+          if (!context.payload.number) {
+            core.setFailed('No PR number found, you can only run Previews on Pull Requests.');
+          }
+
+          return context.payload;
+
     - name: '☁️ Authenticate to Google Cloud'
       uses: 'google-github-actions/auth@v1'
       with:
@@ -66,16 +119,65 @@ runs:
         credentials_json: '${{ inputs.gcp_service_account_key }}'
 
     - name: '☁️ Setup Cloud SDK'
-      uses: google-github-actions/setup-gcloud@v1
+      uses: google-github-actions/setup-gcloud@v2
       with:
         project_id: ${{ inputs.gcp_project_id }}
     
     - name: '🐳 Authorize Docker push'
       shell: bash
-      run: gcloud auth configure-docker us-docker.pkg.dev/durable-primacy-268722/intuscare --quiet
+      run: gcloud auth configure-docker ${{ inputs.gcp_artifact_registry }} --quiet
 
     - name: '🐳 Build and Push Container'
       shell: bash
       run: |-
-        docker build -t gcr.io/${{ inputs.gcp_project_id }}/${{ inputs.name }}:${{ github.sha }} .
-        docker push gcr.io/${{ inputs.gcp_project_id }}/${{ inputs.name }}:${{ github.sha }}
+        docker buildx build -t ${{ inputs.gcp_artifact_registry }}/${{ inputs.name }}:${{ github.sha }} .
+        docker push ${{ inputs.gcp_artifact_registry }}/${{ inputs.name }}:${{ github.sha }}
+
+    - name: '🚀 Deploy to Cloud Run'
+      id: deploy
+      uses: google-github-actions/deploy-cloudrun@v2
+      with:
+        service: ${{ inputs.name }}-${{ github.sha }}
+        image: ${{ inputs.gcp_artifact_registry }}/${{ inputs.cloud_run_service }}:${{ inputs.release_name }}
+        region: ${{ inputs.gcp_region }}
+        suffix: pr${{ steps.pr-number.outputs.result }}-${{ github.sha }}
+        env_vars: |
+          PORT=${{ inputs.port }}
+          ${{ inputs.env_vars }}
+
+    - name: '💬 Add Deployment URL to Pull Request'
+      uses: actions/github-script@v5
+      with:
+        github-token: ${{ inputs.github_token }}
+        env:
+          DEPLOYMENT_URL: ${{ steps.deploy.outputs.url }}
+        script: |
+          (async () => {
+            try {
+              const { number: prNumber, repository } = context.payload;
+              
+              const { data: pullRequest } = await github.rest.pulls.get({
+                repo: repository.name,
+                owner: repository.owner.login,
+                pull_number: prNumber,
+              });
+
+              const body = `
+                ${pullRequest.body.split('<!-- previews -->')[0]}
+                
+                <!-- previews -->
+                ---
+                :rocket: Preview deployed: ${process.env.DEPLOYMENT_URL}️
+                `.trim();
+              
+              await github.rest.pulls.update({
+                repo: repository.name,
+                owner: repository.owner.login,
+                pull_number: prNumber,
+                body: body,
+              });
+            } catch (error) {
+              core.setFailed(error);
+            }
+          })();
+          
