@@ -84,7 +84,7 @@ runs:
           <!-- previews -->
           ---
           ### :warning: Deploying Preview :warning:
-          Current deploying preview environment, check progress here: [GitHub Action for Previews](tbd)
+          Current deploying preview environment, check progress here: [GitHub Action for Previews](/actions/runs)
                 `.trim();
               
               await github.rest.pulls.update({
@@ -128,14 +128,15 @@ runs:
     - name: '🐳 Docker Build Arguments'
       uses: actions/github-script@v7
       id: docker-build-args
+      env: 
+        DOCKER_BUILD_ARGS: '${{ inputs.docker_build_args }}'
       with:
         github-token: ${{ inputs.github_token }}
         script: |
           const args = [];
-          const { inputs } = context;
-
-          if (inputs.docker_build_args) {
-            const buildArgs = inputs.docker_build_args.split(',');
+          
+          if (process.env.DOCKER_BUILD_ARGS) {
+            const buildArgs = process.env.DOCKER_BUILD_ARGS.split(',');
             buildArgs.forEach((arg) => {
               const [key, value] = arg.split('=');
               args.push(`--build-arg ${key}=${value}`);
