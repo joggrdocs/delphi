@@ -104,3 +104,6 @@ lib/**/*
 
 # IntelliJ
 .idea
+
+# VSCode
+.vscode
