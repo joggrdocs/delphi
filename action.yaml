@@ -63,7 +63,6 @@ outputs:
 runs:
   using: "composite"
   steps:
-
     - name: '💬 Add Deployment in progress to Pull Request'
       uses: actions/github-script@v7
       with:
@@ -126,10 +125,34 @@ runs:
       shell: bash
       run: gcloud auth configure-docker ${{ inputs.gcp_artifact_registry }} --quiet
 
+    - name: '🐳 Docker Build Arguments'
+      uses: actions/github-script@v7
+      id: docker-build-args
+      with:
+        github-token: ${{ inputs.github_token }}
+        script: |
+          const args = [];
+          const { inputs } = context;
+
+          if (inputs.docker_build_args) {
+            const buildArgs = inputs.docker_build_args.split(',');
+            buildArgs.forEach((arg) => {
+              const [key, value] = arg.split('=');
+              args.push(`--build-arg ${key}=${value}`);
+            });
+          }
+
+          return args.join(' ');
+
     - name: '🐳 Build and Push Container'
       shell: bash
+      env: 
+        BUILD_ARGS: '${{ steps.docker-build-args.outputs.result }}' 
       run: |-
-        docker buildx build -t ${{ inputs.gcp_artifact_registry }}/${{ inputs.name }}:${{ github.sha }} .
+        docker buildx build \
+          -t ${{ inputs.gcp_artifact_registry }}/${{ inputs.name }}:${{ github.sha }} \
+          -f ${{ inputs.docker_directory }}/${{ inputs.docker_file_name }} \
+          $BUILD_ARGS
         docker push ${{ inputs.gcp_artifact_registry }}/${{ inputs.name }}:${{ github.sha }}
 
     - name: '🚀 Deploy to Cloud Run'
