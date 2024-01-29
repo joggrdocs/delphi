@@ -152,7 +152,7 @@ runs:
       run: |-
         docker build \
           -t ${{ inputs.gcp_artifact_registry }}/${{ inputs.name }}:${{ github.sha }} \
-          -f ${{ inputs.docker_directory }}/${{ inputs.docker_file_name }} $BUILD_ARGS
+          -f ${{ inputs.docker_directory }}/${{ inputs.docker_file_name }}
         docker push ${{ inputs.gcp_artifact_registry }}/${{ inputs.name }}:${{ github.sha }}
 
     - name: '🚀 Deploy to Cloud Run'
