@@ -108,7 +108,7 @@ runs:
             core.setFailed('No PR number found, you can only run Previews on Pull Requests.');
           }
 
-          return context.payload;
+          return context.payload.number;
 
     - name: '☁️ Authenticate to Google Cloud'
       uses: 'google-github-actions/auth@v2'
