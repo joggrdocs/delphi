@@ -84,7 +84,7 @@ runs:
           <!-- previews -->
           ---
           ### :warning: Deploying Preview :warning:
-          Current deploying preview environment, check progress here: [GitHub Action for Previews](/actions/runs)
+          Current deploying preview environment, check progress here: [GitHub Action for Previews](/actions/runs/${github.run_id})
                 `.trim();
               
               await github.rest.pulls.update({
