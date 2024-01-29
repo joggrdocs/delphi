@@ -51,7 +51,7 @@ jobs:
           gcp_region: ${{ secrets.GCP_REGION }}
 
           # (optional) The GCP Artifact Registry, where the Docker image will be stored
-          gcp_artifact_registry: ${{ secrets.GCP_ARTIFACT_REGISTRY }}
+          gcp_artifact_repository: ${{ secrets.GCP_ARTIFACT_REPOSITORY }}
           
           # Default token for the repository
           github_token: ${{ secrets.GITHUB_TOKEN }}

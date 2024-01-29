@@ -29,8 +29,8 @@ inputs:
   gcp_service_account_key:
     description: "The Service Account JSON Key used to push images to the GCP Artifact Registry."
     required: true
-  gcp_artifact_registry:
-    description: "The Artifact Registry name, you can override for custom names (i.e. us-docker.pkg.dev/able-sailor-21423/acme)"
+  gcp_artifact_repository:
+    description: "The Artifact Registry name, you can override for custom names (i.e. the 'acme' in us-docker.pkg.dev/able-sailor-21423/acme)"
     required: true
   
   #------------------
