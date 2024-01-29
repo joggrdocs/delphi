@@ -16,21 +16,17 @@ jobs:
       - id: runAction
         name: Run Action Code
         uses: ./
-#         env:
-#           # If you want to test against production comment out the line below, you MUST update the service_account_key
-#           DEBUG___URL_API_LAUNCHPAD: 'https://stg-launchpad-api.bluenova-app.com'
         with:
-          directory: ./examples/nodejs-simple
-          # If you want to test against production comment out the line with "STAGING" and uncomment below, you MUST
-          # update the DEBUG___URL_API_LAUNCHPAD env var above
-          service_account_key: ${{ secrets.GCP_SA_KEY }}
-          # service_account_key: ${{ secrets.GCP_SA_KEY_STAGING }}
-          name: ghaexample
+          name: previews-example
           port: 3000
-          dockerfile: DevDockerfile
-          api_key: ${{ secrets.BLUENOVA_API_KEY }}
+          env_vars: |
+            MESSAGE="Hello via ENV Vars"
+          gcp_project_id: ${{ secrets.GCP_PROJECT_ID }}
+          gcp_service_account_key: ${{ secrets.GCP_SA_KEY }}
+          gcp_artifact_registry: ${{ secrets.GCP_ARTIFACT_REGISTRY }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          build_args: BUILD_VAR=foo,BUILD_VAR2=bar
-          env_vars: MESSAGE="Hello via ENV Vars"
+          docker_directory: ./examples/nodejs-simple
+          docker_file_name: DevDockerfile
+          docker_build_args: BUILD_VAR=foo,BUILD_VAR2=bar
       - name: Test Outputs
         run: echo "${{ steps.runAction.outputs.url }}"

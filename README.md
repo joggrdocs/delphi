@@ -1,15 +1,6 @@
-<h1 align="center">
-⚠️ <strong>DEPRECATED</strong> ⚠️ 
-</h1>
-<p align="center">
-This repository is deprecated and will not longer be maintained outside of bugfixes and security updates. 
-</p>
-
----
-
 <div>
     <p align="center">
-        <img src="/logo.png" align="center" width="280" />
+        <img src="/.github/assets/logo.png" align="center" width="280" />
     </p>
     <hr>
 </div>

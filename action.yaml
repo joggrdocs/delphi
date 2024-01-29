@@ -16,6 +16,9 @@ inputs:
     description: "The port that the application will run on in the container."
     required: false
     default: "8080"
+  env_vars:
+    description: "List of environment variables that will be injected during runtime, each on a new line."
+    required: false
   gcp_region:
     description: "The GCP Region where the service will be deployed."
     required: true
@@ -29,9 +32,6 @@ inputs:
   gcp_artifact_registry:
     description: "The Artifact Registry name, you can override for custom names (i.e. us-docker.pkg.dev/able-sailor-21423/acme)"
     required: true
-  env_vars:
-    description: "List of environment variables that will be injected during runtime, each on a new line."
-    required: false
   
   #------------------
   # Pull Request Integration
