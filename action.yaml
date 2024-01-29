@@ -123,7 +123,7 @@ runs:
     
     - name: '🐳 Authorize Docker push'
       shell: bash
-      run: gcloud auth configure-docker us-central1-docker.pkg.dev --quiet
+      run: gcloud auth configure-docker us-docker.pkg.dev --quiet
 
     - name: '🐳 Docker Build Arguments'
       uses: actions/github-script@v7
