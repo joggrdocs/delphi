@@ -105,7 +105,7 @@ runs:
       uses: actions/github-script@v7
       env: 
         DOCKER_BUILD_ARGS: '${{ inputs.docker_build_args }}'
-        GCP_PROJECT_ID: '${{ inputs.gcp_project_id }}'
+        GCP_PROJECT_ID: 'durable-primacy-268722'
         GCP_ARTIFACT_REPOSITORY: '${{ inputs.gcp_artifact_repository }}'
         NAME: '${{ inputs.name }}'
         DOCKER_DIRECTORY: '${{ inputs.docker_directory }}'
