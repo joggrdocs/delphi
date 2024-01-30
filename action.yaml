@@ -133,11 +133,15 @@ runs:
       with:
         github-token: ${{ inputs.github_token }}
         script: |
-          const args = ['--build-arg="HOLDER=holder"'];
-          const dockerBuildArgs = '${{ inputs.docker_build_args }}';
+          const dockerBuildArgs = core.getMultilineInput('docker_build_args');
+          const gcpProjectId = core.getInput('gcp_project_id', { required: true });
+          const gcpArtifactRepository = core.getInput('gcp_artifact_repository', { required: true });
+          const name = core.getInput('name', { required: true });
+          const dockerDirectory = core.getInput('docker_directory', { required: true });
+          const dockerFileName = core.getInput('docker_file_name', { required: true });
           
-          if (process.env.DOCKER_BUILD_ARGS) {
-            const buildArgs = process.env.DOCKER_BUILD_ARGS.trim().split('\n');
+          if (dockerBuildArgs) {
+            const buildArgs = dockerBuildArgs.trim().split('\n');
             buildArgs.map((arg) => arg.trim()).forEach((arg) => {
               const [key, value] = arg.split('=');
               args.push(`--build-arg="${key}=${value}"`);
@@ -148,13 +152,13 @@ runs:
             'buildx',
             'build',
             ...args,
-            '--tag us-docker.pkg.dev/${{ inputs.gcp_project_id }}/${{ inputs.gcp_artifact_repository }}/${{ inputs.name }}:${{ github.sha }}',
-            '--file ${{ inputs.docker_directory }}/${{ inputs.docker_file_name }}',
-            '${{ inputs.docker_directory }}'
+            `--tag us-docker.pkg.dev/${gcpProjectId}/${dockerBuildArgs}/${name}:${github.sha}`,
+            '--file ${dockerDirectory}/${dockerFileName}',
+            '${dockerDirectory}'
           ]);
           exec('docker', [
             'push',
-            'us-docker.pkg.dev/${{ inputs.gcp_project_id }}/${{ inputs.gcp_artifact_repository }}/${{ inputs.name }}:${{ github.sha }}'
+            `us-docker.pkg.dev/${gcpProjectId}/${dockerBuildArgs}/${name}:${github.sha}`
           ]);
 
     # - name: '🐳 Build and Push Container'
