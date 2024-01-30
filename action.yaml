@@ -146,8 +146,6 @@ runs:
             });
           }
           
-          console.log(args.join(' '));
-
           return args.join(' ');
 
     - name: '🐳 Build and Push Container'
