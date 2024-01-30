@@ -139,7 +139,7 @@ runs:
           const args = ['--build-arg HOLDER=HOLDER'];
           
           if (process.env.DOCKER_BUILD_ARGS) {
-            const buildArgs = process.env.DOCKER_BUILD_ARGS.split('\n');
+            const buildArgs = process.env.DOCKER_BUILD_ARGS.trim().split('\n');
             buildArgs.map((arg) => arg.trim()).forEach((arg) => {
               const [key, value] = arg.split('=');
               args.push(`--build-arg ${key}=${value}`);
