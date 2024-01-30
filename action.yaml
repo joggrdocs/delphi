@@ -135,6 +135,7 @@ runs:
         NAME: '${{ inputs.name }}'
         DOCKER_DIRECTORY: '${{ inputs.docker_directory }}'
         DOCKER_FILE_NAME: '${{ inputs.docker_file_name }}'
+        GITHUB_SHA: '${{ github.sha }}'
       with:
         github-token: ${{ inputs.github_token }}
         script: |
@@ -144,6 +145,7 @@ runs:
           const name = process.env.NAME;
           const dockerDirectory = process.env.DOCKER_DIRECTORY;
           const dockerFileName =  process.env.DOCKER_FILE_NAME;
+          const githubSha = process.env.GITHUB_SHA;
 
           const args = [];
           if (dockerBuildArgs.length > 0) {
@@ -158,13 +160,13 @@ runs:
             'buildx',
             'build',
             ...args,
-            `--tag us-docker.pkg.dev/${gcpProjectId}/${gcpArtifactRepository}/${name}:${github.sha}`,
+            `--tag us-docker.pkg.dev/${gcpProjectId}/${gcpArtifactRepository}/${name}:${githubSha}`,
             '--file ${dockerDirectory}/${dockerFileName}',
             '${dockerDirectory}'
           ]);
           await exec.exec('docker', [
             'push',
-            `us-docker.pkg.dev/${gcpProjectId}/${gcpArtifactRepository}/${name}:${github.sha}`
+            `us-docker.pkg.dev/${gcpProjectId}/${gcpArtifactRepository}/${name}:${githubSha}`
           ]);
 
     # - name: '🐳 Build and Push Container'
