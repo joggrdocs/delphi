@@ -139,7 +139,8 @@ runs:
           const name = core.getInput('name', { required: true });
           const dockerDirectory = core.getInput('docker_directory', { required: true });
           const dockerFileName = core.getInput('docker_file_name', { required: true });
-          
+
+          const args = []; 
           if (dockerBuildArgs) {
             const buildArgs = dockerBuildArgs.trim().split('\n');
             buildArgs.map((arg) => arg.trim()).forEach((arg) => {
