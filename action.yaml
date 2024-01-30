@@ -151,7 +151,7 @@ runs:
     - name: '🐳 Build and Push Container'
       shell: bash
       run: |-
-        docker build \
+        docker buildx build \
           -t us-docker.pkg.dev/${{ inputs.gcp_project_id }}/${{ inputs.gcp_artifact_repository }}/${{ inputs.name }}:${{ github.sha }} \
           -f ${{ inputs.docker_directory }}/${{ inputs.docker_file_name }} \
           ${{ inputs.docker_directory }} \
