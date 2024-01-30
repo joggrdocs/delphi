@@ -23,7 +23,7 @@ jobs:
             MESSAGE="Hello via ENV Vars"
           gcp_project_id: ${{ secrets.GCP_PROJECT_ID }}
           gcp_service_account_key: ${{ secrets.GCP_SA_KEY }}
-          gcp_artifact_repository: ${{ secrets.GCP_ARTIFACT_REPOSITORY }}
+          gcp_artifact_repository: joggr
           github_token: ${{ secrets.GITHUB_TOKEN }}
           docker_directory: ./examples/nodejs-simple
           docker_file_name: DevDockerfile
