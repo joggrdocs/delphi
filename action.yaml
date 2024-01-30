@@ -147,19 +147,17 @@ runs:
           const dockerFileName =  process.env.DOCKER_FILE_NAME;
           const githubSha = process.env.GITHUB_SHA;
 
-          const args = [];
-          if (dockerBuildArgs.length > 0) {
-            const buildArgs = dockerBuildArgs.trim().split('\n');
-            buildArgs.map((arg) => arg.trim()).forEach((arg) => {
-              const [key, value] = arg.split('=');
-              args.push(`--build-arg="${key}=${value}"`);
+          const buildArgs = dockerBuildArgs
+            .filter((arg) => !!arg)
+            .map((arg) => {
+              const [key, value] = arg.trim().split('=');
+              args.push(`--build-arg ${key}=${value}`);
             });
-          }
           
           await exec.exec('docker', [
             'buildx',
             'build',
-            ...args,
+            ...buildArgs,
             `--tag us-docker.pkg.dev/${gcpProjectId}/${gcpArtifactRepository}/${name}:${githubSha}`,
             '--file ${dockerDirectory}/${dockerFileName}',
             '${dockerDirectory}'
@@ -168,18 +166,6 @@ runs:
             'push',
             `us-docker.pkg.dev/${gcpProjectId}/${gcpArtifactRepository}/${name}:${githubSha}`
           ]);
-
-    # - name: '🐳 Build and Push Container'
-    #   shell: bash
-    #   env:
-    #     DOCKER_BUILD_ARGS: ${{ steps.docker-build-args.outputs.result }}
-    #   run: |-
-    #     docker buildx build \
-    #       $(DOCKER_BUILD_ARGS) \
-    #       --tag us-docker.pkg.dev/${{ inputs.gcp_project_id }}/${{ inputs.gcp_artifact_repository }}/${{ inputs.name }}:${{ github.sha }} \
-    #       --file ${{ inputs.docker_directory }}/${{ inputs.docker_file_name }} \
-    #       ${{ inputs.docker_directory }}
-    #     docker push us-docker.pkg.dev/${{ inputs.gcp_project_id }}/${{ inputs.gcp_artifact_repository }}/${{ inputs.name }}:${{ github.sha }}
 
     - name: '🚀 Deploy to Cloud Run'
       id: deploy
