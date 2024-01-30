@@ -116,7 +116,7 @@ runs:
         script: |
           const script = require('${{ github.action_path }}/lib/scripts/docker.js');
           const { env } = process;
-          await script({ github, context, core, env });
+          await script({ github, context, core, exec, env });
 
     - name: '🚀 Deploy to Cloud Run'
       id: deploy
