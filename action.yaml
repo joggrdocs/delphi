@@ -139,33 +139,13 @@ runs:
       with:
         github-token: ${{ inputs.github_token }}
         script: |
-          const dockerBuildArgs = process.env.DOCKER_BUILD_ARGS;
-          const gcpProjectId = process.env.GCP_PROJECT_ID;
-          const gcpArtifactRepository = process.env.GCP_ARTIFACT_REPOSITORY;
-          const name = process.env.NAME;
-          const dockerDirectory = process.env.DOCKER_DIRECTORY;
-          const dockerFileName =  process.env.DOCKER_FILE_NAME;
-          const githubSha = process.env.GITHUB_SHA;
-
-          const buildArgs = dockerBuildArgs
-            .filter((arg) => !!arg)
-            .map((arg) => {
-              const [key, value] = arg.trim().split('=');
-              args.push(`--build-arg ${key}=${value}`);
-            });
-          
-          await exec.exec('docker', [
-            'buildx',
-            'build',
-            ...buildArgs,
-            `--tag us-docker.pkg.dev/${gcpProjectId}/${gcpArtifactRepository}/${name}:${githubSha}`,
-            '--file ${dockerDirectory}/${dockerFileName}',
-            '${dockerDirectory}'
-          ]);
-          await exec.exec('docker', [
-            'push',
-            `us-docker.pkg.dev/${gcpProjectId}/${gcpArtifactRepository}/${name}:${githubSha}`
-          ]);
+          const script = require('./lib/scripts/docker.js');
+          await script({ 
+            github, 
+            context,
+            core, 
+            env: process.env
+          });
 
     - name: '🚀 Deploy to Cloud Run'
       id: deploy
