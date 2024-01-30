@@ -3,6 +3,9 @@
         <img src="/.github/assets/logo.png" align="center" width="280" />
     </p>
     <hr>
+    <quote>
+        Know thyself... before every deployment to production.
+    </quote>
 </div>
 
 Preview environments for every Pull Request.
