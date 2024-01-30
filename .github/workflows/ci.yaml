@@ -27,6 +27,8 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           docker_directory: ./examples/nodejs-simple
           docker_file_name: DevDockerfile
-          docker_build_args: BUILD_VAR=foo,BUILD_VAR2=bar
+          docker_build_args: |
+            BUILD_VAR=foo
+            BUILD_VAR2=bar
       - name: Test Outputs
         run: echo "${{ steps.runAction.outputs.url }}"
