@@ -4,15 +4,15 @@
     </p>
     <hr>
     <blockquote align="center">
-        "Know thyself" - Oracle of Delphi
+        "Know thyself... before deploying to production" - The DevOps Oracle of Delphi
     </blockquote>
 </div>
 
 <br>
 
 <p align="center">
-  <a href="https://github.com/joggrdocs/previews/actions/workflows/github-code-scanning/codeql">
-    <img alt="CodeQL" src="https://github.com/joggrdocs/previews/actions/workflows/github-code-scanning/codeql/badge.svg">
+  <a href="https://github.com/joggrdocs/previews/actions/workflows/codeql-analysis.yml">
+    <img alt="CodeQL" src="https://github.com/joggrdocs/previews/actions/workflows/codeql-analysis.yml/badge.svg">
   </a>
   <a href="https://github.com/joggrdocs/previews/actions/workflows/ci.yaml">
     <img alt="CI" src="https://github.com/joggrdocs/previews/actions/workflows/ci.yaml/badge.svg">
