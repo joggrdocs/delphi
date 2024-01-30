@@ -3,10 +3,22 @@
         <img src="/.github/assets/logo.png" align="center" width="280" />
     </p>
     <hr>
-    <quote>
-        Know thyself... before every deployment to production.
-    </quote>
+    <blockquote align="center">
+        "Know thyself" - Oracle of Delphi
+    </blockquote>
 </div>
+
+<br>
+
+<p align="center">
+  <a href="https://github.com/joggrdocs/previews/actions/workflows/github-code-scanning/codeql">
+    <img alt="CodeQL" src="https://github.com/joggrdocs/previews/actions/workflows/github-code-scanning/codeql/badge.svg">
+  </a>
+  <a href="https://github.com/joggrdocs/previews/actions/workflows/ci.yaml">
+    <img alt="CI" src="https://github.com/joggrdocs/previews/actions/workflows/ci.yaml/badge.svg">
+  </a>
+  <br/>
+</p>
 
 Preview environments for every Pull Request.
 

@@ -13,4 +13,4 @@ FROM base as web
 USER node
 COPY --chown=node:node --from=build /app/ /app/
 EXPOSE 8080
-CMD ["node", "dist/bin/www.js"]
+CMD ["node", "index.js"]
