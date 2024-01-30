@@ -71,35 +71,33 @@ runs:
       with:
         github-token: ${{ inputs.github_token }}
         script: |
-          (async () => {
-            try {
-              const { number: prNumber, repository } = context.payload;
-              
-              const { data: pullRequest } = await github.rest.pulls.get({
-                repo: repository.name,
-                owner: repository.owner.login,
-                pull_number: prNumber,
-              });
+          try {
+            const { number: prNumber, repository } = context.payload;
+            
+            const { data: pullRequest } = await github.rest.pulls.get({
+              repo: repository.name,
+              owner: repository.owner.login,
+              pull_number: prNumber,
+            });
 
-              const body = `
+            const body = `
           ${pullRequest.body.split('<!-- previews -->')[0].trim()}
           
           <!-- previews -->
           ---
           ### :warning: Deploying Preview :warning:
           Current deploying preview environment, check progress here: [GitHub Action for Previews](https://github.com/${repository.owner.login}/${repository.name}/actions/runs/${context.runId})
-                `.trim();
-              
-              await github.rest.pulls.update({
-                repo: repository.name,
-                owner: repository.owner.login,
-                pull_number: prNumber,
-                body: body,
-              });
-            } catch (error) {
-              core.setFailed(error);
-            }
-          })();
+              `.trim();
+            
+            await github.rest.pulls.update({
+              repo: repository.name,
+              owner: repository.owner.login,
+              pull_number: prNumber,
+              body: body,
+            });
+          } catch (error) {
+            core.setFailed(error);
+          }
 
     - name: '#️⃣ Extract Pull Request #'
       uses: actions/github-script@v7
@@ -128,15 +126,15 @@ runs:
       shell: bash
       run: gcloud auth configure-docker us-docker.pkg.dev --quiet
 
-    - name: '🐳 Docker Build Arguments'
+    - name: '🐳 Build and Push Container'
       uses: actions/github-script@v7
-      id: docker-build-args
       env: 
         DOCKER_BUILD_ARGS: '${{ inputs.docker_build_args }}'
       with:
         github-token: ${{ inputs.github_token }}
         script: |
           const args = ['--build-arg="HOLDER=holder"'];
+          const dockerBuildArgs = '${{ inputs.docker_build_args }}';
           
           if (process.env.DOCKER_BUILD_ARGS) {
             const buildArgs = process.env.DOCKER_BUILD_ARGS.trim().split('\n');
@@ -146,19 +144,30 @@ runs:
             });
           }
           
-          return args.join(' ');
+          exec('docker', [
+            'buildx',
+            'build',
+            ...args,
+            '--tag us-docker.pkg.dev/${{ inputs.gcp_project_id }}/${{ inputs.gcp_artifact_repository }}/${{ inputs.name }}:${{ github.sha }}',
+            '--file ${{ inputs.docker_directory }}/${{ inputs.docker_file_name }}',
+            '${{ inputs.docker_directory }}'
+          ]);
+          exec('docker', [
+            'push',
+            'us-docker.pkg.dev/${{ inputs.gcp_project_id }}/${{ inputs.gcp_artifact_repository }}/${{ inputs.name }}:${{ github.sha }}'
+          ]);
 
-    - name: '🐳 Build and Push Container'
-      shell: bash
-      env:
-        DOCKER_BUILD_ARGS: ${{ steps.docker-build-args.outputs.result }}
-      run: |-
-        docker buildx build \
-          $(DOCKER_BUILD_ARGS) \
-          --tag us-docker.pkg.dev/${{ inputs.gcp_project_id }}/${{ inputs.gcp_artifact_repository }}/${{ inputs.name }}:${{ github.sha }} \
-          --file ${{ inputs.docker_directory }}/${{ inputs.docker_file_name }} \
-          ${{ inputs.docker_directory }}
-        docker push us-docker.pkg.dev/${{ inputs.gcp_project_id }}/${{ inputs.gcp_artifact_repository }}/${{ inputs.name }}:${{ github.sha }}
+    # - name: '🐳 Build and Push Container'
+    #   shell: bash
+    #   env:
+    #     DOCKER_BUILD_ARGS: ${{ steps.docker-build-args.outputs.result }}
+    #   run: |-
+    #     docker buildx build \
+    #       $(DOCKER_BUILD_ARGS) \
+    #       --tag us-docker.pkg.dev/${{ inputs.gcp_project_id }}/${{ inputs.gcp_artifact_repository }}/${{ inputs.name }}:${{ github.sha }} \
+    #       --file ${{ inputs.docker_directory }}/${{ inputs.docker_file_name }} \
+    #       ${{ inputs.docker_directory }}
+    #     docker push us-docker.pkg.dev/${{ inputs.gcp_project_id }}/${{ inputs.gcp_artifact_repository }}/${{ inputs.name }}:${{ github.sha }}
 
     - name: '🚀 Deploy to Cloud Run'
       id: deploy
@@ -182,35 +191,33 @@ runs:
       with:
         github-token: ${{ inputs.github_token }}
         script: |
-          (async () => {
-            try {
-              const { number: prNumber, repository } = context.payload;
-              
-              const { data: pullRequest } = await github.rest.pulls.get({
-                repo: repository.name,
-                owner: repository.owner.login,
-                pull_number: prNumber,
-              });
+          try {
+            const { number: prNumber, repository } = context.payload;
+            
+            const { data: pullRequest } = await github.rest.pulls.get({
+              repo: repository.name,
+              owner: repository.owner.login,
+              pull_number: prNumber,
+            });
 
-              const body = `
+            const body = `
           ${pullRequest.body.split('<!-- previews -->')[0].trim()}
           
           <!-- previews -->
           ---
           ### :rocket: Preview deployed
           View the preview here: [${process.env.DEPLOY_URL}️](${process.env.DEPLOY_URL}️)
-                `.trim();
-              
-              await github.rest.pulls.update({
-                repo: repository.name,
-                owner: repository.owner.login,
-                pull_number: prNumber,
-                body: body,
-              });
-            } catch (error) {
-              core.setFailed(error);
-            }
-          })();
+              `.trim();
+            
+            await github.rest.pulls.update({
+              repo: repository.name,
+              owner: repository.owner.login,
+              pull_number: prNumber,
+              body: body,
+            });
+          } catch (error) {
+            core.setFailed(error);
+          }
     
     - name: '❌ Preview Failed'
       uses: actions/github-script@v7
@@ -218,32 +225,30 @@ runs:
       with:
         github-token: ${{ inputs.github_token }}
         script: |
-          (async () => {
-            try {
-              const { number: prNumber, repository } = context.payload;
-              
-              const { data: pullRequest } = await github.rest.pulls.get({
-                repo: repository.name,
-                owner: repository.owner.login,
-                pull_number: prNumber,
-              });
+          try {
+            const { number: prNumber, repository } = context.payload;
+            
+            const { data: pullRequest } = await github.rest.pulls.get({
+              repo: repository.name,
+              owner: repository.owner.login,
+              pull_number: prNumber,
+            });
 
-              const body = `
+            const body = `
           ${pullRequest.body.split('<!-- previews -->')[0].trim()}
-          
+        
           <!-- previews -->
           ---
           ### :x: Preview Failed
           View the issue here: [GitHub Action for Previews](https://github.com/${repository.owner.login}/${repository.name}/actions/runs/${context.runId})
-                `.trim();
-              
-              await github.rest.pulls.update({
-                repo: repository.name,
-                owner: repository.owner.login,
-                pull_number: prNumber,
-                body: body,
-              });
-            } catch (error) {
-              core.setFailed(error);
-            }
-          })(); 
+              `.trim();
+            
+            await github.rest.pulls.update({
+              repo: repository.name,
+              owner: repository.owner.login,
+              pull_number: prNumber,
+              body: body,
+            });
+          } catch (error) {
+            core.setFailed(error);
+          }
