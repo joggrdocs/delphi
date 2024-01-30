@@ -170,6 +170,8 @@ runs:
         flags: '--allow-unauthenticated --port=${{ inputs.port }} --service-account=${{ fromJSON(inputs.gcp_service_account_key).client_email }}'
         env_vars: ${{ inputs.env_vars }}
         secrets: ${{ inputs.secrets }}
+        labels: |
+          repository=${{ inputs.gcp_artifact_repository }}
 
     - name: '💬 Add Deployment URL to Pull Request'
       uses: actions/github-script@v7
