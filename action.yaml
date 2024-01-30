@@ -166,7 +166,7 @@ runs:
         service: '${{ inputs.gcp_artifact_repository }}-${{ inputs.name }}-pr${{ steps.pr-number.outputs.result }}'
         image: 'us-docker.pkg.dev/${{ inputs.gcp_project_id }}/${{ inputs.gcp_artifact_repository }}/${{ inputs.name }}:${{ github.sha }}'
         region: '${{ inputs.gcp_region }}'
-        flags: '--allow-unauthenticated --port=${{ inputs.port }}'
+        flags: '--allow-unauthenticated --port=${{ inputs.port }} --service-account=${{ fromJSON(inputs.gcp_service_account_key).client_email }}'
         env_vars: ${{ inputs.env_vars }}
         secrets: ${{ inputs.secrets }}
 
