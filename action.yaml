@@ -136,13 +136,13 @@ runs:
       with:
         github-token: ${{ inputs.github_token }}
         script: |
-          const args = ['--build-arg HOLDER=HOLDER'];
+          const args = ['--build-arg="HOLDER=holder"'];
           
           if (process.env.DOCKER_BUILD_ARGS) {
             const buildArgs = process.env.DOCKER_BUILD_ARGS.trim().split('\n');
             buildArgs.map((arg) => arg.trim()).forEach((arg) => {
               const [key, value] = arg.split('=');
-              args.push(`--build-arg ${key}=${value}`);
+              args.push(`--build-arg="${key}=${value}"`);
             });
           }
           
@@ -152,10 +152,10 @@ runs:
       shell: bash
       run: |-
         docker buildx build \
-          -t us-docker.pkg.dev/${{ inputs.gcp_project_id }}/${{ inputs.gcp_artifact_repository }}/${{ inputs.name }}:${{ github.sha }} \
-          -f ${{ inputs.docker_directory }}/${{ inputs.docker_file_name }} \
-          ${{ inputs.docker_directory }} \
-          ${{ steps.docker-build-args.outputs.result }}
+          ${{ steps.docker-build-args.outputs.result }} \
+          --tag us-docker.pkg.dev/${{ inputs.gcp_project_id }}/${{ inputs.gcp_artifact_repository }}/${{ inputs.name }}:${{ github.sha }} \
+          --file ${{ inputs.docker_directory }}/${{ inputs.docker_file_name }} \
+          ${{ inputs.docker_directory }}
         docker push us-docker.pkg.dev/${{ inputs.gcp_project_id }}/${{ inputs.gcp_artifact_repository }}/${{ inputs.name }}:${{ github.sha }}
 
     - name: '🚀 Deploy to Cloud Run'
