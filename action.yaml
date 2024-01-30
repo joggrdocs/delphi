@@ -158,13 +158,13 @@ runs:
             'buildx',
             'build',
             ...args,
-            `--tag us-docker.pkg.dev/${gcpProjectId}/${dockerBuildArgs}/${name}:${github.sha}`,
+            `--tag us-docker.pkg.dev/${gcpProjectId}/${gcpArtifactRepository}/${name}:${github.sha}`,
             '--file ${dockerDirectory}/${dockerFileName}',
             '${dockerDirectory}'
           ]);
           await exec.exec('docker', [
             'push',
-            `us-docker.pkg.dev/${gcpProjectId}/${dockerBuildArgs}/${name}:${github.sha}`
+            `us-docker.pkg.dev/${gcpProjectId}/${gcpArtifactRepository}/${name}:${github.sha}`
           ]);
 
     # - name: '🐳 Build and Push Container'
