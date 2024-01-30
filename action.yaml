@@ -154,8 +154,8 @@ runs:
         docker build \
           -t us-docker.pkg.dev/${{ inputs.gcp_project_id }}/${{ inputs.gcp_artifact_repository }}/${{ inputs.name }}:${{ github.sha }} \
           -f ${{ inputs.docker_directory }}/${{ inputs.docker_file_name }} \
-          ${{ steps.docker-build-args.outputs.result }} \
-          ${{ inputs.docker_directory }}
+          ${{ inputs.docker_directory }} \
+          ${{ steps.docker-build-args.outputs.result }}
         docker push us-docker.pkg.dev/${{ inputs.gcp_project_id }}/${{ inputs.gcp_artifact_repository }}/${{ inputs.name }}:${{ github.sha }}
 
     - name: '🚀 Deploy to Cloud Run'
