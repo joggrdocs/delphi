@@ -149,7 +149,7 @@ runs:
             });
           }
           
-          exec('docker', [
+          await exec.exec('docker', [
             'buildx',
             'build',
             ...args,
@@ -157,7 +157,7 @@ runs:
             '--file ${dockerDirectory}/${dockerFileName}',
             '${dockerDirectory}'
           ]);
-          exec('docker', [
+          await exec.exec('docker', [
             'push',
             `us-docker.pkg.dev/${gcpProjectId}/${dockerBuildArgs}/${name}:${github.sha}`
           ]);
