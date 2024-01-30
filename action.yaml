@@ -139,7 +139,7 @@ runs:
       with:
         github-token: ${{ inputs.github_token }}
         script: |
-          const script = require('./lib/scripts/docker.js');
+          const script = require('${{ github.action_path }}/lib/scripts/docker.js');
           await script({ 
             github, 
             context,
