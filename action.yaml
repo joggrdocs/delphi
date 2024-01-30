@@ -19,6 +19,9 @@ inputs:
   env_vars:
     description: "List of environment variables that will be injected during runtime, each on a new line."
     required: false
+  secrets:
+    description: "List of secrets that will be injected during runtime, each on a new line."
+    required: false
   gcp_region:
     description: "The GCP Region where the service will be deployed."
     required: true
@@ -54,7 +57,7 @@ inputs:
     required: true
     default: "."
   docker_build_args:
-    description: "Comma separated list of arguments that will be injected during the build (i.e. FOO=bar,FOOBAR=foo)"
+    description: "Comma separated list of arguments that will be injected during the build, each on a new line."
     required: false
 outputs:
   url:
@@ -136,8 +139,8 @@ runs:
           const args = [];
           
           if (process.env.DOCKER_BUILD_ARGS) {
-            const buildArgs = process.env.DOCKER_BUILD_ARGS.split(',');
-            buildArgs.forEach((arg) => {
+            const buildArgs = process.env.DOCKER_BUILD_ARGS.split('\n');
+            buildArgs.map((arg) => arg.trim()).forEach((arg) => {
               const [key, value] = arg.split('=');
               args.push(`--build-arg ${key}=${value}`);
             });
@@ -166,6 +169,7 @@ runs:
         suffix: '${{ github.sha }}'
         flags: '--allow-unauthenticated --port=${{ inputs.port }}'
         env_vars: ${{ inputs.env_vars }}
+        secrets: ${{ inputs.secrets }}
 
     - name: '💬 Add Deployment URL to Pull Request'
       uses: actions/github-script@v7

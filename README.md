@@ -41,6 +41,11 @@ jobs:
             FOO=bar
             BAR=foo
 
+          # (Optional) Secrets that will be injected during runtime from GCP Secret Manager
+          secrets: |
+            MY_SECRET=my-secret:latest
+            ANOTHER_SECRET=another-secret:latest
+
           # The GCP Service Account Key, used to authenticate with GCP
           gcp_service_account_key: ${{ secrets.PREVIEWS_SERVICE_ACCOUNT_KEY }}
           
