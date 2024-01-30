@@ -150,9 +150,11 @@ runs:
 
     - name: '🐳 Build and Push Container'
       shell: bash
+      env:
+        DOCKER_BUILD_ARGS: ${{ steps.docker-build-args.outputs.result }}
       run: |-
         docker buildx build \
-          ${{ steps.docker-build-args.outputs.result }} \
+          $DOCKER_BUILD_ARGS \
           --tag us-docker.pkg.dev/${{ inputs.gcp_project_id }}/${{ inputs.gcp_artifact_repository }}/${{ inputs.name }}:${{ github.sha }} \
           --file ${{ inputs.docker_directory }}/${{ inputs.docker_file_name }} \
           ${{ inputs.docker_directory }}

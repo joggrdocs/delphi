@@ -1,0 +1,8 @@
+{
+  "name": "service-deletion-job",
+  "packageManager": "yarn@3.6.1",
+  "main": "index.mjs",
+  "dependencies": {
+    "@google-cloud/run": "^1.0.2"
+  }
+}
