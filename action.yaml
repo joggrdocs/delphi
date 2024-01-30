@@ -134,11 +134,11 @@ runs:
         github-token: ${{ inputs.github_token }}
         script: |
           const dockerBuildArgs = core.getMultilineInput('docker_build_args');
-          const gcpProjectId = core.getInput('gcp_project_id', { required: true });
-          const gcpArtifactRepository = core.getInput('gcp_artifact_repository', { required: true });
-          const name = core.getInput('name', { required: true });
-          const dockerDirectory = core.getInput('docker_directory', { required: true });
-          const dockerFileName = core.getInput('docker_file_name', { required: true });
+          const gcpProjectId = core.getInput('gcp_project_id');
+          const gcpArtifactRepository = core.getInput('gcp_artifact_repository');
+          const name = core.getInput('name');
+          const dockerDirectory = core.getInput('docker_directory');
+          const dockerFileName = core.getInput('docker_file_name');
 
           const args = []; 
           if (dockerBuildArgs) {
