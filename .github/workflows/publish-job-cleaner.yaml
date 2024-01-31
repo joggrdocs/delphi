@@ -8,7 +8,7 @@ on:
 
 jobs:
   publish:
-    name: 'Publish Job: Cleaner'
+    name: 'Publish - ${{ matrix.project }}'
     runs-on: ubuntu-latest
     strategy:
       matrix:
