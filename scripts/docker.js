@@ -32,7 +32,7 @@ function getMultilineInput(env, name) {
  */
 module.exports = async ({ github, context, exec, core, env }) => {
   const dockerBuildArgs = getMultilineInput(env, 'DOCKER_BUILD_ARGS');
-  const dockerTags = getInput(env, 'DOCKER_TAGS');
+  const dockerTags = getInput(env, 'DOCKER_TAGS') ?? '';
   const gcpProjectId = getInput(env, 'GCP_PROJECT_ID');
   const gcpArtifactRepository = getInput(env, 'GCP_ARTIFACT_REPOSITORY');
   const name = getInput(env, 'NAME');
