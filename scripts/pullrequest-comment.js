@@ -59,7 +59,7 @@ function getDeploymentSuccessComment({ context, repository, core, deploymentUrl 
 
   return buildComment(
     ':white_check_mark: Preview Deployment Success',
-    `View the issue here: [GitHub Action for Previews](${getActionRunUrl({ context, repository })}) for more information.`
+    `View the deployment: [deploymentUrl](${deploymentUrl})`
   );
 }
 
