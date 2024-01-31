@@ -1,5 +1,8 @@
 
-const COMMENT_HEADER = '<!-- delphi -->';
+/**
+ * Used to identify the deployment comment
+ */
+const COMMENT_HEADER = '<!-- delphi:comment -->';
 
 /**
  * Get url for the action run
@@ -97,38 +100,51 @@ module.exports = async function (
   try {
     const { number: prNumber, repository } = context.payload;
 
-    const { data: pullRequest } = await github.rest.pulls.get({
+    const { data: comments } = await github.rest.issues.listComments({
       repo: repository.name,
       owner: repository.owner.login,
       pull_number: prNumber,
     });
 
-    const body = [
-      pullRequest.body.split(COMMENT_HEADER)[0].trim(),
-    ];
+    const botComment = comments.find(
+      comment => comment.body.includes(COMMENT_HEADER)
+    );
 
+    let commentBody = '';
     if (type === 'deploying') {
-      body.push(
-        getDeployingComment({ context, core, repository })
-      );
+      commentBody = getDeployingComment({
+        context,
+        core,
+        repository
+      });
     } else if (type === 'success') {
-      body.push(
-        getDeploymentSuccessComment({ context, repository, core, deploymentUrl })
-      );
+      commentBody = getDeploymentSuccessComment({
+        context,
+        repository,
+        core,
+        deploymentUrl
+      });
     } else if (type === 'failed') {
-      body.push(
-        getDeploymentFailedComment({ context, repository })
-      );
+      commentBody = getDeploymentFailedComment({ context, repository });
     } else {
       throw new Error(`Type ${type} is not supported`);
     }
 
-    await github.rest.pulls.update({
-      repo: repository.name,
-      owner: repository.owner.login,
-      pull_number: prNumber,
-      body: body.join('\n\n').trim(),
-    });
+    if (botComment) {
+      await github.rest.issues.updateComment({
+        owner: context.repo.owner,
+        repo: context.repo.repo,
+        comment_id: botComment.id,
+        body: commentBody
+      })
+    } else {
+      await github.rest.issues.createComment({
+        owner: context.repo.owner,
+        repo: context.repo.repo,
+        issue_number: context.payload.number,
+        body: commentBody
+      })
+    }
   } catch (error) {
     core.setFailed(error);
   }
