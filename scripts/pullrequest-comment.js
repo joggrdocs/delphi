@@ -98,12 +98,12 @@ module.exports = async function (
   deploymentUrl = null
 ) {
   try {
-    const { number: prNumber, repository } = context.payload;
+    const { repository } = context.payload;
 
     const { data: comments } = await github.rest.issues.listComments({
-      repo: repository.name,
-      owner: repository.owner.login,
-      pull_number: prNumber,
+      owner: context.repo.owner,
+      repo: context.repo.repo,
+      issue_number: context.payload.number,
     });
 
     const botComment = comments.find(
