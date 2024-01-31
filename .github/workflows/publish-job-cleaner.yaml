@@ -28,7 +28,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           result-encoding: string
           script: |
-            if (process.env.PROJECT_ID === 'development') {
+            if (process.env.GCP_PROJECT === 'development') {
               return process.env.GCP_DEVELOPMENT_PROJECT_ID; 
             } else {
               return process.env.GCP_PREVIEWS_PROJECT_ID;
@@ -45,7 +45,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           result-encoding: string
           script: |
-            if (process.env.PROJECT_ID === 'development') {
+            if (process.env.GCP_PROJECT === 'development') {
               return process.env.GCP_DEVELOPMENT_KEY; 
             } else {
               return process.env.GCP_PREVIEWS_KEY;
