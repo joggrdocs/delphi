@@ -62,7 +62,7 @@ function getDeploymentSuccessComment({ context, repository, core, deploymentUrl 
 
   return buildComment(
     ':white_check_mark: Preview Deployment Success',
-    `View the deployment: [deploymentUrl](${deploymentUrl})`
+    `View the deployment: [${deploymentUrl}](${deploymentUrl})`
   );
 }
 
