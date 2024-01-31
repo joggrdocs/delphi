@@ -3,7 +3,9 @@
   "packageManager": "yarn@4.1.0",
   "private": true,
   "dependencies": {
-    "@google-cloud/run": "^1.0.2"
+    "@google-cloud/logging-winston": "^6.0.0",
+    "@google-cloud/run": "^1.0.2",
+    "winston": "^3.11.0"
   },
   "scripts": {
     "build": "tsc"

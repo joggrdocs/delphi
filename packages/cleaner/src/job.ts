@@ -1,4 +1,5 @@
 import * as cloudRun from './lib/cloudRun';
+import logger from './lib/logger';
 
 /**
  * Runs the job to delete services
@@ -27,10 +28,10 @@ async function runJob(projectId: string, dryRun: boolean = false) {
 
   const serviceNamesToDelete = services.map((service) => service.serviceName);
   if (dryRun) {
-    console.log(`Dry Run: ${serviceNamesToDelete.join(', ')}`);
+    logger.info(`Dry Run: ${serviceNamesToDelete.join(', ')}`);
     return [];
   } else if (serviceNamesToDelete.length !== 0) {
-    console.log(`Starting Deleting Services: ${serviceNamesToDelete.join(', ')}`);
+    logger.info(`Starting Deleting Services: ${serviceNamesToDelete.join(', ')}`);
     await cloudRun.deleteServices(serviceNamesToDelete);
     return serviceNamesToDelete;
   } else {
