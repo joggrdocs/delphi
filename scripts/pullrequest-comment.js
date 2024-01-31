@@ -106,7 +106,9 @@ module.exports = async function (
     });
 
     const botComment = comments.find(
-      comment => comment.body.includes(COMMENT_HEADER)
+      comment => comment.body.includes(
+        COMMENT_HEADER
+      )
     );
 
     let commentBody = '';
