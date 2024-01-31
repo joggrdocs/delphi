@@ -8,7 +8,7 @@ on:
 
 jobs:
   publish:
-    name: Test Action
+    name: 'Publish Job: Cleaner'
     runs-on: ubuntu-latest
     strategy:
       matrix:
