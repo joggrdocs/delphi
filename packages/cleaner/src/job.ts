@@ -36,7 +36,7 @@ async function runJob(payload: {
     ]
   );
 
-  const serviceNamesToDelete = services.map((service) => service.serviceName);
+  const serviceNamesToDelete = services.map((service) => service.name);
   if (dryRun) {
     logger.info(`Dry Run: ${serviceNamesToDelete.join(', ')}`);
     return [];
