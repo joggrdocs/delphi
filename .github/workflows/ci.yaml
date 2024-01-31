@@ -21,6 +21,8 @@ jobs:
           port: 3000
           env_vars: |
             MESSAGE="Hello via ENV Vars"
+          secrets: |
+            SECRET_MESSAGE=secret_message:latest
           gcp_service_account_key: ${{ secrets.GCP_SA_KEY }}
           gcp_artifact_repository: joggr
           github_token: ${{ secrets.GITHUB_TOKEN }}

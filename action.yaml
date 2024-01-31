@@ -115,7 +115,7 @@ runs:
       with:
         github-token: ${{ inputs.github_token }}
         script: |
-          const script = require('${{ github.action_path }}/lib/scripts/docker.js');
+          const script = require('${{ github.action_path }}/scripts/docker.js');
           const { env } = process;
           await script({ github, context, core, exec, env });
 
@@ -141,7 +141,7 @@ runs:
       with:
         github-token: ${{ inputs.github_token }}
         script: |
-          const script = require('${{ github.action_path }}/lib/scripts/pullrequest-comment.js');
+          const script = require('${{ github.action_path }}/scripts/pullrequest-comment.js');
           const { DEPLOY_URL: url } = process.env;
           await script({ github, context, core, }, 'success', url);
     
@@ -151,5 +151,5 @@ runs:
       with:
         github-token: ${{ inputs.github_token }}
         script: |
-          const script = require('${{ github.action_path }}/lib/scripts/pullrequest-comment.js');
+          const script = require('${{ github.action_path }}/scripts/pullrequest-comment.js');
           await script({ github, context, core, }, 'failed');
