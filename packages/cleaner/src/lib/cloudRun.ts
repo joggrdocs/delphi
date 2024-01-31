@@ -76,7 +76,8 @@ export async function deleteService(name: string) {
     name,
   } satisfies protos.google.cloud.run.v2.IDeleteServiceRequest;
 
-  await runClient.deleteService(request);
+  const [operation] = await runClient.deleteService(request);
+  await operation.promise();
 }
 
 /**
