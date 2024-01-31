@@ -72,7 +72,7 @@ runs:
       with:
         github-token: ${{ inputs.github_token }}
         script: |
-          const script = require('${{ github.action_path }}/lib/scripts/pullrequest-comment.js');
+          const script = require('${{ github.action_path }}/scripts/pullrequest-comment.js');
           await script({ github, context, core, }, 'deploying');
 
     - name: '#️⃣ Extract Pull Request #'
