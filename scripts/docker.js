@@ -43,11 +43,13 @@ module.exports = async ({ github, context, exec, core, env }) => {
   const fullImageName = `us-docker.pkg.dev/${gcpProjectId}/${gcpArtifactRepository}/${name}`;
 
   const tags = [];
-  dockerTags
-    .split(',')
-    .forEach((tag) => {
-      tags.push(...['--tag', `${fullImageName}:${tag}`]);
-    });
+  if (dockerTags) {
+    dockerTags
+      .split(',')
+      .forEach((tag) => {
+        tags.push(...['--tag', `${fullImageName}:${tag}`]);
+      });
+  }
 
   const buildArgs = [];
   dockerBuildArgs
