@@ -24,9 +24,9 @@ async function runJob(payload: {
     [
       {
         field: 'labels',
-        label: 'group',
+        label: 'previews',
         operation: 'equalTo',
-        value: 'previews',
+        value: 'true',
       },
       {
         field: 'age',

@@ -133,6 +133,7 @@ runs:
         env_vars: ${{ inputs.env_vars }}
         secrets: ${{ inputs.secrets }}
         labels: |
+          previews=true
           group=${{ inputs.gcp_artifact_repository }}
           service=${{ inputs.name }}
           pull_request=pr${{ steps.pr-number.outputs.result }}
