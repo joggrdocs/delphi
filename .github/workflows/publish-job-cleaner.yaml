@@ -1,0 +1,77 @@
+name: "Deploy: Cleaner Job"
+
+on:
+  workflow_dispatch: {}
+
+jobs:
+  publish:
+    name: Test Action
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        project: [development, previews]
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v1
+
+      - name: '☁️ Project Id: ${{ matrix.project }}'
+        uses: actions/github-script@v7
+        id: gcp-project-id
+        env: 
+          GCP_PROJECT: ${{ matrix.project }}
+          GCP_PREVIEWS_PROJECT_ID: ${{ vars.GCP_PREVIEWS_PROJECT_ID }}
+          GCP_DEVELOPMENT_PROJECT_ID: ${{ vars.GCP_PREPRD_PROJECT_ID }}
+        with: 
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            if (process.env.PROJECT_ID === 'development') {
+              return process.env.GCP_DEVELOPMENT_PROJECT_ID; 
+            } else {
+              return process.env.GCP_PREVIEWS_PROJECT_ID;
+            }
+     
+      - name: '☁️ Project Service Account: ${{ matrix.project }}'
+        uses: actions/github-script@v7
+        id: gcp-sa-key
+        env: 
+          GCP_PROJECT: ${{ matrix.project }}
+          GCP_PREVIEWS_KEY: ${{ secrets.GCP_SA_KEY }}
+          GCP_DEVELOPMENT_KEY: ${{ secrets.GCP_PREPRD_PROJECT_SA_KEY }}
+        with: 
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            if (process.env.PROJECT_ID === 'development') {
+              return process.env.GCP_DEVELOPMENT_KEY; 
+            } else {
+              return process.env.GCP_PREVIEWS_KEY;
+            }
+
+      - name: '☁️ Authenticate to Google Cloud'
+        uses: 'google-github-actions/auth@v2'
+        with:
+          project_id: ${{ steps.gcp-project-id.outputs.result }}
+          credentials_json: ${{ steps.gcp-sa-key.outputs.result }}
+
+      - name: '☁️ Setup Cloud SDK'
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          project_id: ${{ steps.gcp-project-id.outputs.result }}
+ 
+      - name: '🐳 Authorize Docker push: ${{ matrix.project }}'
+        shell: bash
+        run: gcloud auth configure-docker us-docker.pkg.dev --quiet
+
+      - name: '🐳 Build and Push Container: ${{ matrix.project }}'
+        uses: actions/github-script@v7
+        env: 
+          GCP_PROJECT_ID: '${{ steps.gcp-project-id.outputs.result }}'
+          GCP_ARTIFACT_REPOSITORY: 'operations'
+          NAME: 'job-previews-cleaner'
+          DOCKER_DIRECTORY: './packages/cleaner'
+          GITHUB_SHA: '${{ github.sha }}'
+        with:
+          github-token: ${{ github.token }}
+          script: |
+            const script = require('./scripts/docker.js');
+            const { env } = process;
+            await script({ github, context, core, exec, env });

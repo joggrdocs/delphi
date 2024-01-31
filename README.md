@@ -44,11 +44,11 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v1
       - id: runAction
-        name: '🚀 Launch Preview Environment'
+        name: "🚀 Launch Preview Environment"
         uses: joggrdocs/deplhi@v1
         with:
           # The name of your application (must be unique)
-          name: my-application 
+          name: my-application
 
           # (optional) The port your application is running on, defaults to 8080
           port: 8080
@@ -65,16 +65,16 @@ jobs:
 
           # The GCP Service Account Key, used to authenticate with GCP
           gcp_service_account_key: ${{ secrets.PREVIEWS_SERVICE_ACCOUNT_KEY }}
-          
+
           # The GCP Project ID
-          gcp_project_id: ${{ secrets.GCP_PROJECT_ID }}
+          gcp_project_id: ${{ vars.GCP_PROJECT_ID }}
 
           # (optional) The GCP Region, defaults to us-central1
-          gcp_region: ${{ secrets.GCP_REGION }}
+          gcp_region: ${{ vars.GCP_REGION }}
 
           # (optional) The GCP Artifact Registry, where the Docker image will be stored
-          gcp_artifact_repository: ${{ secrets.GCP_ARTIFACT_REPOSITORY }}
-          
+          gcp_artifact_repository: ${{ vars.GCP_ARTIFACT_REPOSITORY }}
+
           # Default token for the repository
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -84,7 +84,7 @@ jobs:
           # (Optional) The Dockerfile name, you can override for custom names (i.e. DevDockerfile)
           docker_file_name: DevDockerfile
 
-          # (Optional) Docker Build Arguments (i.e. --build-args) that will be injected during the build 
+          # (Optional) Docker Build Arguments (i.e. --build-args) that will be injected during the build
           docker_build_args: FOO=bar,BAR=foo
 ```
 
@@ -108,17 +108,17 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v1
       - id: runAction
-        name: '🚀 Launch Preview Environment'
+        name: "🚀 Launch Preview Environment"
         uses: joggrdocs/deplhi@v1
         with:
           # The name of your application (must be unique)
-          name: my-application 
-          
+          name: my-application
+
           # The GCP Service Account Key, used to authenticate with GCP
           gcp_service_account_key: ${{ secrets.PREVIEWS_SERVICE_ACCOUNT_KEY }}
-          
+
           # The GCP Project ID
-          gcp_project_id: ${{ secrets.GCP_PROJECT_ID }}
+          gcp_project_id: ${{ vars.GCP_PROJECT_ID }}
 
           # Default token for the repository
           github_token: ${{ secrets.GITHUB_TOKEN }}
