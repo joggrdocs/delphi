@@ -31,6 +31,7 @@ name: "Preview Environments"
 
 on:
   pull_request:
+    types: [labeled, synchronize, opened, reopened]
     branches:
       - main
 
@@ -38,6 +39,7 @@ jobs:
   launchpad:
     name: LaunchPad
     runs-on: ubuntu-latest
+    if: contains(github.event.pull_request.labels.*.name, 'preview')
     steps:
       - name: Checkout Code
         uses: actions/checkout@v1
@@ -93,6 +95,7 @@ name: "Preview Environments"
 
 on:
   pull_request:
+    types: [labeled, synchronize, opened, reopened]
     branches:
       - main
 
@@ -100,6 +103,7 @@ jobs:
   launchpad:
     name: LaunchPad
     runs-on: ubuntu-latest
+    if: contains(github.event.pull_request.labels.*.name, 'preview')
     steps:
       - name: Checkout Code
         uses: actions/checkout@v1
