@@ -26,6 +26,7 @@ jobs:
           GCP_DEVELOPMENT_PROJECT_ID: ${{ vars.GCP_PREPRD_PROJECT_ID }}
         with: 
           github-token: ${{ secrets.GITHUB_TOKEN }}
+          result-encoding: string
           script: |
             if (process.env.PROJECT_ID === 'development') {
               return process.env.GCP_DEVELOPMENT_PROJECT_ID; 
@@ -38,10 +39,11 @@ jobs:
         id: gcp-sa-key
         env: 
           GCP_PROJECT: ${{ matrix.project }}
-          GCP_PREVIEWS_KEY: ${{ secrets.GCP_SA_KEY }}
-          GCP_DEVELOPMENT_KEY: ${{ secrets.GCP_PREPRD_PROJECT_SA_KEY }}
+          GCP_PREVIEWS_KEY: '${{ secrets.GCP_SA_KEY }}'
+          GCP_DEVELOPMENT_KEY: '${{ secrets.GCP_PREPRD_PROJECT_SA_KEY }}'
         with: 
           github-token: ${{ secrets.GITHUB_TOKEN }}
+          result-encoding: string
           script: |
             if (process.env.PROJECT_ID === 'development') {
               return process.env.GCP_DEVELOPMENT_KEY; 
