@@ -1,4 +1,4 @@
-import runJob from "src/job";
+import runJob from "../job";
 
 if (!process.env.GCP_PROJECT_ID) {
   throw new Error('GCP_PROJECT_ID is required');
