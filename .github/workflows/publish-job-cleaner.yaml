@@ -73,6 +73,7 @@ jobs:
           GCP_ARTIFACT_REPOSITORY: 'operations'
           NAME: 'job-previews-cleaner'
           DOCKER_DIRECTORY: './packages/cleaner'
+          DOCKER_FILE_NAME: 'Dockerfile'
           GITHUB_SHA: '${{ github.sha }}'
         with:
           github-token: ${{ github.token }}
