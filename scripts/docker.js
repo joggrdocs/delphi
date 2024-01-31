@@ -32,12 +32,20 @@ function getMultilineInput(env, name) {
  */
 module.exports = async ({ github, context, exec, core, env }) => {
   const dockerBuildArgs = getMultilineInput(env, 'DOCKER_BUILD_ARGS');
+  const dockerTags = getInput(env, 'DOCKER_TAGS');
   const gcpProjectId = getInput(env, 'GCP_PROJECT_ID');
   const gcpArtifactRepository = getInput(env, 'GCP_ARTIFACT_REPOSITORY');
   const name = getInput(env, 'NAME');
   const dockerDirectory = getInput(env, 'DOCKER_DIRECTORY');
   const dockerFileName = getInput(env, 'DOCKER_FILE_NAME');
   const githubSha = getInput(env, 'GITHUB_SHA');
+
+  const tags = [];
+  dockerTags
+    .filter((tag) => !!tag)
+    .forEach((tag) => {
+      tags.push(...['--tag', `${tag}:${githubSha}`]);
+    });
 
   const buildArgs = [];
   dockerBuildArgs
@@ -50,6 +58,7 @@ module.exports = async ({ github, context, exec, core, env }) => {
   await exec.exec('docker', [
     'build',
     ...buildArgs,
+    ...tags,
     '--tag',
     `us-docker.pkg.dev/${gcpProjectId}/${gcpArtifactRepository}/${name}:${githubSha}`,
     '--file',

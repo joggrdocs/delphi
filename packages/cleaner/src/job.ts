@@ -4,9 +4,10 @@ import * as cloudRun from './lib/cloudRun';
  * Runs the job to delete services
  * 
  * @param projectId A GCP project ID
+ * @param dryRun If true, the job will not delete any services
  * @returns The service names that were deleted
  */
-async function runJob(projectId: string) {
+async function runJob(projectId: string, dryRun: boolean = false) {
   const services = await cloudRun.listServices(
     cloudRun.buildParent(projectId),
     [
@@ -25,9 +26,11 @@ async function runJob(projectId: string) {
   );
 
   const serviceNamesToDelete = services.map((service) => service.serviceName);
-  if (serviceNamesToDelete.length !== 0) {
+  if (dryRun) {
+    console.log(`Dry Run: ${serviceNamesToDelete.join(', ')}`);
+    return [];
+  } else if (serviceNamesToDelete.length !== 0) {
     console.log(`Starting Deleting Services: ${serviceNamesToDelete.join(', ')}`);
-
     await cloudRun.deleteServices(serviceNamesToDelete);
     return serviceNamesToDelete;
   } else {

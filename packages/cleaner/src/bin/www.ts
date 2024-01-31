@@ -4,7 +4,7 @@ if (!process.env.GCP_PROJECT_ID) {
   throw new Error('GCP_PROJECT_ID is required');
 }
 
-runJob(process.env.GCP_PROJECT_ID)
+runJob(process.env.GCP_PROJECT_ID, process.env.DRY_RUN === 'true')
   .then((serviceNamesToDelete) => {
     if (serviceNamesToDelete.length === 0) {
       console.log('Skipping: No services to delete');
