@@ -40,11 +40,13 @@ module.exports = async ({ github, context, exec, core, env }) => {
   const dockerFileName = getInput(env, 'DOCKER_FILE_NAME');
   const githubSha = getInput(env, 'GITHUB_SHA');
 
+  const fullImageName = `us-docker.pkg.dev/${gcpProjectId}/${gcpArtifactRepository}/${name}`;
+
   const tags = [];
   dockerTags
     .split(',')
     .forEach((tag) => {
-      tags.push(...['--tag', tag]);
+      tags.push(...['--tag', `${fullImageName}:${tag}`]);
     });
 
   const buildArgs = [];
@@ -60,7 +62,7 @@ module.exports = async ({ github, context, exec, core, env }) => {
     ...buildArgs,
     ...tags,
     '--tag',
-    `us-docker.pkg.dev/${gcpProjectId}/${gcpArtifactRepository}/${name}:${githubSha}`,
+    `${fullImageName}:${githubSha}`,
     '--file',
     `${dockerDirectory}/${dockerFileName}`,
     `${dockerDirectory}`
