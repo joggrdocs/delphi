@@ -1,3 +1,4 @@
+import type { TimeRange } from "../lib/cloudRun";
 import runJob from "../job";
 import logger from '../lib/logger';
 
@@ -8,7 +9,11 @@ import logger from '../lib/logger';
       throw new Error('GCP_PROJECT_ID is required');
     }
 
-    const serviceNamesToDelete = await runJob(process.env.GCP_PROJECT_ID, process.env.DRY_RUN === 'true')
+    const serviceNamesToDelete = await runJob({
+      projectId: process.env.GCP_PROJECT_ID,
+      dryRun: process.env.DRY_RUN === 'true',
+      timeRange: process.env.TIME_RANGE as TimeRange,
+    })
     if (serviceNamesToDelete.length === 0) {
       logger.warn('Skipping: No services to delete');
     } else {

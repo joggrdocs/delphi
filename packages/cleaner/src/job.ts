@@ -8,7 +8,17 @@ import logger from './lib/logger';
  * @param dryRun If true, the job will not delete any services
  * @returns The service names that were deleted
  */
-async function runJob(projectId: string, dryRun: boolean = false) {
+async function runJob(payload: {
+  projectId: string,
+  dryRun: boolean,
+  timeRange?: cloudRun.TimeRange,
+}) {
+  const {
+    projectId,
+    dryRun,
+    timeRange = '30 days'
+  } = payload;
+
   const services = await cloudRun.listServices(
     cloudRun.buildParent(projectId),
     [
@@ -21,7 +31,7 @@ async function runJob(projectId: string, dryRun: boolean = false) {
       {
         field: 'age',
         operation: 'greaterThanOrEqualTo',
-        value: '30 days',
+        value: timeRange,
       }
     ]
   );

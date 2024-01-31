@@ -107,10 +107,12 @@ export type FilterOperation =
   | 'lessThan'
   | 'equalTo';
 
-export interface FilterCreatedAt {
+export type TimeRange = `${number} ${'days' | 'hours' | 'min' | 'seconds'}`;
+
+export interface FilterAge {
   field: 'age';
   operation: FilterOperation;
-  value: `${number} ${'days' | 'hours' | 'min' | 'seconds'}`;
+  value: TimeRange;
 }
 
 export interface FilterName {
@@ -127,7 +129,7 @@ export interface FilterLabels {
 }
 
 export type Filter =
-  | FilterCreatedAt
+  | FilterAge
   | FilterName
   | FilterLabels;
 
@@ -148,7 +150,7 @@ export interface Service {
  * @param value A filter value
  * @returns A age value in milliseconds 
  */
-export function getCreationAgeValue(value: FilterCreatedAt['value']): number {
+export function getCreationAgeValue(value: FilterAge['value']): number {
   const [duration, unit] = value.split(' ');
   const multiplier = {
     days: 86400000,
