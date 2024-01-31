@@ -24,8 +24,7 @@ function getActionRunUrl({ context, repository }) {
 function buildComment(header, body) {
   return `
 ${COMMENT_HEADER}
----
-### ${header}
+## ${header}
 ${body}
 `.trim();
 }
