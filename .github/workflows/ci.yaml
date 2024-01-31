@@ -13,8 +13,8 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v1
-      - id: runAction
-        name: Run Action Code
+      - id: testAction
+        name: Test Action Code
         uses: ./
         with:
           name: previews-example
@@ -30,4 +30,4 @@ jobs:
             BUILD_VAR=foo
             BUILD_VAR2=bar
       - name: Test Outputs
-        run: echo "${{ steps.runAction.outputs.url }}"
+        run: echo "${{ steps.testAction.outputs.url }}"
