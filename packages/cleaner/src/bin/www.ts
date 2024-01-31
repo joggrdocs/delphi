@@ -10,20 +10,16 @@ import logger from '../lib/logger';
 
     const serviceNamesToDelete = await runJob(process.env.GCP_PROJECT_ID, process.env.DRY_RUN === 'true')
     if (serviceNamesToDelete.length === 0) {
-      logger.info('Skipping: No services to delete');
+      logger.warn('Skipping: No services to delete');
     } else {
       logger.info(`Completed Deleting Services: ${serviceNamesToDelete.join(', ')}`);
     }
     process.exit(0);
   } catch (error) {
     if (error instanceof Error) {
-      logger.error(`Error: ${error.message}`, {
-        ...error,
-      });
+      logger.fatal(error, `Error: ${error.message}`);
     } else {
-      logger.error('Unknown Error', {
-        ...new Error('Unknown Error'),
-      });
+      logger.fatal(new Error('Unknown Error'), 'Unknown Error');
     }
 
     process.exit(1);
