@@ -22,6 +22,9 @@ inputs:
   secrets:
     description: "List of secrets that will be injected during runtime, each on a new line."
     required: false
+  flags:
+    description: "List of flags that will be injected during runtime."
+    required: false
   gcp_region:
     description: "The GCP Region where the service will be deployed."
     required: true
@@ -126,7 +129,7 @@ runs:
         service: 'pvw-${{ inputs.gcp_artifact_repository }}-${{ inputs.name }}-pr${{ steps.pr-number.outputs.result }}'
         image: 'us-docker.pkg.dev/${{ inputs.gcp_project_id }}/${{ inputs.gcp_artifact_repository }}/${{ inputs.name }}:${{ github.sha }}'
         region: '${{ inputs.gcp_region }}'
-        flags: '--allow-unauthenticated --port=${{ inputs.port }} --service-account=${{ fromJSON(inputs.gcp_service_account_key).client_email }}'
+        flags: '${{ inputs.flags }} --allow-unauthenticated --port=${{ inputs.port }} --service-account=${{ fromJSON(inputs.gcp_service_account_key).client_email }}'
         env_vars: ${{ inputs.env_vars }}
         secrets: ${{ inputs.secrets }}
         labels: |
