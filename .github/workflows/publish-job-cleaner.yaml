@@ -40,7 +40,7 @@ jobs:
         env: 
           GCP_PROJECT: ${{ matrix.project }}
           GCP_PREVIEWS_KEY: '${{ secrets.GCP_SA_KEY }}'
-          GCP_DEVELOPMENT_KEY: '${{ secrets.GCP_PREPRD_PROJECT_SA_KEY }}'
+          GCP_DEVELOPMENT_KEY: '${{ secrets.GCP_PREVIEWS_SERVICE_ACCOUNT_KEY }}'
         with: 
           github-token: ${{ secrets.GITHUB_TOKEN }}
           result-encoding: string
