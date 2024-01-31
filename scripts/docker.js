@@ -41,11 +41,14 @@ module.exports = async ({ github, context, exec, core, env }) => {
   const githubSha = getInput(env, 'GITHUB_SHA');
 
   const tags = [];
-  dockerTags
-    .filter((tag) => !!tag)
-    .forEach((tag) => {
-      tags.push(...['--tag', `${tag}:${githubSha}`]);
-    });
+  if (dockerTags) {
+    dockerTags
+      .split(',')
+      .filter((tag) => !!tag)
+      .forEach((tag) => {
+        tags.push(...['--tag', `${tag}:${githubSha}`]);
+      });
+  }
 
   const buildArgs = [];
   dockerBuildArgs

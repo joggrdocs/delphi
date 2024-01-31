@@ -72,6 +72,7 @@ jobs:
           GCP_PROJECT_ID: '${{ steps.gcp-project-id.outputs.result }}'
           GCP_ARTIFACT_REPOSITORY: 'operations'
           NAME: 'job-previews-cleaner'
+          DOCKER_TAGS: latest
           DOCKER_DIRECTORY: './packages/cleaner'
           DOCKER_FILE_NAME: 'Dockerfile'
           GITHUB_SHA: '${{ github.sha }}'
