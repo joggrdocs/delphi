@@ -69,6 +69,7 @@ module.exports = async ({ github, context, exec, core, env }) => {
   ]);
   await exec.exec('docker', [
     'push',
-    `us-docker.pkg.dev/${gcpProjectId}/${gcpArtifactRepository}/${name}:${githubSha}`
+    `us-docker.pkg.dev/${gcpProjectId}/${gcpArtifactRepository}/${name}`,
+    '--all-tags'
   ]);
 }
