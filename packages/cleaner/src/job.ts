@@ -19,6 +19,8 @@ async function runJob(payload: {
     timeRange = '30 days'
   } = payload;
 
+  logger.debug(payload, 'Starting Job');
+
   const services = await cloudRun.listServices(
     cloudRun.buildParent(projectId),
     [
@@ -36,12 +38,14 @@ async function runJob(payload: {
     ]
   );
 
+  logger.debug(services, `${services.length} Services Found'=`);
+
   const serviceNamesToDelete = services.map((service) => service.name);
   if (dryRun) {
-    logger.info(`Dry Run: ${serviceNamesToDelete.join(', ')}`);
+    logger.debug(`Dry Run: ${serviceNamesToDelete.join(', ')}`);
     return [];
   } else if (serviceNamesToDelete.length !== 0) {
-    logger.info(`Starting Deleting Services: ${serviceNamesToDelete.join(', ')}`);
+    logger.debug(`Starting Deleting Services: ${serviceNamesToDelete.join(', ')}`);
     await cloudRun.deleteServices(serviceNamesToDelete);
     return serviceNamesToDelete;
   } else {

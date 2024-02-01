@@ -4,7 +4,8 @@ import logger from '../lib/logger';
 
 (async () => {
   try {
-    logger.info('Starting Job');
+    logger.debug('Starting Job');
+
     if (!process.env.GCP_PROJECT_ID) {
       throw new Error('GCP_PROJECT_ID is required');
     }
@@ -15,7 +16,7 @@ import logger from '../lib/logger';
       timeRange: process.env.TIME_RANGE as TimeRange,
     })
     if (serviceNamesToDelete.length === 0) {
-      logger.warn('Skipping: No services to delete');
+      logger.info('Skipping: No services to delete');
     } else {
       logger.info(`Completed Deleting Services: ${serviceNamesToDelete.join(', ')}`);
     }
