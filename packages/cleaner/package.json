@@ -1,0 +1,16 @@
+{
+  "name": "service-deletion",
+  "packageManager": "yarn@4.1.0",
+  "private": true,
+  "dependencies": {
+    "@google-cloud/run": "^1.0.2",
+    "pino": "^8.17.2"
+  },
+  "scripts": {
+    "build": "tsc"
+  },
+  "devDependencies": {
+    "tsc": "^2.0.4",
+    "typescript": "^5.3.3"
+  }
+}

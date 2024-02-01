@@ -4,8 +4,8 @@ RUN mkdir /app
 WORKDIR /app
 RUN chown -R node:node /app
 
-ARG BUILD_VAR=not_set
-ARG BUILD_VAR2=not_set
+ARG BUILD_VAR
+ARG BUILD_VAR2
 
 RUN echo "$BUILD_VAR"
 RUN echo "$BUILD_VAR2"
