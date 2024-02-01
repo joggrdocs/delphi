@@ -1,9 +1,6 @@
 name: "Deploy: Cleaner Job"
 
 on:
-  ## REMOVE ME
-  pull_request:
-    types: [synchronize]
   workflow_dispatch: {}
 
 jobs:
