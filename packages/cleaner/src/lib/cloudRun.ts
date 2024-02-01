@@ -154,9 +154,9 @@ export interface Service {
 export function getCreationAgeValue(value: FilterAge['value']): number {
   const [duration, unit] = value.split(' ');
   const multiplier = {
-    days: 86400000,
-    hours: 3600000,
-    min: 60000,
+    days: 24 * 60 * 60 * 1000,
+    hours: 60 * 60 * 1000,
+    min: 60 * 1000,
     seconds: 1000,
   }[unit];
 
