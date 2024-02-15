@@ -27,11 +27,11 @@ inputs:
     required: false
   gcp_region:
     description: "The GCP Region where the service will be deployed."
-    required: true
+    required: false
     default: "us-central1"
   gcp_project_id:
     description: "The GCP Project ID where the service will be deployed."
-    required: true
+    required: false
     default: "durable-primacy-268722"
   gcp_service_account_key:
     description: "The Service Account JSON Key used to push images to the GCP Artifact Registry."
@@ -54,11 +54,11 @@ inputs:
 
   docker_file_name:
     description: "The Dockerfile name, you can override for custom names (i.e. DevDockerfile)"
-    required: true
+    required: false
     default: "Dockerfile"
   docker_directory:
     description: "Directory where the DockerFile is located."
-    required: true
+    required: false
     default: "."
   docker_build_args:
     description: "Comma separated list of arguments that will be injected during the build, each on a new line."
