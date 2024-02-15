@@ -54,11 +54,11 @@ inputs:
 
   docker_file_name:
     description: "The Dockerfile name, you can override for custom names (i.e. DevDockerfile)"
-    required: true
+    required: false
     default: "Dockerfile"
   docker_directory:
     description: "Directory where the DockerFile is located."
-    required: true
+    required: false
     default: "."
   docker_build_args:
     description: "Comma separated list of arguments that will be injected during the build, each on a new line."
