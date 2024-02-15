@@ -7,7 +7,8 @@
   ],
   "devDependencies": {
     "@joggr/tempo": "^0.6.0",
-    "husky": "^9.0.11"
+    "husky": "^9.0.11",
+    "yaml": "^2.3.4"
   },
   "scripts": {
     "prepare": "husky"
