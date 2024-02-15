@@ -11,11 +11,11 @@
 <br>
 
 <p align="center">
-  <a href="https://github.com/joggrdocs/previews/actions/workflows/codeql-analysis.yml">
-    <img alt="CodeQL" src="https://github.com/joggrdocs/previews/actions/workflows/codeql-analysis.yml/badge.svg">
+  <a href="https://github.com/joggrdocs/delphi/actions/workflows/codeql-analysis.yml">
+    <img alt="CodeQL" src="https://github.com/joggrdocs/delphi/actions/workflows/codeql-analysis.yml/badge.svg">
   </a>
-  <a href="https://github.com/joggrdocs/previews/actions/workflows/ci.yaml">
-    <img alt="CI" src="https://github.com/joggrdocs/previews/actions/workflows/ci.yaml/badge.svg">
+  <a href="https://github.com/joggrdocs/delphi/actions/workflows/ci.yaml">
+    <img alt="CI" src="https://github.com/joggrdocs/delphi/actions/workflows/ci.yaml/badge.svg">
   </a>
   <br/>
 </p>
