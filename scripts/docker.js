@@ -9,7 +9,6 @@ function getInput(env, name) {
   return env[name];
 }
 
-
 /**
  * Get multiline input from the environment
  * 
