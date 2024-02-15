@@ -16,3 +16,4 @@ const run = () => {
   process.stdout.write('📚 Generating README.md...\n');
   process.stdout.write(readmePath);
 };
+run();
