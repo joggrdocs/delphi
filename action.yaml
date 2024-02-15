@@ -27,11 +27,11 @@ inputs:
     required: false
   gcp_region:
     description: "The GCP Region where the service will be deployed."
-    required: true
+    required: false
     default: "us-central1"
   gcp_project_id:
     description: "The GCP Project ID where the service will be deployed."
-    required: true
+    required: false
     default: "durable-primacy-268722"
   gcp_service_account_key:
     description: "The Service Account JSON Key used to push images to the GCP Artifact Registry."

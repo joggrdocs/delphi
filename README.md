@@ -56,8 +56,6 @@ jobs:
 | Field | Required | Description | Default |
 | ----- | -------- | ----------- | ------- |
 | name | yes | The name of the service (must be unique) to be deployed. | - |
-| gcp_region | yes | The GCP Region where the service will be deployed. | us-central1 |
-| gcp_project_id | yes | The GCP Project ID where the service will be deployed. | - |
 | gcp_service_account_key | yes | The Service Account JSON Key used to push images to the GCP Artifact Registry. | - |
 | gcp_artifact_repository | yes | The Artifact Registry name, you can override for custom names (i.e. the 'acme' in us-docker.pkg.dev/able-sailor-21423/acme) | - |
 | github_token | yes | Github Token, pass in the `secrets.GITHUB_TOKEN`. | - |
@@ -67,6 +65,8 @@ jobs:
 | env_vars | no | List of environment variables that will be injected during runtime, each on a new line. | - |
 | secrets | no | List of secrets that will be injected during runtime, each on a new line. | - |
 | flags | no | List of flags that will be injected during runtime. | - |
+| gcp_region | no | The GCP Region where the service will be deployed. | us-central1 |
+| gcp_project_id | no | The GCP Project ID where the service will be deployed. | - |
 | docker_build_args | no | Comma separated list of arguments that will be injected during the build, each on a new line. | - |
 
 ### Outputs
