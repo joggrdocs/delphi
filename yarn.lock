@@ -38,6 +38,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@joggr/tempo@npm:^0.6.0":
+  version: 0.6.0
+  resolution: "@joggr/tempo@npm:0.6.0"
+  checksum: 10c0/75cd9588d3e8880cc41c055a947d91868a04ec55eb96ce5b637fc229634cac210a504e1bd08b56272c1c74bd7312b908f0cf51c60c88ecf2e4e7131f60fa2c05
+  languageName: node
+  linkType: hard
+
 "@protobufjs/aspromise@npm:^1.1.1, @protobufjs/aspromise@npm:^1.1.2":
   version: 1.1.2
   resolution: "@protobufjs/aspromise@npm:1.1.2"
@@ -490,6 +497,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"husky@npm:^9.0.11":
+  version: 9.0.11
+  resolution: "husky@npm:9.0.11"
+  bin:
+    husky: bin.mjs
+  checksum: 10c0/2c787dcf74a837fc9a4fea7da907509d4bd9a289f4ea10ecc9d86279e4d4542b0f5f6443a619bccae19e265f2677172cc2b86aae5c932a35a330cc227d914605
+  languageName: node
+  linkType: hard
+
 "ieee754@npm:^1.2.1":
   version: 1.2.1
   resolution: "ieee754@npm:1.2.1"
@@ -663,6 +679,9 @@ __metadata:
 "previews@workspace:.":
   version: 0.0.0-use.local
   resolution: "previews@workspace:."
+  dependencies:
+    "@joggr/tempo": "npm:^0.6.0"
+    husky: "npm:^9.0.11"
   languageName: unknown
   linkType: soft
 

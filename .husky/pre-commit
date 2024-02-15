@@ -1,0 +1,3 @@
+node ./scripts/build-docs.mjs
+git add -A
+
