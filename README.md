@@ -38,14 +38,14 @@ on:
       - main
 
 jobs:
-  launchpad:
-    name: LaunchPad
+  previews:
+    name: '🔮 Previews'
     runs-on: ubuntu-latest
     if: contains(github.event.pull_request.labels.*.name, 'preview')
     steps:
       - name: Checkout Code
         uses: actions/checkout@v1
-      - id: runAction
+      - id: preview
         name: "🔮 Launch Preview Environment"
         uses: joggrdocs/delphi@v1
         with:
@@ -104,14 +104,14 @@ on:
       - main
 
 jobs:
-  launchpad:
-    name: LaunchPad
+  previews:
+    name: '🔮 Previews'
     runs-on: ubuntu-latest
     if: contains(github.event.pull_request.labels.*.name, 'preview')
     steps:
       - name: Checkout Code
         uses: actions/checkout@v1
-      - id: runAction
+      - id: preview
         name: "🔮 Launch Preview Environment"
         uses: joggrdocs/delphi@v1
         with:
