@@ -25,7 +25,8 @@ const run = () => {
     const outputs = [];
 
     for (const [key, value] of Object.entries(parsedActionYaml.inputs)) {
-      inputs.push([key, value.required ? 'yes' : 'no', value.description ?? 'no description provided', value.default ?? '-']);
+      const def = key !== 'gcp_project_id' ? value.default : '-';
+      inputs.push([key, value.required ? 'yes' : 'no', value.description ?? 'no description provided', def ?? '-']);
     }
 
     for (const [key, value] of Object.entries(parsedActionYaml.outputs)) {
