@@ -38,6 +38,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@joggr/tempo@npm:^0.6.0":
+  version: 0.6.0
+  resolution: "@joggr/tempo@npm:0.6.0"
+  checksum: 10c0/75cd9588d3e8880cc41c055a947d91868a04ec55eb96ce5b637fc229634cac210a504e1bd08b56272c1c74bd7312b908f0cf51c60c88ecf2e4e7131f60fa2c05
+  languageName: node
+  linkType: hard
+
 "@protobufjs/aspromise@npm:^1.1.1, @protobufjs/aspromise@npm:^1.1.2":
   version: 1.1.2
   resolution: "@protobufjs/aspromise@npm:1.1.2"
@@ -490,6 +497,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"husky@npm:^9.0.11":
+  version: 9.0.11
+  resolution: "husky@npm:9.0.11"
+  bin:
+    husky: bin.mjs
+  checksum: 10c0/2c787dcf74a837fc9a4fea7da907509d4bd9a289f4ea10ecc9d86279e4d4542b0f5f6443a619bccae19e265f2677172cc2b86aae5c932a35a330cc227d914605
+  languageName: node
+  linkType: hard
+
 "ieee754@npm:^1.2.1":
   version: 1.2.1
   resolution: "ieee754@npm:1.2.1"
@@ -663,6 +679,10 @@ __metadata:
 "previews@workspace:.":
   version: 0.0.0-use.local
   resolution: "previews@workspace:."
+  dependencies:
+    "@joggr/tempo": "npm:^0.6.0"
+    husky: "npm:^9.0.11"
+    yaml: "npm:^2.3.4"
   languageName: unknown
   linkType: soft
 
@@ -978,6 +998,13 @@ __metadata:
   version: 5.0.8
   resolution: "y18n@npm:5.0.8"
   checksum: 10c0/4df2842c36e468590c3691c894bc9cdbac41f520566e76e24f59401ba7d8b4811eb1e34524d57e54bc6d864bcb66baab7ffd9ca42bf1eda596618f9162b91249
+  languageName: node
+  linkType: hard
+
+"yaml@npm:^2.3.4":
+  version: 2.3.4
+  resolution: "yaml@npm:2.3.4"
+  checksum: 10c0/cf03b68f8fef5e8516b0f0b54edaf2459f1648317fc6210391cf606d247e678b449382f4bd01f77392538429e306c7cba8ff46ff6b37cac4de9a76aff33bd9e1
   languageName: node
   linkType: hard
 
