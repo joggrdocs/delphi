@@ -24,6 +24,30 @@ Preview environments for every Pull Request.
 
 ## Usage
 
+```yaml
+name: "Preview Environments"
+on:
+  pull_request:
+    types: [labeled, synchronize, opened, reopened]
+    branches:
+      - main
+jobs:
+  previews:
+    name: '🔮 Previews'
+    runs-on: ubuntu-latest
+    if: contains(github.event.pull_request.labels.*.name, 'preview')
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v1
+      - name: "🔮 Launch Preview Environment"
+        uses: joggrdocs/delphi@v1
+        with:
+          name: my-application
+          gcp_service_account_key: ${{ secrets.PREVIEWS_SERVICE_ACCOUNT_KEY }}
+          gcp_project_id: ${{ vars.GCP_PROJECT_ID }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+```
+
 ## API Documentation
 
 TBD
@@ -202,5 +226,3 @@ jobs:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
           SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
 ```
-
-
