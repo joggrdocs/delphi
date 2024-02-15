@@ -24,6 +24,12 @@ Preview environments for every Pull Request.
 
 ## Usage
 
+## API Documentation
+
+TBD
+
+## Examples
+
 ### Full Example
 
 This example includes all the bells and whistles.
@@ -127,3 +133,74 @@ jobs:
           # Default token for the repository
           github_token: ${{ secrets.GITHUB_TOKEN }}
 ```
+
+### Slack Notification
+
+```yaml
+name: "Preview Environments"
+
+on:
+  pull_request:
+    types: [labeled, synchronize, opened, reopened]
+    branches:
+      - main
+
+jobs:
+  previews:
+    name: '🔮 Previews'
+    runs-on: ubuntu-latest
+    if: contains(github.event.pull_request.labels.*.name, 'preview')
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v1
+      - id: preview
+        name: "🔮 Launch Preview Environment"
+        uses: joggrdocs/delphi@v1
+        with:
+          name: my-application
+          gcp_service_account_key: ${{ secrets.PREVIEWS_SERVICE_ACCOUNT_KEY }}
+          gcp_project_id: ${{ vars.GCP_PROJECT_ID }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Send Slack Notification
+        id: slack
+        uses: slackapi/slack-github-action@v1.25.0
+        with:
+          # For posting a rich message using Block Kit
+          payload: |
+            {
+              "text": "New Preview @${{ github.repository }} for PR<https://github.com/${{ github.repository }}/pull/${{ github.event.number }}|#${{ github.event.number }}>",
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "New Preview @${{ github.repository }} for PR<https://github.com/${{ github.repository }}/pull/${{ github.event.number }}|#${{ github.event.number }}> by <https://github.com/${{ github.actor }}/${{ github.actor }}>"
+                  }
+                },
+                {
+                  type: 'divider'
+                },
+                {
+                  type: 'actions',
+                  elements: [
+                    {
+                      type: 'button',
+                      text: {
+                        type: 'plain_text',
+                        text: 'View Preview',
+                        emoji: true
+                      },
+                      value: 'view-runs',
+                      url: '${{ steps.preview.outputs.url }}',
+                      action_id: 'view-preview-action'
+                    }
+                  ]
+                }
+              ]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+```
+
+
