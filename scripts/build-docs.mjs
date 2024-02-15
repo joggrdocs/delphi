@@ -37,7 +37,11 @@ const run = () => {
       .h3('Inputs')
       .table([
         ['Field', 'Required', 'Description', 'Default'],
-        ...inputs,
+        ...inputs.sort((a, b) => {
+          if (a[1] === 'yes' && b[1] === 'no') return -1;
+          if (a[1] === 'no' && b[1] === 'yes') return 1;
+          return 0;
+        }),
       ])
       .h3('Outputs')
       .table([

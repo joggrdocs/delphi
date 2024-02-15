@@ -56,10 +56,6 @@ jobs:
 | Field | Required | Description | Default |
 | ----- | -------- | ----------- | ------- |
 | name | yes | The name of the service (must be unique) to be deployed. | - |
-| port | no | The port that the application will run on in the container. | 8080 |
-| env_vars | no | List of environment variables that will be injected during runtime, each on a new line. | - |
-| secrets | no | List of secrets that will be injected during runtime, each on a new line. | - |
-| flags | no | List of flags that will be injected during runtime. | - |
 | gcp_region | yes | The GCP Region where the service will be deployed. | us-central1 |
 | gcp_project_id | yes | The GCP Project ID where the service will be deployed. | - |
 | gcp_service_account_key | yes | The Service Account JSON Key used to push images to the GCP Artifact Registry. | - |
@@ -67,6 +63,10 @@ jobs:
 | github_token | yes | Github Token, pass in the `secrets.GITHUB_TOKEN`. | - |
 | docker_file_name | yes | The Dockerfile name, you can override for custom names (i.e. DevDockerfile) | Dockerfile |
 | docker_directory | yes | Directory where the DockerFile is located. | . |
+| port | no | The port that the application will run on in the container. | 8080 |
+| env_vars | no | List of environment variables that will be injected during runtime, each on a new line. | - |
+| secrets | no | List of secrets that will be injected during runtime, each on a new line. | - |
+| flags | no | List of flags that will be injected during runtime. | - |
 | docker_build_args | no | Comma separated list of arguments that will be injected during the build, each on a new line. | - |
 
 ### Outputs
