@@ -26,6 +26,8 @@ Preview environments for every Pull Request.
 
 ### Full Example
 
+This example includes all the bells and whistles.
+
 ```yaml
 name: "Preview Environments"
 
@@ -44,8 +46,8 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v1
       - id: runAction
-        name: "🚀 Launch Preview Environment"
-        uses: joggrdocs/deplhi@v1
+        name: "🔮 Launch Preview Environment"
+        uses: joggrdocs/delphi@v1
         with:
           # The name of your application (must be unique)
           name: my-application
@@ -90,6 +92,8 @@ jobs:
 
 ### Basic Example
 
+This is the minimal code you will need to set up previews.
+
 ```yaml
 name: "Preview Environments"
 
@@ -108,8 +112,8 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v1
       - id: runAction
-        name: "🚀 Launch Preview Environment"
-        uses: joggrdocs/deplhi@v1
+        name: "🔮 Launch Preview Environment"
+        uses: joggrdocs/delphi@v1
         with:
           # The name of your application (must be unique)
           name: my-application
