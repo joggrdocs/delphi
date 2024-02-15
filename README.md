@@ -165,34 +165,34 @@ jobs:
         id: slack
         uses: slackapi/slack-github-action@v1.25.0
         with:
-          # For posting a rich message using Block Kit
+          # For posting a rich message using Block Kit https://app.slack.com/block-kit-builder
           payload: |
             {
-              "text": "New Preview @${{ github.repository }} for PR<https://github.com/${{ github.repository }}/pull/${{ github.event.number }}|#${{ github.event.number }}>",
+              "text": "New Preview <https://github.com/${{ github.repository }|${{ github.repository }}> for <https://github.com/${{ github.repository }}/pull/${{ github.event.number }}|PR#${{ github.event.number }}>",
               "blocks": [
                 {
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "New Preview @${{ github.repository }} for PR<https://github.com/${{ github.repository }}/pull/${{ github.event.number }}|#${{ github.event.number }}> by <https://github.com/${{ github.actor }}/${{ github.actor }}>"
+                    "text": "New Preview <https://github.com/${{ github.repository }|${{ github.repository }}> for <https://github.com/${{ github.repository }}/pull/${{ github.event.number }}|PR#${{ github.event.number }}> by <https://github.com/${{ github.actor }}/@${{ github.actor }}>"
                   }
                 },
                 {
-                  type: 'divider'
+                  "type": "divider"
                 },
-                {
-                  type: 'actions',
-                  elements: [
+                { 
+                  "type": "actions",
+                  "elements": [
                     {
-                      type: 'button',
-                      text: {
-                        type: 'plain_text',
-                        text: 'View Preview',
-                        emoji: true
+                      "type": "button",
+                      "text": {
+                        "type": "plain_text",
+                        "text": "View Preview",
+                        "emoji": true
                       },
-                      value: 'view-runs',
-                      url: '${{ steps.preview.outputs.url }}',
-                      action_id: 'view-preview-action'
+                      "value": "view-runs",
+                      "url": "${{ steps.preview.outputs.url }}",
+                      "action_id": "view-preview-action"
                     }
                   ]
                 }
