@@ -149,6 +149,10 @@ runs:
           --tag-value=${{ inputs.gcp_tag }} \
           --parent=//run.googleapis.com/projects/${{ inputs.gcp_project_id }}/locations/${{ inputs.gcp_region }}/services/pvw-${{ inputs.gcp_artifact_repository }}-${{ inputs.name }}-pr${{ steps.pr-number.outputs.result }} \
           --location=${{ inputs.gcp_region }}
+        gcloud run services add-iam-policy-binding pvw-${{ inputs.gcp_artifact_repository }}-${{ inputs.name }}-pr${{ steps.pr-number.outputs.result }} \
+          --region='us-central1' 
+          --member='allUsers'
+          --role='roles/run.invoker'
 
     - name: '💬 Add Deployment URL to Pull Request'
       uses: actions/github-script@v7
