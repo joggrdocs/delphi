@@ -55,7 +55,7 @@ jobs:
 
 | Field | Required | Description | Default |
 | ----- | -------- | ----------- | ------- |
-| name | yes | The name of the service (must be unique) to be deployed. | - |
+| name | yes | The name of the service (must be unique) to be deployed. This cannot exceed 24 characters | - |
 | gcp_service_account_key | yes | The Service Account JSON Key used to push images to the GCP Artifact Registry. | - |
 | gcp_artifact_repository | yes | The Artifact Registry name, you can override for custom names (i.e. the 'acme' in us-docker.pkg.dev/able-sailor-21423/acme) | - |
 | github_token | yes | Github Token, pass in the `secrets.GITHUB_TOKEN`. | - |

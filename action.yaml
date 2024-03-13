@@ -10,7 +10,7 @@ inputs:
   #------------------
 
   name:
-    description: "The name of the service (must be unique) to be deployed."
+    description: "The name of the service (must be unique) to be deployed. This cannot exceed 24 characters"
     required: true
   port:
     description: "The port that the application will run on in the container."
@@ -126,7 +126,7 @@ runs:
       id: deploy
       uses: google-github-actions/deploy-cloudrun@v2
       with:
-        service: 'pvw-${{ inputs.gcp_artifact_repository }}-${{ inputs.name }}-pr${{ steps.pr-number.outputs.result }}'
+        service: 'pvw-${{ inputs.name }}-pr${{ steps.pr-number.outputs.result }}'
         image: 'us-docker.pkg.dev/${{ inputs.gcp_project_id }}/${{ inputs.gcp_artifact_repository }}/${{ inputs.name }}:${{ github.sha }}'
         region: '${{ inputs.gcp_region }}'
         flags: '${{ inputs.flags }} --allow-unauthenticated --port=${{ inputs.port }} --service-account=${{ fromJSON(inputs.gcp_service_account_key).client_email }}'
