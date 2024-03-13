@@ -39,6 +39,10 @@ inputs:
   gcp_artifact_repository:
     description: "The Artifact Registry name, you can override for custom names (i.e. the 'acme' in us-docker.pkg.dev/able-sailor-21423/acme)"
     required: true
+  gcp_tag:
+    description: "A tag to be applied to the Cloud Run service, used for Ingress or other permissions."
+    required: false
+    default: "tagValues/281479867842234"
   
   #------------------
   # Pull Request Integration
@@ -132,12 +136,19 @@ runs:
         flags: '${{ inputs.flags }} --allow-unauthenticated --port=${{ inputs.port }} --service-account=${{ fromJSON(inputs.gcp_service_account_key).client_email }}'
         env_vars: ${{ inputs.env_vars }}
         secrets: ${{ inputs.secrets }}
-        tag: allUsersIngress
         labels: |
           previews=true
           group=${{ inputs.gcp_artifact_repository }}
           service=${{ inputs.name }}
           pull_request=pr${{ steps.pr-number.outputs.result }}
+
+    - name: '🏷️ Tag Cloud Run Service for Ingress'
+      shell: bash
+      run: |
+        gcloud resource-manager tags bindings create \
+          --tag-value=${{ inputs.gcp_tag }} \
+          --parent=//run.googleapis.com/projects/${{ inputs.gcp_project_id }}/locations/${{ inputs.gcp_region }}/services/pvw-${{ inputs.name }}-pr${{ steps.pr-number.outputs.result }} \
+          --location=${{ inputs.gcp_region }}
 
     - name: '💬 Add Deployment URL to Pull Request'
       uses: actions/github-script@v7
