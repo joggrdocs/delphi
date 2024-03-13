@@ -132,6 +132,7 @@ runs:
         flags: '${{ inputs.flags }} --allow-unauthenticated --port=${{ inputs.port }} --service-account=${{ fromJSON(inputs.gcp_service_account_key).client_email }}'
         env_vars: ${{ inputs.env_vars }}
         secrets: ${{ inputs.secrets }}
+        tag: allUsersIngress
         labels: |
           previews=true
           group=${{ inputs.gcp_artifact_repository }}
