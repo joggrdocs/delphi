@@ -65,7 +65,7 @@ jobs:
 | flags | no | List of flags that will be injected during runtime. | - |
 | gcp_region | no | The GCP Region where the service will be deployed. | us-central1 |
 | gcp_project_id | no | The GCP Project ID where the service will be deployed. | - |
-| gcp_tag | no | A tag to be applied to the Cloud Run service, used for Ingress or other permissions. | - |
+| gcp_tag | no | A tag to be applied to the Cloud Run service, used for ingress or other permissions. | - |
 | docker_file_name | no | The Dockerfile name, you can override for custom names (i.e. DevDockerfile) | Dockerfile |
 | docker_directory | no | Directory where the DockerFile is located. | . |
 | docker_build_args | no | Comma separated list of arguments that will be injected during the build, each on a new line. | - |

@@ -40,7 +40,7 @@ inputs:
     description: "The Artifact Registry name, you can override for custom names (i.e. the 'acme' in us-docker.pkg.dev/able-sailor-21423/acme)"
     required: true
   gcp_tag:
-    description: "A tag to be applied to the Cloud Run service, used for Ingress or other permissions."
+    description: "A tag to be applied to the Cloud Run service, used for ingress or other permissions."
     required: false
     default: "tagValues/281479867842234"
   
