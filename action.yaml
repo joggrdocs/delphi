@@ -10,7 +10,7 @@ inputs:
   #------------------
 
   name:
-    description: "The name of the service (must be unique) to be deployed."
+    description: "The name of the service (must be unique) to be deployed. This cannot exceed 24 characters"
     required: true
   port:
     description: "The port that the application will run on in the container."
@@ -39,6 +39,10 @@ inputs:
   gcp_artifact_repository:
     description: "The Artifact Registry name, you can override for custom names (i.e. the 'acme' in us-docker.pkg.dev/able-sailor-21423/acme)"
     required: true
+  gcp_tag:
+    description: "A tag to be applied to the Cloud Run service, used for ingress or other permissions."
+    required: false
+    default: "tagValues/281479867842234"
   
   #------------------
   # Pull Request Integration
@@ -138,6 +142,19 @@ runs:
           service=${{ inputs.name }}
           pull_request=pr${{ steps.pr-number.outputs.result }}
 
+    - name: '🏷️ Tag Cloud Run Service for Ingress'
+      uses: actions/github-script@v7
+      env:
+        GCP_TAG: '${{ inputs.gcp_tag }}'
+        GCP_PROJECT_ID: '${{ inputs.gcp_project_id }}'
+        GCP_REGION: '${{ inputs.gcp_region }}' 
+        SERVICE_NAME: 'pvw-${{ inputs.gcp_artifact_repository }}-${{ inputs.name }}-pr${{ steps.pr-number.outputs.result }}'
+      with:
+        github-token: ${{ inputs.github_token }}
+        script: |
+          const script = require('${{ github.action_path }}/scripts/gcp-resource-tag.js');
+          await script({ github, context, core, exec, env: process.env });
+    
     - name: '💬 Add Deployment URL to Pull Request'
       uses: actions/github-script@v7
       env: 

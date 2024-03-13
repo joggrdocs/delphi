@@ -55,7 +55,7 @@ jobs:
 
 | Field | Required | Description | Default |
 | ----- | -------- | ----------- | ------- |
-| name | yes | The name of the service (must be unique) to be deployed. | - |
+| name | yes | The name of the service (must be unique) to be deployed. This cannot exceed 24 characters | - |
 | gcp_service_account_key | yes | The Service Account JSON Key used to push images to the GCP Artifact Registry. | - |
 | gcp_artifact_repository | yes | The Artifact Registry name, you can override for custom names (i.e. the 'acme' in us-docker.pkg.dev/able-sailor-21423/acme) | - |
 | github_token | yes | Github Token, pass in the `secrets.GITHUB_TOKEN`. | - |
@@ -65,6 +65,7 @@ jobs:
 | flags | no | List of flags that will be injected during runtime. | - |
 | gcp_region | no | The GCP Region where the service will be deployed. | us-central1 |
 | gcp_project_id | no | The GCP Project ID where the service will be deployed. | - |
+| gcp_tag | no | A tag to be applied to the Cloud Run service, used for ingress or other permissions. | - |
 | docker_file_name | no | The Dockerfile name, you can override for custom names (i.e. DevDockerfile) | Dockerfile |
 | docker_directory | no | Directory where the DockerFile is located. | . |
 | docker_build_args | no | Comma separated list of arguments that will be injected during the build, each on a new line. | - |
