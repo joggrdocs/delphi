@@ -130,7 +130,7 @@ runs:
       id: deploy
       uses: google-github-actions/deploy-cloudrun@v2
       with:
-        service: 'pvw-${{ inputs.name }}-pr${{ steps.pr-number.outputs.result }}'
+        service: 'pvw-${{ inputs.gcp_artifact_repository }}-${{ inputs.name }}-pr${{ steps.pr-number.outputs.result }}'
         image: 'us-docker.pkg.dev/${{ inputs.gcp_project_id }}/${{ inputs.gcp_artifact_repository }}/${{ inputs.name }}:${{ github.sha }}'
         region: '${{ inputs.gcp_region }}'
         flags: '${{ inputs.flags }} --allow-unauthenticated --port=${{ inputs.port }} --service-account=${{ fromJSON(inputs.gcp_service_account_key).client_email }}'
@@ -147,7 +147,7 @@ runs:
       run: |
         gcloud resource-manager tags bindings create \
           --tag-value=${{ inputs.gcp_tag }} \
-          --parent=//run.googleapis.com/projects/${{ inputs.gcp_project_id }}/locations/${{ inputs.gcp_region }}/services/pvw-${{ inputs.name }}-pr${{ steps.pr-number.outputs.result }} \
+          --parent=//run.googleapis.com/projects/${{ inputs.gcp_project_id }}/locations/${{ inputs.gcp_region }}/services/pvw-${{ inputs.gcp_artifact_repository }}-${{ inputs.name }}-pr${{ steps.pr-number.outputs.result }} \
           --location=${{ inputs.gcp_region }}
 
     - name: '💬 Add Deployment URL to Pull Request'
