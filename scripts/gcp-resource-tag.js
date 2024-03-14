@@ -28,7 +28,7 @@ module.exports = async ({ exec, env }) => {
       'bindings',
       'create',
       `--tag-value=${gcpTag}`,
-      `--parent=//run.googleapis.com/projects/${gcpProjectId}/locations/${gcpRegion}/services/${serviceName}`
+      `--parent=//run.googleapis.com/projects/${gcpProjectId}/locations/${gcpRegion}/services/${serviceName}`,
       `--location=${gcpRegion}`,
     ]);
   } catch (error) {
@@ -40,8 +40,8 @@ module.exports = async ({ exec, env }) => {
     'services',
     'add-iam-policy-binding',
     serviceName,
-    `--member=allUsers`,
-    `--role=roles/run.invoker`,
+    '--member=allUsers',
+    '--role=roles/run.invoker',
     `--region=${gcpRegion}`,
   ]);
 }
