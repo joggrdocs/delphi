@@ -16,9 +16,9 @@ function getInput(env, name) {
  * @param {object} payload.env
  */
 module.exports = async ({ exec, env }) => {
+  const serviceName = getInput(env, 'SERVICE_NAME');
   const gcpProjectId = getInput(env, 'GCP_PROJECT_ID');
   const gcpRegion = getInput(env, 'GCP_REGION');
-  const serviceName = getInput(env, 'SERVICE_NAME');
   const gcpTag = getInput(env, 'GCP_TAG');
 
   try {
