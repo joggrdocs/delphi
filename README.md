@@ -60,6 +60,7 @@ jobs:
 | gcp_artifact_repository | yes | The Artifact Registry name, you can override for custom names (i.e. the 'acme' in us-docker.pkg.dev/able-sailor-21423/acme) | - |
 | github_token | yes | Github Token, pass in the `secrets.GITHUB_TOKEN`. | - |
 | port | no | The port that the application will run on in the container. | 8080 |
+| service_account | no | The service account to be used for the Cloud Run service. | - |
 | env_vars | no | List of environment variables that will be injected during runtime, each on a new line. | - |
 | secrets | no | List of secrets that will be injected during runtime, each on a new line. | - |
 | flags | no | List of flags that will be injected during runtime. | - |
