@@ -10,6 +10,11 @@ function getInput(env, name) {
 }
 
 /**
+ * Sleep for a given number of milliseconds
+ */
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+/**
  * Tag the new Service with the GCP_TAG
  * 
  * @param {object} payload
@@ -34,6 +39,9 @@ module.exports = async ({ exec, env }) => {
   } catch (error) {
     console.warn('WARNING: Failed to create resource tag. This may be due to the tag already existing.');
   }
+
+  // We sleep to allow the tag to propagate
+  await sleep(5000);
 
   await exec.exec('gcloud', [
     'run',
