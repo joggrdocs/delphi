@@ -35,7 +35,6 @@ module.exports = async ({ github, context, exec, core, env }) => {
   const dockerDirectory = getInput(env, 'DOCKER_DIRECTORY');
   const dockerFileName = getInput(env, 'DOCKER_FILE_NAME');
   const githubSha = getInput(env, 'GITHUB_SHA');
-  const dockerCache = getInput(env, 'DOCKER_CACHE') === 'gha';
 
   const fullImageName = `us-docker.pkg.dev/${gcpProjectId}/${gcpArtifactRepository}/${name}`;
 
