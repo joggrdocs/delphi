@@ -112,12 +112,12 @@ runs:
       with:
         project_id: ${{ inputs.gcp_project_id }}
     
+    - name: '🐳 Set up Docker Buildx'
+      uses: docker/setup-buildx-action@v3
+
     - name: '🐳 Authorize Docker push'
       shell: bash
       run: gcloud auth configure-docker us-docker.pkg.dev --quiet
-
-    - name: '🐳 Set up Docker Buildx'
-      uses: docker/setup-buildx-action@v3
 
     - name: '🐳 Build and Push Container'
       uses: actions/github-script@v7
