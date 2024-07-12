@@ -35,11 +35,9 @@ module.exports = async ({ github, context, exec, core, env }) => {
   const dockerDirectory = getInput(env, 'DOCKER_DIRECTORY');
   const dockerFileName = getInput(env, 'DOCKER_FILE_NAME');
   const githubSha = getInput(env, 'GITHUB_SHA');
-  const githubHeadRef = getInput(env, 'GITHUB_HEAD_REF');
-  const dockerCache = (getInput(env, 'DOCKER_CACHE') ?? 'false') === 'true';
+  const dockerCache = getInput(env, 'DOCKER_CACHE') === 'gha';
 
   const fullImageName = `us-docker.pkg.dev/${gcpProjectId}/${gcpArtifactRepository}/${name}`;
-  const branchName = githubHeadRef.replace('refs/heads/', '');
 
   const tags = [];
   if (dockerTags) {
@@ -71,9 +69,9 @@ module.exports = async ({ github, context, exec, core, env }) => {
   if (dockerCache) {
     buildCache.push(
       '--push',
-      '--cache-to',
-      'type=gha,mode=max',
       '--cache-from',
+      'type=gha',
+      '--cache-to',
       'type=gha,mode=max',
       
       // '--cache-from',
@@ -90,19 +88,21 @@ module.exports = async ({ github, context, exec, core, env }) => {
   await exec.exec('docker', [
     'buildx',
     'build',
+    ...buildCache,
     ...buildArgs,
     ...tags,
     '--tag',
     `${fullImageName}:${githubSha}`,
-    ...buildCache,
-    '--file',
+     '--file',
     `${dockerDirectory}/${dockerFileName}`,
     `${dockerDirectory}`
   ]);
 
-  await exec.exec('docker', [
-    'push',
-    fullImageName,
-    '--all-tags'
-  ]);
+  if (!dockerCache) {
+    await exec.exec('docker', [
+      'push',
+      fullImageName,
+      '--all-tags'
+    ]);
+  }
 }
