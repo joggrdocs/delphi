@@ -56,39 +56,14 @@ module.exports = async ({ github, context, exec, core, env }) => {
       buildArgs.push(...['--build-arg', `${key}=${value}`]);
     });
 
-  //  docker buildx build --push -t <registry>/<image> \
-  // --cache-to type=registry,ref=<registry>/<cache-image>:<branch> \
-  // --cache-from type=registry,ref=<registry>/<cache-image>:<branch> \
-  // --cache-from type=registry,ref=<registry>/<cache-image>:main .
-
-  //   --cache-to type=gha[,parameters...] \
-  // --cache-from type=gha[,parameters...] .
-
-  // @see https://docs.docker.com/build/cache/backends/#multiple-caches
-  const buildCache = [];
-  if (dockerCache) {
-    buildCache.push(
-      '--push',
-      '--cache-from',
-      'type=gha',
-      '--cache-to',
-      'type=gha,mode=max',
-      
-      // '--cache-from',
-      // `"type=registry,ref=${fullImageName}:${branchName}"`,
-      // '--cache-to',
-      // `"type=registry,ref=${fullImageName}:${branchName}"`,
-      // '--cache-from',
-      // `type=registry,ref=${fullImageName}:main`,
-      // '--cache-to',
-      // `type=registry,ref=${fullImageName}:main`,
-    );
-  }
-  
   await exec.exec('docker', [
     'buildx',
     'build',
-    ...buildCache,
+    '--push',
+    '--cache-from',
+    'type=gha',
+    '--cache-to',
+    'type=gha,mode=max',
     ...buildArgs,
     ...tags,
     '--tag',
@@ -97,12 +72,4 @@ module.exports = async ({ github, context, exec, core, env }) => {
     `${dockerDirectory}/${dockerFileName}`,
     `${dockerDirectory}`
   ]);
-
-  if (!dockerCache) {
-    await exec.exec('docker', [
-      'push',
-      fullImageName,
-      '--all-tags'
-    ]);
-  }
 }

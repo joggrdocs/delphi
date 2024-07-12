@@ -73,7 +73,7 @@ inputs:
   docker_cache:
     description: "The type of cache to use during the build, one of 'gha' or 'registry' (not-supported)."
     required: false
-    default: "true"
+    default: "gha"
 outputs:
   url:
     description: "The preview URL for the running application"
