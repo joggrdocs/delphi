@@ -39,6 +39,7 @@ module.exports = async ({ github, context, exec, core, env }) => {
   const dockerDirectory = getInput(env, 'DOCKER_DIRECTORY');
   const dockerFileName = getInput(env, 'DOCKER_FILE_NAME');
   const githubSha = getInput(env, 'GITHUB_SHA');
+  const dockerCache = (getInput(env, 'DOCKER_CACHE') ?? 'false') === 'true';
 
   const fullImageName = `us-docker.pkg.dev/${gcpProjectId}/${gcpArtifactRepository}/${name}`;
 
@@ -59,6 +60,16 @@ module.exports = async ({ github, context, exec, core, env }) => {
       buildArgs.push(...['--build-arg', `${key}=${value}`]);
     });
 
+  const cacheArgs = [];
+  if (dockerCache) {
+    cacheArgs.push(
+      '--cache-from',
+      `type=gha`,
+      '--cache-to',
+      'type=gha,mode=max'
+    );
+  }
+  
   await exec.exec('docker', [
     'build',
     ...buildArgs,

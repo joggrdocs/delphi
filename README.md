@@ -70,6 +70,7 @@ jobs:
 | docker_file_name | no | The Dockerfile name, you can override for custom names (i.e. DevDockerfile) | Dockerfile |
 | docker_directory | no | Directory where the DockerFile is located. | . |
 | docker_build_args | no | Comma separated list of arguments that will be injected during the build, each on a new line. | - |
+| docker_cache | no | Whether to use the Docker cache during the build. | true |
 
 ### Outputs
 
