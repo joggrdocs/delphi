@@ -24,11 +24,7 @@ function getMultilineInput(env, name) {
 /**
  * Build & Push Docker Image 
  * 
- * @param {object} payload
- * @param {object} payload.context
- * @param {object} payload.core
- * @param {object} payload.github
- * @param {object} payload.exec
+ * @param {import('@types/github-script').AsyncFunctionArguments} payload
  */
 module.exports = async ({ github, context, exec, core, env }) => {
   const dockerBuildArgs = getMultilineInput(env, 'DOCKER_BUILD_ARGS');
@@ -60,18 +56,19 @@ module.exports = async ({ github, context, exec, core, env }) => {
     });
 
   await exec.exec('docker', [
+    'buildx',
     'build',
+    '--push',
+    '--cache-from',
+    'type=gha',
+    '--cache-to',
+    'type=gha,mode=max',
     ...buildArgs,
     ...tags,
     '--tag',
     `${fullImageName}:${githubSha}`,
-    '--file',
+     '--file',
     `${dockerDirectory}/${dockerFileName}`,
     `${dockerDirectory}`
-  ]);
-  await exec.exec('docker', [
-    'push',
-    `us-docker.pkg.dev/${gcpProjectId}/${gcpArtifactRepository}/${name}`,
-    '--all-tags'
   ]);
 }

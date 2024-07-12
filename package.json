@@ -7,6 +7,7 @@
   ],
   "devDependencies": {
     "@joggr/tempo": "^0.6.0",
+    "@types/github-script": "github:actions/github-script",
     "husky": "^9.0.11",
     "yaml": "^2.3.4"
   },
