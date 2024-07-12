@@ -130,6 +130,7 @@ runs:
         DOCKER_FILE_NAME: '${{ inputs.docker_file_name }}'
         DOCKER_CACHE: '${{ inputs.docker_cache }}'
         GITHUB_SHA: '${{ github.sha }}'
+        GITHUB_REF: '${{ github.ref }}'
       with:
         github-token: ${{ inputs.github_token }}
         script: |

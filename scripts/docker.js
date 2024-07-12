@@ -35,10 +35,11 @@ module.exports = async ({ github, context, exec, core, env }) => {
   const dockerDirectory = getInput(env, 'DOCKER_DIRECTORY');
   const dockerFileName = getInput(env, 'DOCKER_FILE_NAME');
   const githubSha = getInput(env, 'GITHUB_SHA');
+  const githubRef = getInput(env, 'GITHUB_REF');
   const dockerCache = (getInput(env, 'DOCKER_CACHE') ?? 'false') === 'true';
 
   const fullImageName = `us-docker.pkg.dev/${gcpProjectId}/${gcpArtifactRepository}/${name}`;
-  const branchName = context.ref.replace('refs/heads/', '');
+  const branchName = githubRef.replace('refs/heads/', '');
 
   const tags = [];
   if (dockerTags) {
@@ -66,14 +67,14 @@ module.exports = async ({ github, context, exec, core, env }) => {
   const cacheArgs = [];
   if (dockerCache) {
     cacheArgs.push(
-      // '--cache-to',
-      // `type=registry,ref=${fullImageName}:${branchName}`,
-      // '--cache-from',
-      // `type=registry,ref=${fullImageName}:${branchName}`,
-      '--cache-to',
-      `type=registry,ref=${fullImageName}:main`,
       '--cache-from',
-      `type=registry,ref=${fullImageName}:main`,
+      `type=registry,ref=${fullImageName}:${branchName}`,
+      '--cache-to',
+      `type=registry,ref=${fullImageName}:${branchName}`,
+      // '--cache-from',
+      // `type=registry,ref=${fullImageName}:main`,
+      // '--cache-to',
+      // `type=registry,ref=${fullImageName}:main`,
     );
   }
   
@@ -91,7 +92,7 @@ module.exports = async ({ github, context, exec, core, env }) => {
   ]);
   await exec.exec('docker', [
     'push',
-    `us-docker.pkg.dev/${gcpProjectId}/${gcpArtifactRepository}/${name}`,
+    fullImageName,
     '--all-tags'
   ]);
 }
