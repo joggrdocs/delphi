@@ -76,6 +76,7 @@ module.exports = async ({ github, context, exec, core, env }) => {
     ...tags,
     '--tag',
     `${fullImageName}:${githubSha}`,
+    ...cacheArgs,
     '--file',
     `${dockerDirectory}/${dockerFileName}`,
     `${dockerDirectory}`
