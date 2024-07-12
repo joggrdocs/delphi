@@ -68,9 +68,9 @@ module.exports = async ({ github, context, exec, core, env }) => {
   if (dockerCache) {
     cacheArgs.push(
       '--cache-from',
-      `type=registry,ref="${fullImageName}:${branchName}"`,
+      `"type=registry,ref=${fullImageName}:${branchName}"`,
       '--cache-to',
-      `type=registry,ref="${fullImageName}:${branchName}"`,
+      `"type=registry,ref="${fullImageName}:${branchName}"`,
       // '--cache-from',
       // `type=registry,ref=${fullImageName}:main`,
       // '--cache-to',
