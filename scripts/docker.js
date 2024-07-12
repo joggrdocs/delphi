@@ -24,11 +24,7 @@ function getMultilineInput(env, name) {
 /**
  * Build & Push Docker Image 
  * 
- * @param {object} payload
- * @param {object} payload.context
- * @param {object} payload.core
- * @param {object} payload.github
- * @param {object} payload.exec
+ * @param {import('@types/github-script').AsyncFunctionArguments} payload
  */
 module.exports = async ({ github, context, exec, core, env }) => {
   const dockerBuildArgs = getMultilineInput(env, 'DOCKER_BUILD_ARGS');
@@ -42,6 +38,7 @@ module.exports = async ({ github, context, exec, core, env }) => {
   const dockerCache = (getInput(env, 'DOCKER_CACHE') ?? 'false') === 'true';
 
   const fullImageName = `us-docker.pkg.dev/${gcpProjectId}/${gcpArtifactRepository}/${name}`;
+  const branchName = context.ref.replace('refs/heads/', '');
 
   const tags = [];
   if (dockerTags) {
@@ -60,13 +57,21 @@ module.exports = async ({ github, context, exec, core, env }) => {
       buildArgs.push(...['--build-arg', `${key}=${value}`]);
     });
 
+  //  docker buildx build --push -t <registry>/<image> \
+  // --cache-to type=registry,ref=<registry>/<cache-image>:<branch> \
+  // --cache-from type=registry,ref=<registry>/<cache-image>:<branch> \
+  // --cache-from type=registry,ref=<registry>/<cache-image>:main .
+
+  // @see https://docs.docker.com/build/cache/backends/#multiple-caches
   const cacheArgs = [];
   if (dockerCache) {
     cacheArgs.push(
-      '--cache-from',
-      `type=gha`,
       '--cache-to',
-      'type=gha,mode=max'
+      `type=registry,ref=${fullImageName}:${branchName}`,
+      '--cache-from',
+      `type=registry,ref=${fullImageName}:${branchName}`,
+      '--cache-from',
+      `type=registry,ref=${fullImageName}:main`,
     );
   }
   
