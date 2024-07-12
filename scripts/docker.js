@@ -35,11 +35,11 @@ module.exports = async ({ github, context, exec, core, env }) => {
   const dockerDirectory = getInput(env, 'DOCKER_DIRECTORY');
   const dockerFileName = getInput(env, 'DOCKER_FILE_NAME');
   const githubSha = getInput(env, 'GITHUB_SHA');
-  const githubRef = getInput(env, 'GITHUB_REF');
+  const githubHeadRef = getInput(env, 'GITHUB_HEAD_REF');
   const dockerCache = (getInput(env, 'DOCKER_CACHE') ?? 'false') === 'true';
 
   const fullImageName = `us-docker.pkg.dev/${gcpProjectId}/${gcpArtifactRepository}/${name}`;
-  const branchName = githubRef.replace('refs/heads/', '');
+  const branchName = githubHeadRef.replace('refs/heads/', '');
 
   const tags = [];
   if (dockerTags) {
