@@ -44,8 +44,9 @@ jobs:
         with:
           name: my-application
           gcp_service_account_key: ${{ secrets.PREVIEWS_SERVICE_ACCOUNT_KEY }}
-          gcp_project_id: ${{ vars.GCP_PROJECT_ID }}
+          gcp_project_id: ${{ vars.GCP_PROJECT_ID_PREVIEWS }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          gcp_artifact_repository: ${{ vars.GCP_ARTIFACT_REGISTRY_PREVIEWS }}
 ```
 
 ## API Documentation
