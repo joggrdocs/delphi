@@ -70,10 +70,6 @@ inputs:
   docker_build_args:
     description: "Comma separated list of arguments that will be injected during the build, each on a new line."
     required: false
-  docker_cache:
-    description: "The type of cache to use during the build, one of 'gha' or 'registry' (not-supported)."
-    required: false
-    default: "gha"
 outputs:
   url:
     description: "The preview URL for the running application"
@@ -128,7 +124,6 @@ runs:
         NAME: '${{ inputs.name }}'
         DOCKER_DIRECTORY: '${{ inputs.docker_directory }}'
         DOCKER_FILE_NAME: '${{ inputs.docker_file_name }}'
-        DOCKER_CACHE: '${{ inputs.docker_cache }}'
         GITHUB_SHA: '${{ github.sha }}'
       with:
         github-token: ${{ inputs.github_token }}
