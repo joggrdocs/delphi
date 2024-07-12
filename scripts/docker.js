@@ -63,15 +63,23 @@ module.exports = async ({ github, context, exec, core, env }) => {
   // --cache-from type=registry,ref=<registry>/<cache-image>:<branch> \
   // --cache-from type=registry,ref=<registry>/<cache-image>:main .
 
+  //   --cache-to type=gha[,parameters...] \
+  // --cache-from type=gha[,parameters...] .
+
   // @see https://docs.docker.com/build/cache/backends/#multiple-caches
   const buildCache = [];
   if (dockerCache) {
     buildCache.push(
       '--push',
-      '--cache-from',
-      `"type=registry,ref=${fullImageName}:${branchName}"`,
       '--cache-to',
-      `"type=registry,ref=${fullImageName}:${branchName}"`,
+      'type=gha,mode=max',
+      '--cache-from',
+      'type=gha,mode=max',
+      
+      // '--cache-from',
+      // `"type=registry,ref=${fullImageName}:${branchName}"`,
+      // '--cache-to',
+      // `"type=registry,ref=${fullImageName}:${branchName}"`,
       // '--cache-from',
       // `type=registry,ref=${fullImageName}:main`,
       // '--cache-to',
