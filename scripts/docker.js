@@ -71,6 +71,7 @@ module.exports = async ({ github, context, exec, core, env }) => {
   }
   
   await exec.exec('docker', [
+    'buildx',
     'build',
     ...buildArgs,
     ...tags,
